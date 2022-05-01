@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.ui.theme
+package net.dzikoysk.presenceofmind.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

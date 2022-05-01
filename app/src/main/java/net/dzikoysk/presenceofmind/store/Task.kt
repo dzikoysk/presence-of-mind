@@ -1,10 +1,10 @@
-package net.dzikoysk.presenceofmind
+package net.dzikoysk.presenceofmind.store
 
 import java.util.concurrent.atomic.AtomicLong
 
 data class Task(
     val id: Long = TASK_ID_ASSIGNER.incrementAndGet(),
-    val title: String
+    val description: String
 ) {
 
     companion object {
