@@ -47,6 +47,15 @@ android {
 
 dependencies {
     implementation("org.burnoutcrew.composereorderable:reorderable:0.7.4")
+    implementation("io.github.androidpoet:dropdown:1.0.1")
+    implementation("io.github.vanpra.compose-material-dialogs:core:0.8.0-beta")
+
+    def jackson = "2.13.3"
+    implementation("com.fasterxml.jackson.core:jackson-databind:$jackson")
+    implementation("com.fasterxml.jackson.core:jackson-core:$jackson")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:$jackson")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jackson")
 
     def room_version = "2.4.2"
     implementation "androidx.room:room-runtime:$room_version"

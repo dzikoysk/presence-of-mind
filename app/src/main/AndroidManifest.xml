@@ -10,9 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PresenceOfMind">
         <activity
-            android:name=".pages.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.PresenceOfMind">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
