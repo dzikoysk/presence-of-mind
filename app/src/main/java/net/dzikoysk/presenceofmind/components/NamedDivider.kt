@@ -1,16 +1,15 @@
 package net.dzikoysk.presenceofmind.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -21,25 +20,29 @@ fun NamedDivider(
 ) {
     Box(
         modifier = Modifier
-            .padding(top = 10.dp, bottom = 10.dp)
             .fillMaxWidth()
             .then(modifier),
     ) {
-        Divider(
-            color = Color.LightGray,
-            thickness = 1.dp,
-            modifier = Modifier.padding(top = 8.dp)
-        )
+        Canvas(modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
+            drawRoundRect(
+                color = Color.LightGray,
+                style = Stroke(
+                    width = 1f,
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                )
+            )
+        }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
             Box(Modifier.background(Color.White)) {
                 Text(
                     text = name,
-                    color = Color.Gray,
-                    fontSize = 11.sp,
-                    modifier = Modifier.padding(horizontal = 12.dp)
+                    color = Color.LightGray,
+                    fontSize = 10.sp,
+                    modifier = Modifier.padding(horizontal = 15.dp)
                 )
             }
         }

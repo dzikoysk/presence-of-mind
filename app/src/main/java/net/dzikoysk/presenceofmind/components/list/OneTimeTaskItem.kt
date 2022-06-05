@@ -17,19 +17,23 @@ import java.time.Instant
 import kotlin.time.toKotlinDuration
 
 @Composable
-fun OneTimeTaskItem(task: Task, metadata: OneTimeMetadata) {
-    Column(Modifier.padding(start = 16.dp)) {
-        Text(
-            text = task.description,
-            modifier = Modifier.padding(top = 12.dp)
-        )
-        Text(
-            text = Duration.between(Instant.now(), metadata.eventDate.toLocalDateTime())
-                .toKotlinDuration()
-                .incomingDurationToHumanReadableFormat(),
-            fontSize = 10.sp,
-            color = Color.Gray,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-    }
+fun createOneTimeTaskItem(task: Task, metadata: OneTimeMetadata): TaskItemCard {
+    return TaskItemCard(
+        content = {
+            Column(Modifier.padding(start = 16.dp)) {
+                Text(
+                    text = task.description,
+                    modifier = Modifier.padding(top = 12.dp)
+                )
+                Text(
+                    text = Duration.between(Instant.now(), metadata.eventDate.toLocalDateTime())
+                        .toKotlinDuration()
+                        .incomingDurationToHumanReadableFormat(),
+                    fontSize = 10.sp,
+                    color = Color.Gray,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+            }
+        }
+    )
 }

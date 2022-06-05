@@ -10,11 +10,15 @@ import net.dzikoysk.presenceofmind.task.LongTermMetadata
 import net.dzikoysk.presenceofmind.task.Task
 
 @Composable
-fun LongTermTaskItem(task: Task, metadata: LongTermMetadata) {
-    Column(Modifier.padding(start = 16.dp)) {
-        Text(
-            text = task.description,
-            modifier = Modifier.padding(top = 12.dp)
-        )
-    }
+fun createLongTermTaskItem(task: Task, metadata: LongTermMetadata): TaskItemCard {
+    return TaskItemCard(
+        content = {
+            Column(Modifier.padding(start = 16.dp)) {
+                Text(
+                    text = task.description,
+                    modifier = Modifier.padding(top = 12.dp)
+                )
+            }
+        }
+    )
 }

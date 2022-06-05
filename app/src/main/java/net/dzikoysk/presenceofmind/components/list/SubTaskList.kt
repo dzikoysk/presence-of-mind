@@ -16,7 +16,10 @@ import androidx.compose.ui.unit.sp
 import net.dzikoysk.presenceofmind.task.Task
 
 @Composable
-fun SubTaskList(task: Task) {
+fun SubTaskList(
+    task: Task,
+    saveTask: (Task) -> Unit
+) {
     Box {
         task.subtasks.forEachIndexed { idx, subtask ->
             Row(
@@ -30,7 +33,11 @@ fun SubTaskList(task: Task) {
 
                     Checkbox(
                         checked = isDone.value,
-                        onCheckedChange = { isDone.value = !isDone.value }
+                        onCheckedChange = {
+                            isDone.value = !isDone.value
+                            subtask.done = isDone.value
+                            saveTask(task)
+                        }
                     )
                     Text(
                         text = subtask.description,

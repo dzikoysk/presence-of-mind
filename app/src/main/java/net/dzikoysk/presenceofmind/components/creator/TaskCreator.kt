@@ -107,7 +107,10 @@ fun TaskCreator(
         when (selectedType) {
             OccurrencePolicy.ONE_TIME -> {
                 item {
-                    NamedDivider(name = "~ ${selectedType.displayName} configuration ~")
+                    NamedDivider(
+                        name = " ${selectedType.displayName} configuration ",
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
 
                     val datePickerDialog = DatePickerDialog(
                         LocalContext.current,
@@ -158,7 +161,10 @@ fun TaskCreator(
             }
             OccurrencePolicy.REPETITIVE -> {
                 item {
-                    NamedDivider(name = "~ ${selectedType.displayName} configuration ~")
+                    NamedDivider(
+                        name = " ${selectedType.displayName} configuration ",
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
                 }
                 item {
                     OutlinedTextField(

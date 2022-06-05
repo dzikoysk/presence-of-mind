@@ -30,12 +30,17 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.components.NamedDivider
+import net.dzikoysk.presenceofmind.shared.mirror.LinearProgressIndicator
 import net.dzikoysk.presenceofmind.task.*
 import org.burnoutcrew.reorderable.*
 import java.util.UUID
 import kotlin.math.roundToInt
 import kotlin.time.ExperimentalTime
+
+enum class MarkedAs {
+    UNFINISHED,
+    DONE
+}
 
 @ExperimentalMaterialApi
 @ExperimentalTime
@@ -44,25 +49,40 @@ import kotlin.time.ExperimentalTime
 @Preview(showBackground = true)
 fun TaskList(
     taskService: TaskService = TaskService().also { it.createDefaultTasks() },
+    displayMode: MarkedAs = MarkedAs.UNFINISHED
+
 ) {
     val tasks = taskService.getObservableListOfAllTasks()
-    val todoTasks = tasks.filter { it.done == null }
-    val doneTasks = tasks.filter { it.done != null }
+    val doneTasks = tasks.filter { it.done }
 
+    val matchedTasks = when (displayMode) {
+        MarkedAs.UNFINISHED -> tasks.filterNot { it.done }
+        MarkedAs.DONE -> doneTasks
+    }
+
+    val percent = runCatching { doneTasks.size / tasks.size.toFloat() }
+        .getOrDefault(1f)
+
+    Row(Modifier.padding(horizontal = 30.dp).padding(top = 18.dp).fillMaxWidth()) {
+        LinearProgressIndicator(
+            progress = percent,
+            color = Color(0xFFADA6F8),
+            modifier = Modifier
+                .height(6.dp)
+                .fillMaxWidth()
+        )
+    }
     TaskOrderedListColumn(
         taskService = taskService,
         indexOfTask = { tasks.indexOfFirst { task -> task.id == it } },
-        tasks = todoTasks
+        tasks = matchedTasks
     )
+    /*
     NamedDivider(
-        name = "~ Done ~",
+        name = "DONE",
         modifier = Modifier.padding(horizontal = 30.dp)
     )
-    TaskOrderedListColumn(
-        taskService = taskService,
-        indexOfTask = { tasks.indexOfFirst { task -> task.id == it } },
-        tasks = doneTasks
-    )
+     */
 }
 
 @ExperimentalMaterialApi
@@ -89,7 +109,8 @@ fun TaskOrderedListColumn(
                 },
                 onDragEnd = { _, _ -> taskService.forceTasksSave() }
             )
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .fillMaxHeight(),
         contentPadding = PaddingValues(
             horizontal = 22.dp,
             vertical = 16.dp
@@ -115,7 +136,8 @@ fun TaskOrderedListColumn(
 data class TaskItemContext(
     val task: Task,
     val updateTask: (Task) -> Unit = {},
-    val deleteTask: () -> Unit = {}
+    val deleteTask: () -> Unit = {},
+    val onDone: () -> Unit = {}
 )
 
 @ExperimentalMaterialApi
@@ -129,7 +151,7 @@ fun TaskListItem(
 ) {
     val taskColor =
         context.task.metadata.policy.color
-            .takeIf { context.task.done == null }
+            .takeUnless { context.task.done }
             ?: Color.Gray
 
     Card(
@@ -138,7 +160,7 @@ fun TaskListItem(
             .fillMaxWidth()
             .draggedItem(state.offsetByKey(context.task.id))
             .detectReorder(state),
-        elevation = 2.dp,
+        elevation = 0.dp,
         shape = RoundedCornerShape(corner = CornerSize(7.dp)),
         backgroundColor = taskColor
     ) {
@@ -166,6 +188,11 @@ fun TaskListItem(
     }
 }
 
+data class TaskItemCard(
+    val content: @Composable (() -> Unit),
+    val onDone: (Task, MarkedAs) -> Task = { task, _ -> task }
+)
+
 private val SWIPE_SQUARE_SIZE = 55.dp
 
 @ExperimentalAnimationApi
@@ -185,6 +212,16 @@ fun TaskItemSwipeableCard(
         sizePx to 1
     )
 
+    val taskItemCard = when (val metadata = context.task.metadata) {
+        is LongTermMetadata -> createLongTermTaskItem(context.task, metadata)
+        is OneTimeMetadata -> createOneTimeTaskItem(context.task, metadata)
+        is RepetitiveMetadata -> createRepetitiveTaskItem(
+            previewMode = previewMode,
+            task = context.task,
+            metadata = metadata
+        )
+    }
+
     Box(
         modifier = Modifier
             .swipeable(
@@ -203,9 +240,19 @@ fun TaskItemSwipeableCard(
             verticalArrangement = Arrangement.Center,
             content = {
                 TaskItemSwipeMenu(
-                    context = context,
                     isVisible = swipeAbleState.currentValue == 1,
-                    close = {
+                    isDone = context.task.done,
+                    onDone = {
+                        val markedAsDone = if (context.task.done) MarkedAs.UNFINISHED else MarkedAs.DONE
+
+                        context.task
+                            .copy(
+                                done = !context.task.done,
+                                doneCount = context.task.doneCount + markedAsDone.ordinal
+                            )
+                            .let { taskItemCard.onDone(it, markedAsDone) }
+                            .apply { context.updateTask(this) }
+
                         scope.launch {
                             swipeAbleState.snapTo(0)
                         }
@@ -224,9 +271,13 @@ fun TaskItemSwipeableCard(
                 .onGloballyPositioned { cardHeight.value = it.size.height }
                 .background(Color.White),
             content = {
-                TaskItemCardContent(
-                    previewMode = previewMode,
-                    context = context
+                TaskHeader(
+                    deleteTask = context.deleteTask,
+                    content = { taskItemCard.content() },
+                )
+                SubTaskList(
+                    task = context.task,
+                    saveTask = { context.updateTask(it) }
                 )
             }
         )
@@ -235,12 +286,10 @@ fun TaskItemSwipeableCard(
 
 @Composable
 fun TaskItemSwipeMenu(
-    context: TaskItemContext,
     isVisible: Boolean,
-    close: () -> Unit,
+    isDone: Boolean,
+    onDone: () -> Unit,
 ) {
-    val isDone = context.task.done != null
-
     val iconId =
         if (isDone)
             R.drawable.ic_baseline_replay_24
@@ -256,36 +305,8 @@ fun TaskItemSwipeMenu(
             .fillMaxSize()
             .clickable {
                 if (isVisible) {
-                    context.updateTask(
-                        context.task.copy(
-                            done = if (isDone) null else System.currentTimeMillis()
-                        )
-                    )
-                    close()
+                    onDone()
                 }
             },
-    )
-}
-
-@ExperimentalTime
-@ExperimentalAnimationApi
-@Composable
-fun TaskItemCardContent(previewMode: Boolean, context: TaskItemContext) {
-    TaskHeader(
-        deleteTask = context.deleteTask,
-        content = {
-            when (val metadata = context.task.metadata) {
-                is LongTermMetadata -> LongTermTaskItem(context.task, metadata)
-                is OneTimeMetadata -> OneTimeTaskItem(context.task, metadata)
-                is RepetitiveMetadata -> RepetitiveTaskItem(
-                    previewMode = previewMode,
-                    task = context.task,
-                    metadata = metadata
-                )
-            }
-        },
-    )
-    SubTaskList(
-        task = context.task
     )
 }

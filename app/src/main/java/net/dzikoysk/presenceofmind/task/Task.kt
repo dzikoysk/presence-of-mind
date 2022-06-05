@@ -12,9 +12,9 @@ enum class OccurrencePolicy(
     val displayName: String,
     val color: Color
 ) {
-    ONE_TIME("One time", Color(0xffffb5d4)),
-    REPETITIVE("Repetitive", Color(0xff7bdfff)),
-    LONG_TERM("Long-term", Color(0xffb2eedd))
+    ONE_TIME("One time", Color(0xFFFFCCF8)),
+    REPETITIVE("Repetitive", Color(0xFFBBF0B1)),
+    LONG_TERM("Long-term", Color(0xFFC3EEFF))
 }
 
 @JsonTypeInfo(
@@ -32,16 +32,15 @@ sealed class OccurrenceMetadata(
 )
 
 /** One-time events */
-class OneTimeMetadata(
+data class OneTimeMetadata(
     val eventDate: EventDateTime = EventDateTime.now()
 ) : OccurrenceMetadata(OccurrencePolicy.ONE_TIME)
 
 
 /** Habits / Daily routine **/
-class RepetitiveMetadata(
+data class RepetitiveMetadata(
     val intervalInDays: Int = 1,
     val expectedAttentionInMinutes: Int = 60,
-    val doneCount: Int = 0,
     val timeSpentInSeconds: Long = 0
 ) : OccurrenceMetadata(OccurrencePolicy.REPETITIVE)
 
@@ -57,8 +56,9 @@ data class CreateTaskRequest(
 data class Task(
     val id: UUID = UUID.randomUUID(),
     val description: String = "",
-    val done: Long? = null,
     val metadata: OccurrenceMetadata = LongTermMetadata,
+    val done: Boolean = false,
+    val doneCount: Int = 0,
     val subtasks: List<SubTask> = emptyList()
 )
 
