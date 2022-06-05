@@ -161,7 +161,7 @@ fun TaskListItem(
             .draggedItem(state.offsetByKey(context.task.id))
             .detectReorder(state),
         elevation = 0.dp,
-        shape = RoundedCornerShape(corner = CornerSize(7.dp)),
+        shape = RoundedCornerShape(CornerSize(8.dp)),
         backgroundColor = taskColor
     ) {
         Box(
