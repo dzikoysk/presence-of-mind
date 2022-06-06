@@ -20,8 +20,9 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+    - name: Grant execute permission for gradlew
+      working-directory: pom-application
+      run: chmod +x gradlew
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-      with:
-        build-root-directory: pom-application
-        arguments: build
+      working-directory: pom-aplication
+      run: ./gradlew build
