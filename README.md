@@ -20,7 +20,7 @@
   <br/><hr><br/>
   <div>
     Yey another todo application - over a milion existing solutions and I still can't find something that fits my needs. <br>
-    This is a personal utility Android application in Jetpack Compose to mix daily schedule with long-term goals &amp; notes
+    This is a personal utility Android application in Jetpack Compose to organize private backlog by mixing daily schedule tasks with habits, long-term goals, notes & things to learn, on just one simple stack-based layout view.
   </div>
   <br><hr>
 </div>                                                                                                     
