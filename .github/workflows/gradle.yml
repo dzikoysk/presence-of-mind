@@ -24,5 +24,5 @@ jobs:
       working-directory: pom-application
       run: chmod +x gradlew
     - name: Build with Gradle
-      working-directory: pom-aplication
+      working-directory: pom-application
       run: ./gradlew build
