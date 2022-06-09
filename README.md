@@ -11,12 +11,14 @@
   <a href="https://www.codefactor.io/repository/github/dzikoysk/presence-of-mind">
     <img src="https://www.codefactor.io/repository/github/dzikoysk/presence-of-mind/badge?s=311879689c7855499217cb3456b06f67ef7588e8" alt="CodeFactor" />
   </a>
+  <!--
   <a href="https://discord.gg/qGRqmGjUFX">
     <img alt="Discord" src="https://img.shields.io/badge/discord-reposilite-738bd7.svg?style=square" />
   </a>
   <a href="https://discord.gg/qGRqmGjUFX">
     <img alt="Discord Online" src="https://img.shields.io/discord/204728244434501632.svg" />
   </a>
+  -->
   <br/><hr><br/>
   <div>
     Yey another todo application - over a milion existing solutions and I still can't find something that fits my needs. <br>
