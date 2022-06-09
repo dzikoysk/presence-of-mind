@@ -24,11 +24,17 @@
     Yey another todo application - over a milion existing solutions and I still can't find something that fits my needs. <br>
     This is a personal utility Android application in Jetpack Compose to organize private backlog by mixing daily schedule tasks with habits, long-term goals, notes & things to learn, on just one simple stack-based layout view.
   </div>
-  <br><hr>
+  <br><br>
+  <img height="760" src="https://user-images.githubusercontent.com/4235722/172942977-7fc84ce9-cf3a-4e2b-a5cd-43c6fca807f8.gif" />
+  <br>
+  <i><sub>~ Hollywood montage (author: unknown)</sub></i>
+  <br>
+  <hr>
 </div>                                                                                                     
 
 ### Installation
-Official: [Google Play]()
+Official: _~Google Play~ In progress_ <br>
+Manual: [GitHub Releases](https://github.com/dzikoysk/presence-of-mind/releases)
 
 ### For developers
 Stack: [Kotlin](https://kotlinlang.org/), [Android Studio](https://developer.android.com/studio), [Jetpack Compose](https://developer.android.com/jetpack/compose)
