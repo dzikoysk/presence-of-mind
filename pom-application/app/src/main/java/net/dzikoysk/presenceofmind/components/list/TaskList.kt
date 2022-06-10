@@ -1,6 +1,7 @@
 package net.dzikoysk.presenceofmind.components.list
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -17,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -94,20 +96,21 @@ fun TaskOrderedListColumn(
     indexOfTask: (UUID) -> Int,
     tasks: List<Task>
 ) {
-    val listOrderState = rememberReorderState()
+    val listOrderState = rememberReorderableLazyListState(
+        onMove = { from, to ->
+            taskService.moveTasks(
+                from = indexOfTask(from.key as UUID),
+                to = indexOfTask(to.key as UUID)
+            )
+        },
+        onDragEnd = { _, _ -> taskService.forceTasksSave() }
+    )
 
     LazyColumn(
         state = listOrderState.listState,
         modifier = Modifier
             .reorderable(
-                state = listOrderState,
-                onMove = { from, to ->
-                    taskService.moveTasks(
-                        from = indexOfTask(from.key as UUID),
-                        to = indexOfTask(to.key as UUID)
-                    )
-                },
-                onDragEnd = { _, _ -> taskService.forceTasksSave() }
+                state = listOrderState
             )
             .fillMaxWidth()
             .fillMaxHeight(),
@@ -120,14 +123,24 @@ fun TaskOrderedListColumn(
             items = tasks,
             key = { it.id },
             itemContent = { task ->
-                TaskListItem(
-                    state = listOrderState,
-                    context = TaskItemContext(
-                        task = task,
-                        updateTask = { taskService.updateTask(it) },
-                        deleteTask = { taskService.deleteTask(task.id) }
+                ReorderableItem(
+                    reorderableState = listOrderState,
+                    key = task.id
+                ) { isDragging ->
+                    val elevation = animateDpAsState(if (isDragging) 16.dp else 0.dp)
+
+                    TaskListItem(
+                        state = listOrderState,
+                        context = TaskItemContext(
+                            task = task,
+                            updateTask = { taskService.updateTask(it) },
+                            deleteTask = { taskService.deleteTask(task.id) }
+                        ),
+                        modifier = Modifier
+                            .shadow(elevation.value)
+                            .background(Color.Transparent)
                     )
-                )
+                }
             }
         )
     }
@@ -146,8 +159,9 @@ data class TaskItemContext(
 @Composable
 fun TaskListItem(
     previewMode: Boolean = false,
-    state: ReorderableState = rememberReorderState(),
-    context: TaskItemContext
+    state: ReorderableLazyListState = rememberReorderableLazyListState(onMove = { _, _ -> }),
+    context: TaskItemContext,
+    modifier: Modifier = Modifier
 ) {
     val taskColor =
         context.task.metadata.policy.color
@@ -158,8 +172,8 @@ fun TaskListItem(
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 8.dp)
             .fillMaxWidth()
-            .draggedItem(state.offsetByKey(context.task.id))
-            .detectReorder(state),
+            .detectReorder(state)
+            .then(modifier),
         elevation = 0.dp,
         shape = RoundedCornerShape(CornerSize(8.dp)),
         backgroundColor = taskColor

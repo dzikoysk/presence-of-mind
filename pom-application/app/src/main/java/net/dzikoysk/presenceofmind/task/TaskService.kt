@@ -2,7 +2,6 @@ package net.dzikoysk.presenceofmind.task
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import org.burnoutcrew.reorderable.move
 import java.util.UUID
 
 class TaskService(
@@ -36,7 +35,7 @@ class TaskService(
     }
 
     fun moveTasks(from: Int, to: Int) {
-        tasks.move(from, to)
+        tasks.add(to, tasks.removeAt(from))
     }
 
     fun forceTasksSave() {
