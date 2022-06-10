@@ -33,8 +33,8 @@
 </div>                                                                                                     
 
 ### Installation
-Official: _~Google Play~ In progress_ <br>
-Manual: [GitHub Releases](https://github.com/dzikoysk/presence-of-mind/releases)
+Manual: [GitHub Releases](https://github.com/dzikoysk/presence-of-mind/releases) <br/>
+Official: [Google Play](https://play.google.com/store/apps/details?id=net.dzikoysk.presenceofmind) _(Might be slightly outdated comparing to GitHub releases)_ <br/>
 
 ### For developers
 Stack: [Kotlin](https://kotlinlang.org/), [Android Studio](https://developer.android.com/studio), [Jetpack Compose](https://developer.android.com/jetpack/compose)
