@@ -28,6 +28,7 @@ android {
         targetSdk 29
         versionCode 1
         versionName "1.0"
+        archivesBaseName = "presence-of-mind-$versionName"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
