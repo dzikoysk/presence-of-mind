@@ -5,21 +5,21 @@ plugins {
 
 android {
     def keystorePropertiesFile = rootProject.file("keystore.properties")
-    def keystoreProperties = new Properties()
 
     if (keystorePropertiesFile.exists()) {
+        def keystoreProperties = new Properties()
         keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    }
 
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-
+        signingConfigs {
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
+
     compileSdk 32
 
     defaultConfig {
@@ -33,7 +33,10 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        signingConfig signingConfigs.release
+
+        if (keystorePropertiesFile.exists()) {
+            signingConfig signingConfigs.release
+        }
     }
 
     buildTypes {
