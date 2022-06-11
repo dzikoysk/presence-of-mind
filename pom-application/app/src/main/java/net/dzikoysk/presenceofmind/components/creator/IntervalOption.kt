@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -37,13 +36,13 @@ fun IntervalOption(
             label = {
                 Text(
                     text = "Select interval",
-                    modifier = Modifier.background(Color.White)
+                    modifier = Modifier.background(MaterialTheme.colors.surface)
                 )
             },
             trailingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_arrow_drop_down_24),
-                    contentDescription = null
+                    contentDescription = "Open list of available intervals"
                 )
             },
             modifier = Modifier

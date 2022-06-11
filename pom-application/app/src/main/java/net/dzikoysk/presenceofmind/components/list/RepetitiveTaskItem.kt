@@ -102,7 +102,7 @@ fun createRepetitiveTaskItem(
                                 painterResource(id = R.drawable.ic_baseline_arrow_drop_up_24)
                             else
                                 painterResource(id = R.drawable.ic_baseline_arrow_drop_down_24),
-                            contentDescription = null
+                            contentDescription = "Open repetitive task dashboard"
                         )
                     }
                 }
@@ -118,8 +118,8 @@ fun createRepetitiveTaskItem(
                             .padding(top = 8.dp)) {
                         if (isStarted) {
                             Icon(
+                                contentDescription = "Stop countdown",
                                 painter = painterResource(id = R.drawable.ic_baseline_stop_24),
-                                contentDescription = null,
                                 modifier = Modifier
                                     .clickable {
                                         setIsStarted(false)
@@ -129,6 +129,7 @@ fun createRepetitiveTaskItem(
                                     .then(playbackModifier)
                             )
                             Icon(
+                                contentDescription = "Resume countdown",
                                 painter = painterResource(
                                     id =
                                     if (isPaused)
@@ -136,15 +137,14 @@ fun createRepetitiveTaskItem(
                                     else
                                         R.drawable.ic_baseline_pause_24
                                 ),
-                                contentDescription = null,
                                 modifier = Modifier
                                     .clickable { setIsPaused(!isPaused) }
                                     .then(playbackModifier)
                             )
                         } else {
                             Icon(
+                                contentDescription = "Start countdown",
                                 painter = painterResource(id = R.drawable.ic_baseline_play_arrow_24),
-                                contentDescription = null,
                                 modifier = Modifier
                                     .clickable {
                                         setIsStarted(true)

@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
-interface TaskRepository {
+sealed interface TaskRepository {
 
     fun saveOrderedTasks(tasks: List<Task>): Future<*>
 

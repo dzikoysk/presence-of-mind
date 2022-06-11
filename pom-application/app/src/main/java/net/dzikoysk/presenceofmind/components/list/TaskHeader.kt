@@ -54,7 +54,7 @@ fun TaskMenu(deleteTask: () -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.TwoTone.MoreVert,
-                contentDescription = null
+                contentDescription = "Open task dropdown menu"
             )
         }
     }

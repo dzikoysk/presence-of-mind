@@ -3,6 +3,7 @@ package net.dzikoysk.presenceofmind.components
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,9 +16,12 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun NamedDivider(
+    modifier: Modifier = Modifier,
     name: String,
-    modifier: Modifier = Modifier
+    backgroundColor: Color = MaterialTheme.colors.background,
 ) {
+    val surface = MaterialTheme.colors.secondary
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -25,7 +29,7 @@ fun NamedDivider(
     ) {
         Canvas(modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
             drawRoundRect(
-                color = Color.LightGray,
+                color = surface,
                 style = Stroke(
                     width = 1f,
                     pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
@@ -37,10 +41,10 @@ fun NamedDivider(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Box(Modifier.background(Color.White)) {
+            Box(Modifier.background(backgroundColor)) {
                 Text(
                     text = name,
-                    color = Color.LightGray,
+                    color = surface,
                     fontSize = 10.sp,
                     modifier = Modifier.padding(horizontal = 15.dp)
                 )

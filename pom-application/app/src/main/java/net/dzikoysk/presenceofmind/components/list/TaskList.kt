@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import net.dzikoysk.presenceofmind.R
+import net.dzikoysk.presenceofmind.components.NamedDivider
 import net.dzikoysk.presenceofmind.shared.mirror.LinearProgressIndicator
 import net.dzikoysk.presenceofmind.task.*
 import org.burnoutcrew.reorderable.*
@@ -79,12 +80,13 @@ fun TaskList(
         indexOfTask = { tasks.indexOfFirst { task -> task.id == it } },
         tasks = matchedTasks
     )
-    /*
-    NamedDivider(
-        name = "DONE",
-        modifier = Modifier.padding(horizontal = 30.dp)
-    )
-     */
+
+    if (matchedTasks.isEmpty()) {
+        NamedDivider(
+            name = "No matched tasks in this group",
+            modifier = Modifier.padding(horizontal = 30.dp).padding(top = 20.dp)
+        )
+    }
 }
 
 @ExperimentalMaterialApi
@@ -106,6 +108,12 @@ fun TaskOrderedListColumn(
         onDragEnd = { _, _ -> taskService.forceTasksSave() }
     )
 
+    val height =
+        if (tasks.isEmpty())
+            Modifier.height(0.dp)
+        else
+            Modifier.fillMaxHeight()
+
     LazyColumn(
         state = listOrderState.listState,
         modifier = Modifier
@@ -113,7 +121,7 @@ fun TaskOrderedListColumn(
                 state = listOrderState
             )
             .fillMaxWidth()
-            .fillMaxHeight(),
+            .then(height),
         contentPadding = PaddingValues(
             horizontal = 22.dp,
             vertical = 16.dp
@@ -176,7 +184,6 @@ fun TaskListItem(
             .then(modifier),
         elevation = 0.dp,
         shape = RoundedCornerShape(CornerSize(8.dp)),
-        backgroundColor = taskColor
     ) {
         Box(
             modifier = Modifier
@@ -195,6 +202,7 @@ fun TaskListItem(
             content = {
                 TaskItemSwipeableCard(
                     previewMode = previewMode,
+                    taskColor = taskColor,
                     context = context
                 )
             }
@@ -215,6 +223,7 @@ private val SWIPE_SQUARE_SIZE = 55.dp
 @Composable
 fun TaskItemSwipeableCard(
     previewMode: Boolean = false,
+    taskColor: Color,
     context: TaskItemContext
 ) {
     val scope = rememberCoroutineScope()
@@ -244,16 +253,17 @@ fun TaskItemSwipeableCard(
                 thresholds = { _, _ -> FractionalThreshold(fraction = 0.3f) },
                 orientation = Orientation.Horizontal
             )
-    ) {
+            .background(taskColor, shape = RoundedCornerShape(CornerSize(9.dp))),
+        ) {
         Column(
             modifier = Modifier
-                .padding(start = 16.dp)
-                .width(SWIPE_SQUARE_SIZE - (16.dp * 2))
+                .width(SWIPE_SQUARE_SIZE)
                 .height(LocalDensity.current.run { cardHeight.value.toDp() }),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             content = {
                 TaskItemSwipeMenu(
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     isVisible = swipeAbleState.currentValue == 1,
                     isDone = context.task.done,
                     onDone = {
@@ -283,7 +293,7 @@ fun TaskItemSwipeableCard(
                     )
                 }
                 .onGloballyPositioned { cardHeight.value = it.size.height }
-                .background(Color.White),
+                .background(MaterialTheme.colors.surface),
             content = {
                 TaskHeader(
                     deleteTask = context.deleteTask,
@@ -300,6 +310,7 @@ fun TaskItemSwipeableCard(
 
 @Composable
 fun TaskItemSwipeMenu(
+    modifier: Modifier = Modifier,
     isVisible: Boolean,
     isDone: Boolean,
     onDone: () -> Unit,
@@ -310,17 +321,19 @@ fun TaskItemSwipeMenu(
         else
             R.drawable.ic_baseline_check_24
 
-    Icon(
-        painter = painterResource(id = iconId),
-        contentDescription = "Done",
-        tint = Color.White,
-        modifier = Modifier
-            .size(40.dp)
-            .fillMaxSize()
-            .clickable {
-                if (isVisible) {
-                    onDone()
-                }
-            },
-    )
+    Box(modifier) {
+        Icon(
+            painter = painterResource(id = iconId),
+            contentDescription = "Done",
+            tint = Color.White,
+            modifier = Modifier
+                .size(40.dp)
+                .fillMaxSize()
+                .clickable {
+                    if (isVisible) {
+                        onDone()
+                    }
+                },
+        )
+    }
 }
