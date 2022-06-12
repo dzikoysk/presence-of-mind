@@ -21,8 +21,10 @@ data class CountdownSession(
     }
 
     fun resetCountdown() {
-        this.sessionTimeInSeconds = sessionTimeInSeconds + (System.currentTimeMillis() - startTimeInMillis).milliseconds.inWholeSeconds
-        this.startTimeInMillis = 0
+        if (isRunning()) {
+            this.sessionTimeInSeconds += (System.currentTimeMillis() - startTimeInMillis).milliseconds.inWholeSeconds
+            this.startTimeInMillis = 0
+        }
     }
 
     @JsonIgnore

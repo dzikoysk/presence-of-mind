@@ -69,8 +69,8 @@ fun createRepetitiveTaskItem(
                         .also { it.resetCountdown() }
 
                     updatedTask.copy(
-                        metadata = metadata.copy(
-                            timeSpentInSeconds = metadata.timeSpentInSeconds + stoppedCountdown.sessionTimeInSeconds,
+                        metadata = updatedTask.metadata.copy(
+                            timeSpentInSeconds = updatedTask.metadata.timeSpentInSeconds + stoppedCountdown.sessionTimeInSeconds,
                             countdownSession = CountdownSession()
                         )
                     )
