@@ -17,8 +17,8 @@ import net.dzikoysk.presenceofmind.task.Task
 
 @Composable
 fun SubTaskList(
-    task: Task,
-    saveTask: (Task) -> Unit
+    task: Task<*>,
+    saveTask: (Task<*>) -> Unit
 ) {
     Box {
         task.subtasks.forEachIndexed { idx, subtask ->

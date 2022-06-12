@@ -17,12 +17,12 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.task.OccurrencePolicy
+import net.dzikoysk.presenceofmind.task.OccurrenceType
 
 @Composable
 fun IntervalOption(
-    selectedType: OccurrencePolicy,
-    setSelectedType: (OccurrencePolicy) -> Unit,
+    selectedType: OccurrenceType,
+    setSelectedType: (OccurrenceType) -> Unit,
     typeDropdownIsOpen: Boolean,
     setDropdownIsOpen: (Boolean) -> Unit
 ) {
@@ -59,7 +59,7 @@ fun IntervalOption(
                 offset = DpOffset(x = 0.dp, y = (-8).dp),
                 modifier = Modifier.width(LocalDensity.current.run { fieldWidth.width.toDp() })
             ) {
-                OccurrencePolicy.values().forEach { occurrencePolicyType ->
+                OccurrenceType.values().forEach { occurrencePolicyType ->
                     DropdownMenuItem(
                         onClick = {
                             setSelectedType(occurrencePolicyType)

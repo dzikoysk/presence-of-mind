@@ -8,13 +8,13 @@ class TaskService(
     val taskRepository: TaskRepository = InMemoryTaskRepository()
 ) {
 
-    private val tasks = mutableStateListOf<Task>()
+    private val tasks = mutableStateListOf<Task<*>>()
 
     init {
         tasks.addAll(taskRepository.loadOrderedTasks())
     }
 
-    fun createTask(createTaskRequest: CreateTaskRequest): Task {
+    fun createTask(createTaskRequest: CreateTaskRequest): Task<*> {
         val task = Task(
             id = UUID.randomUUID(),
             description = createTaskRequest.description,
@@ -28,7 +28,7 @@ class TaskService(
         return task
     }
 
-    fun updateTask(task: Task) {
+    fun updateTask(task: Task<*>) {
         val index = tasks.indexOfFirst { it.id == task.id }
         tasks[index] = task
         forceTasksSave()
@@ -47,10 +47,10 @@ class TaskService(
         forceTasksSave()
     }
 
-    fun findAllTasks(): List<Task> =
+    fun findAllTasks(): List<Task<*>> =
         taskRepository.loadOrderedTasks()
 
-    fun getObservableListOfAllTasks(): SnapshotStateList<Task> =
+    fun getObservableListOfAllTasks(): SnapshotStateList<Task<*>> =
         tasks
 
 }

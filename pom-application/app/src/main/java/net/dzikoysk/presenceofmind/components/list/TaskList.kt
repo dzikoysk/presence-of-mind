@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.NamedDivider
+import net.dzikoysk.presenceofmind.shared.Unsafe
 import net.dzikoysk.presenceofmind.shared.mirror.LinearProgressIndicator
 import net.dzikoysk.presenceofmind.task.*
 import org.burnoutcrew.reorderable.*
@@ -96,7 +97,7 @@ fun TaskList(
 fun TaskOrderedListColumn(
     taskService: TaskService,
     indexOfTask: (UUID) -> Int,
-    tasks: List<Task>
+    tasks: List<Task<*>>
 ) {
     val listOrderState = rememberReorderableLazyListState(
         onMove = { from, to ->
@@ -155,8 +156,8 @@ fun TaskOrderedListColumn(
 }
 
 data class TaskItemContext(
-    val task: Task,
-    val updateTask: (Task) -> Unit = {},
+    val task: Task<*>,
+    val updateTask: (Task<*>) -> Unit = {},
     val deleteTask: () -> Unit = {},
     val onDone: () -> Unit = {}
 )
@@ -166,10 +167,9 @@ data class TaskItemContext(
 @ExperimentalAnimationApi
 @Composable
 fun TaskListItem(
-    previewMode: Boolean = false,
+    modifier: Modifier = Modifier,
     state: ReorderableLazyListState = rememberReorderableLazyListState(onMove = { _, _ -> }),
     context: TaskItemContext,
-    modifier: Modifier = Modifier
 ) {
     val taskColor =
         context.task.metadata.policy.color
@@ -201,7 +201,6 @@ fun TaskListItem(
                 },
             content = {
                 TaskItemSwipeableCard(
-                    previewMode = previewMode,
                     taskColor = taskColor,
                     context = context
                 )
@@ -210,9 +209,9 @@ fun TaskListItem(
     }
 }
 
-data class TaskItemCard(
+data class TaskItemCard<M : OccurrenceMetadata>(
     val content: @Composable (() -> Unit),
-    val onDone: (Task, MarkedAs) -> Task = { task, _ -> task }
+    val onDone: (Task<M>, MarkedAs) -> Task<M> = { task, _ -> task }
 )
 
 private val SWIPE_SQUARE_SIZE = 55.dp
@@ -222,7 +221,6 @@ private val SWIPE_SQUARE_SIZE = 55.dp
 @ExperimentalMaterialApi
 @Composable
 fun TaskItemSwipeableCard(
-    previewMode: Boolean = false,
     taskColor: Color,
     context: TaskItemContext
 ) {
@@ -235,14 +233,23 @@ fun TaskItemSwipeableCard(
         sizePx to 1
     )
 
+    @Suppress("UNCHECKED_CAST")
     val taskItemCard = when (val metadata = context.task.metadata) {
-        is LongTermMetadata -> createLongTermTaskItem(context.task, metadata)
-        is OneTimeMetadata -> createOneTimeTaskItem(context.task, metadata)
-        is RepetitiveMetadata -> createRepetitiveTaskItem(
-            previewMode = previewMode,
-            task = context.task,
-            metadata = metadata
-        )
+        is LongTermMetadata ->
+            createLongTermTaskItem(
+                task = context.task as Task<LongTermMetadata>
+            )
+        is OneTimeMetadata ->
+            createOneTimeTaskItem(
+                task = context.task as Task<OneTimeMetadata>,
+            )
+        is RepetitiveMetadata ->
+            createRepetitiveTaskItem(
+                task = context.task as Task<RepetitiveMetadata>,
+                updateTask = { context.updateTask(it) }
+            )
+        else ->
+            throw NotImplementedError("Unknown metadata type $metadata")
     }
 
     Box(
@@ -274,7 +281,7 @@ fun TaskItemSwipeableCard(
                                 done = !context.task.done,
                                 doneCount = context.task.doneCount + markedAsDone.ordinal
                             )
-                            .let { taskItemCard.onDone(it, markedAsDone) }
+                            .let { taskItemCard.onDone(Unsafe.cast(it), markedAsDone) }
                             .apply { context.updateTask(this) }
 
                         scope.launch {

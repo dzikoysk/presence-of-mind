@@ -18,8 +18,11 @@ import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.plural
 import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
+import net.dzikoysk.presenceofmind.task.CountdownSession
 import net.dzikoysk.presenceofmind.task.RepetitiveMetadata
 import net.dzikoysk.presenceofmind.task.Task
+import java.util.UUID
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
@@ -31,9 +34,9 @@ import kotlin.time.ExperimentalTime
 @Composable
 private fun PreviewOfRepetitiveTaskItem() {
     TaskListItem(
-        previewMode = true,
         context = TaskItemContext(
             task = Task(
+                id = UUID.randomUUID(),
                 description = "Preview of repetitive task item",
                 metadata = RepetitiveMetadata(
                     intervalInDays = 3,
@@ -47,33 +50,38 @@ private fun PreviewOfRepetitiveTaskItem() {
 @ExperimentalTime
 @Composable
 fun createRepetitiveTaskItem(
-    previewMode: Boolean = false,
-    task: Task,
-    metadata: RepetitiveMetadata = task.metadata as RepetitiveMetadata,
-) : TaskItemCard {
-    val (isOpen, setIsOpen) = remember { mutableStateOf(previewMode) }
-    val (isStarted, setIsStarted) = remember { mutableStateOf(previewMode) }
-    val (isPaused, setIsPaused) = remember { mutableStateOf(true) }
+    task: Task<RepetitiveMetadata>,
+    updateTask: (Task<RepetitiveMetadata>) -> Unit = {}
+) : TaskItemCard<RepetitiveMetadata> {
+    val metadata = task.metadata
+    val countdownSession = metadata.countdownSession
 
-    val currentIsPaused by rememberUpdatedState(isPaused)
-    var seconds by remember { mutableStateOf(0) }
+    val (isOpen, setIsOpen) = remember { mutableStateOf(countdownSession.isRunning()) }
+    val (isStarted, setIsStarted) = remember { mutableStateOf(countdownSession.isRunning()) }
+    var countdownWatcher by remember { mutableStateOf(0) }
 
     return TaskItemCard(
         onDone = { updatedTask, markedAs ->
             when (markedAs) {
                 MarkedAs.UNFINISHED -> updatedTask
-                MarkedAs.DONE -> updatedTask.copy(
-                    metadata = metadata.copy(
-                        timeSpentInSeconds = metadata.timeSpentInSeconds + seconds
+                MarkedAs.DONE -> {
+                    val stoppedCountdown = updatedTask.metadata.countdownSession
+                        .also { it.resetCountdown() }
+
+                    updatedTask.copy(
+                        metadata = metadata.copy(
+                            timeSpentInSeconds = metadata.timeSpentInSeconds + stoppedCountdown.sessionTimeInSeconds,
+                            countdownSession = CountdownSession()
+                        )
                     )
-                )
+                }
             }
         },
         content = {
             LaunchedEffect(Unit) {
                 while(true) {
+                    countdownWatcher++
                     delay(1.seconds)
-                    if (!currentIsPaused) seconds++
                 }
             }
 
@@ -119,26 +127,13 @@ fun createRepetitiveTaskItem(
                         if (isStarted) {
                             Icon(
                                 contentDescription = "Stop countdown",
-                                painter = painterResource(id = R.drawable.ic_baseline_stop_24),
+                                painter = painterResource(id = R.drawable.ic_baseline_pause_24),
                                 modifier = Modifier
                                     .clickable {
                                         setIsStarted(false)
-                                        setIsPaused(true)
-                                        seconds = 0
+                                        countdownSession.resetCountdown()
+                                        updateTask(task)
                                     }
-                                    .then(playbackModifier)
-                            )
-                            Icon(
-                                contentDescription = "Resume countdown",
-                                painter = painterResource(
-                                    id =
-                                    if (isPaused)
-                                        R.drawable.ic_baseline_play_arrow_24
-                                    else
-                                        R.drawable.ic_baseline_pause_24
-                                ),
-                                modifier = Modifier
-                                    .clickable { setIsPaused(!isPaused) }
                                     .then(playbackModifier)
                             )
                         } else {
@@ -148,14 +143,28 @@ fun createRepetitiveTaskItem(
                                 modifier = Modifier
                                     .clickable {
                                         setIsStarted(true)
-                                        setIsPaused(false)
+                                        countdownSession.startCountdown()
+                                        updateTask(task)
                                     }
                                     .then(playbackModifier)
                             )
                         }
 
+                        val timeToFinish = metadata.expectedAttentionInMinutes
+                            .minutes
+                            .incomingDurationToHumanReadableFormat()
+
+                        val currentTimeInSeconds = countdownWatcher.run { countdownSession.startTimeInMillis }
+                            .takeIf { countdownSession.isRunning() }
+                            ?.let { System.currentTimeMillis() - it }
+                            ?.milliseconds
+                            ?.inWholeSeconds
+                            ?: 0
+
+                        val timeElapsed = currentTimeInSeconds + countdownSession.sessionTimeInSeconds
+
                         Text(
-                            text = "${seconds.seconds.timeToHumanReadableFormat()}  /  ${metadata.expectedAttentionInMinutes.minutes.incomingDurationToHumanReadableFormat()}",
+                            text = "${timeElapsed.seconds.timeToHumanReadableFormat()}  /  $timeToFinish",
                             fontSize = 12.sp,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)

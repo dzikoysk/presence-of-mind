@@ -59,7 +59,7 @@ fun TaskCreator(
     taskService: TaskService = TaskService(),
 ) {
     var newTask by remember { mutableStateOf("") }
-    val (selectedType, setSelectedType) = remember { mutableStateOf(OccurrencePolicy.ONE_TIME) }
+    val (selectedType, setSelectedType) = remember { mutableStateOf(OccurrenceType.ONE_TIME) }
     val (typeDropdownIsOpen, setDropdownIsOpen) = remember { mutableStateOf(false) }
     val (intervalInDays, setIntervalInDays) = remember { mutableStateOf("1") }
     val (expectedAttentionInMinutes, setExpectedAttentionInMinutes) = remember { mutableStateOf("0") }
@@ -105,7 +105,7 @@ fun TaskCreator(
         }
 
         when (selectedType) {
-            OccurrencePolicy.ONE_TIME -> {
+            OccurrenceType.ONE_TIME -> {
                 item {
                     NamedDivider(
                         name = " ${selectedType.displayName} configuration ",
@@ -160,7 +160,7 @@ fun TaskCreator(
                     )
                 }
             }
-            OccurrencePolicy.REPETITIVE -> {
+            OccurrenceType.REPETITIVE -> {
                 item {
                     NamedDivider(
                         name = " ${selectedType.displayName} configuration ",
@@ -188,7 +188,7 @@ fun TaskCreator(
                     )
                 }
             }
-            OccurrencePolicy.LONG_TERM -> {
+            OccurrenceType.LONG_TERM -> {
                 // skip
             }
         }
@@ -202,16 +202,16 @@ fun TaskCreator(
                     createTaskDialogState.value = false
 
                     val policy = when (selectedType) {
-                        OccurrencePolicy.ONE_TIME ->
+                        OccurrenceType.ONE_TIME ->
                             OneTimeMetadata(
                                 eventDate = oneTimeEventTime
                             )
-                        OccurrencePolicy.REPETITIVE ->
+                        OccurrenceType.REPETITIVE ->
                             RepetitiveMetadata(
                                 intervalInDays = intervalInDays.toInt(),
                                 expectedAttentionInMinutes = expectedAttentionInMinutes.toInt()
                             )
-                        OccurrencePolicy.LONG_TERM ->
+                        OccurrenceType.LONG_TERM ->
                             LongTermMetadata
                     }
 
