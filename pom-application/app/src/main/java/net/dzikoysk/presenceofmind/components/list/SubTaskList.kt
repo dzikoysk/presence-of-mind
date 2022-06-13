@@ -21,31 +21,33 @@ fun SubTaskList(
     saveTask: (Task<*>) -> Unit
 ) {
     Box {
-        task.subtasks.forEachIndexed { idx, subtask ->
-            Row(
-                modifier = Modifier
-                    .padding(start = 5.dp, top = (30 * idx).dp)
-                    .scale(0.85f),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Row {
-                    val isDone = remember { mutableStateOf(subtask.done) }
+        task.subtasks
+            .sortedBy { it.index }
+            .forEachIndexed { idx, subtask ->
+                Row(
+                    modifier = Modifier
+                        .padding(start = 5.dp, top = (30 * idx).dp)
+                        .scale(0.85f),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Row {
+                        val isDone = remember { mutableStateOf(subtask.done) }
 
-                    Checkbox(
-                        checked = isDone.value,
-                        onCheckedChange = {
-                            isDone.value = !isDone.value
-                            subtask.done = isDone.value
-                            saveTask(task)
-                        }
-                    )
-                    Text(
-                        text = subtask.description,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(top = 13.dp)
-                    )
+                        Checkbox(
+                            checked = isDone.value,
+                            onCheckedChange = {
+                                isDone.value = !isDone.value
+                                subtask.done = isDone.value
+                                saveTask(task)
+                            }
+                        )
+                        Text(
+                            text = subtask.description,
+                            fontSize = 15.sp,
+                            modifier = Modifier.padding(top = 13.dp)
+                        )
+                    }
                 }
             }
-        }
     }
 }

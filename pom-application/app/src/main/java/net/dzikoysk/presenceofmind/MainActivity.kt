@@ -186,9 +186,7 @@ fun MainView(
                             true -> MaterialTheme.colors.primaryVariant
                             false -> MaterialTheme.colors.surface
                         },
-                    onClick = {
-                        createTaskDialogState.value = true
-                    },
+                    onClick = { createTaskDialogState.value = true },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_add_24),

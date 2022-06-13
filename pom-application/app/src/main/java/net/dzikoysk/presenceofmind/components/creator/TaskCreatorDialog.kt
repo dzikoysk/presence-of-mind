@@ -43,9 +43,7 @@ fun TaskCreatorDialog(
     }
 
     Dialog(
-        onDismissRequest = {
-            createTaskDialogState.value = false
-        },
+        onDismissRequest = { createTaskDialogState.value = false },
         properties = DialogProperties(usePlatformDefaultWidth = false),
         content = { TaskCreator(createTaskDialogState, taskService) }
     )

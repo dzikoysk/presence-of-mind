@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.NamedDivider
+import net.dzikoysk.presenceofmind.components.creator.SubtaskManagerDialog
 import net.dzikoysk.presenceofmind.shared.Unsafe
 import net.dzikoysk.presenceofmind.shared.mirror.LinearProgressIndicator
 import net.dzikoysk.presenceofmind.task.*
@@ -46,6 +48,7 @@ enum class MarkedAs {
     DONE
 }
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalTime
 @ExperimentalAnimationApi
@@ -90,6 +93,7 @@ fun TaskList(
     }
 }
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalTime
 @ExperimentalAnimationApi
@@ -118,9 +122,7 @@ fun TaskOrderedListColumn(
     LazyColumn(
         state = listOrderState.listState,
         modifier = Modifier
-            .reorderable(
-                state = listOrderState
-            )
+            .reorderable(listOrderState)
             .fillMaxWidth()
             .then(height),
         contentPadding = PaddingValues(
@@ -162,6 +164,7 @@ data class TaskItemContext(
     val onDone: () -> Unit = {}
 )
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalTime
 @ExperimentalAnimationApi
@@ -216,6 +219,7 @@ data class TaskItemCard<M : OccurrenceMetadata>(
 
 private val SWIPE_SQUARE_SIZE = 55.dp
 
+@ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @ExperimentalTime
 @ExperimentalMaterialApi
@@ -302,14 +306,26 @@ fun TaskItemSwipeableCard(
                 .onGloballyPositioned { cardHeight.value = it.size.height }
                 .background(MaterialTheme.colors.surface),
             content = {
+                val subtaskManagerOpen = remember { mutableStateOf(false)  }
+
                 TaskHeader(
                     deleteTask = context.deleteTask,
+                    openSubtasksManager = { subtaskManagerOpen.value = true },
                     content = { taskItemCard.content() },
                 )
+
                 SubTaskList(
                     task = context.task,
                     saveTask = { context.updateTask(it) }
                 )
+
+                if (subtaskManagerOpen.value) {
+                    SubtaskManagerDialog(
+                        close = { subtaskManagerOpen.value = false },
+                        updateTask= { context.updateTask(it) },
+                        task = context.task
+                    )
+                }
             }
         )
     }

@@ -18,8 +18,9 @@ import com.androidpoet.dropdown.*
 @ExperimentalAnimationApi
 @Composable
 fun TaskHeader(
-    content: @Composable (() -> Unit),
-    deleteTask: () -> Unit
+    deleteTask: () -> Unit,
+    openSubtasksManager: () -> Unit,
+    content: @Composable (() -> Unit)
 ) {
     Column {
         Row(
@@ -29,34 +30,47 @@ fun TaskHeader(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             content()
-            TaskMenu(deleteTask = deleteTask)
+            TaskMenu(
+                deleteTask = deleteTask,
+                openSubtasksManager = openSubtasksManager
+            )
         }
     }
 }
 
 const val DELETE_TASK_ID = "delete-task"
+const val MANAGE_SUBTASKS_ID = "manage-subtasks"
 
 @ExperimentalAnimationApi
 @Composable
-fun TaskMenu(deleteTask: () -> Unit) {
+fun TaskMenu(
+    deleteTask: () -> Unit,
+    openSubtasksManager: () -> Unit
+) {
     Box {
         val (isOpen, setIsOpen) = remember { mutableStateOf(false) }
 
-        TaskMenuDropdown(isOpen = isOpen, setIsOpen = setIsOpen, itemSelected = {
-            when (it) {
-                DELETE_TASK_ID -> deleteTask()
+        TaskMenuDropdown(
+            isOpen = isOpen,
+            setIsOpen = setIsOpen,
+            itemSelected = {
+                when (it) {
+                    DELETE_TASK_ID -> deleteTask()
+                    MANAGE_SUBTASKS_ID -> openSubtasksManager()
+                }
+                setIsOpen(false)
             }
-            setIsOpen(false)
-        })
+        )
 
         IconButton(
-            onClick = { setIsOpen(true) }
-        ) {
-            Icon(
-                imageVector = Icons.TwoTone.MoreVert,
-                contentDescription = "Open task dropdown menu"
-            )
-        }
+            onClick = { setIsOpen(true) },
+            content = {
+                Icon(
+                    imageVector = Icons.TwoTone.MoreVert,
+                    contentDescription = "Open task dropdown menu"
+                )
+            }
+        )
     }
 }
 
@@ -68,7 +82,7 @@ fun TaskMenuDropdown(
     itemSelected: (String) -> Unit
 ) {
     val menu = dropDownMenu<String> {
-        item(id = "add-subtask", title = "Add subtask")
+        item(id = MANAGE_SUBTASKS_ID, title = "Manage subtasks")
         item(id = DELETE_TASK_ID, title = "Delete")
     }
 

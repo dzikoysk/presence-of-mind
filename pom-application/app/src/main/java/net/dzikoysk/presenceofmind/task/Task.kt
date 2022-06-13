@@ -25,8 +25,8 @@ data class Task<M : OccurrenceMetadata>(
 
 data class SubTask(
     var index: Int,
-    val description: String,
-    var done: Boolean
+    var description: String = "",
+    var done: Boolean = false
 )
 
 data class CreateTaskRequest(
