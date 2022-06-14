@@ -19,6 +19,7 @@ import com.androidpoet.dropdown.*
 @Composable
 fun TaskHeader(
     deleteTask: () -> Unit,
+    editTask: () -> Unit,
     openSubtasksManager: () -> Unit,
     content: @Composable (() -> Unit)
 ) {
@@ -32,19 +33,22 @@ fun TaskHeader(
             content()
             TaskMenu(
                 deleteTask = deleteTask,
+                editTask = editTask,
                 openSubtasksManager = openSubtasksManager
             )
         }
     }
 }
 
-const val DELETE_TASK_ID = "delete-task"
 const val MANAGE_SUBTASKS_ID = "manage-subtasks"
+const val EDIT_TASK_ID = "edit-task"
+const val DELETE_TASK_ID = "delete-task"
 
 @ExperimentalAnimationApi
 @Composable
 fun TaskMenu(
     deleteTask: () -> Unit,
+    editTask: () -> Unit,
     openSubtasksManager: () -> Unit
 ) {
     Box {
@@ -56,6 +60,7 @@ fun TaskMenu(
             itemSelected = {
                 when (it) {
                     DELETE_TASK_ID -> deleteTask()
+                    EDIT_TASK_ID -> editTask()
                     MANAGE_SUBTASKS_ID -> openSubtasksManager()
                 }
                 setIsOpen(false)
@@ -83,6 +88,7 @@ fun TaskMenuDropdown(
 ) {
     val menu = dropDownMenu<String> {
         item(id = MANAGE_SUBTASKS_ID, title = "Manage subtasks")
+        item(id = EDIT_TASK_ID, title = "Edit task")
         item(id = DELETE_TASK_ID, title = "Delete")
     }
 

@@ -20,12 +20,12 @@ import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.task.OccurrenceType
 
 @Composable
-fun IntervalOption(
+fun TaskEditorIntervalOption(
     selectedType: OccurrenceType,
     setSelectedType: (OccurrenceType) -> Unit,
-    typeDropdownIsOpen: Boolean,
-    setDropdownIsOpen: (Boolean) -> Unit
 ) {
+    val (typeDropdownIsOpen, setDropdownIsOpen) = remember { mutableStateOf(false) }
+
     Box {
         var fieldWidth by remember { mutableStateOf(IntSize.Zero) }
 

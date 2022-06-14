@@ -8,30 +8,20 @@ class TaskService(
     val taskRepository: TaskRepository = InMemoryTaskRepository()
 ) {
 
-    private val tasks = mutableStateListOf<Task<*>>()
+    private val tasks = mutableStateListOf<Task>()
 
     init {
         tasks.addAll(taskRepository.loadOrderedTasks())
     }
 
-    fun createTask(createTaskRequest: CreateTaskRequest): Task<*> {
-        val task = Task(
-            id = UUID.randomUUID(),
-            description = createTaskRequest.description,
-            metadata = createTaskRequest.policy,
-            subtasks = createTaskRequest.subtasks
-        )
-
-        tasks.add(task)
-        forceTasksSave()
-
-        return task
-    }
-
-    fun updateTask(task: Task<*>) {
-        val index = tasks.indexOfFirst { it.id == task.id }
-        tasks.removeAt(index)
-        tasks.add(index, task)
+    fun saveTask(task: Task) {
+        when (val index = tasks.indexOfFirst { it.id == task.id }) {
+            -1 -> tasks.add(task)
+            else -> {
+                tasks.removeAt(index)
+                tasks.add(index, task)
+            }
+        }
         forceTasksSave()
     }
 
@@ -48,25 +38,25 @@ class TaskService(
         forceTasksSave()
     }
 
-    fun findAllTasks(): List<Task<*>> =
+    fun findAllTasks(): List<Task> =
         taskRepository.loadOrderedTasks()
 
-    fun getObservableListOfAllTasks(): SnapshotStateList<Task<*>> =
+    fun getObservableListOfAllTasks(): SnapshotStateList<Task> =
         tasks
 
 }
 
 fun TaskService.createDefaultTasks() {
-    createTask(CreateTaskRequest(description = "One-time task ~ Events", policy = OneTimeMetadata()))
-    createTask(CreateTaskRequest(
+    saveTask(Task(description = "One-time task ~ Events", metadata = OneTimeMetadata()))
+    saveTask(Task(
         description = "Repetitive task ~ Habits",
-        policy = RepetitiveMetadata(
+        metadata = RepetitiveMetadata(
             intervalInDays = 1,
             expectedAttentionInMinutes = 75
         )
     ))
-    createTask(CreateTaskRequest(description = "Long-term task ~ Notes", policy = LongTermMetadata))
-    createTask(CreateTaskRequest(description = "Complex long-term task ~ Lists", policy = LongTermMetadata, subtasks = listOf(
+    saveTask(Task(description = "Long-term task ~ Notes", metadata = LongTermMetadata))
+    saveTask(Task(description = "Complex long-term task ~ Lists", metadata = LongTermMetadata, subtasks = listOf(
         SubTask(description = "To do", done = false),
         SubTask(description = "Done", done = true),
     )))

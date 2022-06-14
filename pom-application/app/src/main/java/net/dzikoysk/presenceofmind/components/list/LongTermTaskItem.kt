@@ -6,11 +6,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.task.LongTermMetadata
 import net.dzikoysk.presenceofmind.task.Task
 
 @Composable
-fun createLongTermTaskItem(task: Task<LongTermMetadata>): TaskItemCard<LongTermMetadata> {
+fun createLongTermTaskItem(task: Task): TaskItemCard {
     return TaskItemCard(
         content = {
             Column(Modifier.padding(start = 16.dp)) {

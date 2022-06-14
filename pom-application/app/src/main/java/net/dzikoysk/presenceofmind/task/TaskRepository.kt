@@ -10,9 +10,9 @@ import java.util.concurrent.Future
 
 sealed interface TaskRepository {
 
-    fun saveOrderedTasks(tasks: List<Task<*>>): Future<*>
+    fun saveOrderedTasks(tasks: List<Task>): Future<*>
 
-    fun loadOrderedTasks(): List<Task<*>>
+    fun loadOrderedTasks(): List<Task>
 
 }
 
@@ -24,13 +24,13 @@ class SharedPreferencesTaskRepository(private val sharedPreferences: SharedPrefe
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    override fun saveOrderedTasks(tasks: List<Task<*>>): Future<*> =
+    override fun saveOrderedTasks(tasks: List<Task>): Future<*> =
         executor.submit {
             val result = DEFAULT_OBJECT_MAPPER.writeValueAsString(tasks)
             sharedPreferences.edit { putString(ORDERED_TASKS_ID, result) }
         }
 
-    override fun loadOrderedTasks(): List<Task<*>> =
+    override fun loadOrderedTasks(): List<Task> =
         sharedPreferences.getString(ORDERED_TASKS_ID, null)
             ?.let { DEFAULT_OBJECT_MAPPER.readValue(it) }
             ?: emptyList()
@@ -39,14 +39,14 @@ class SharedPreferencesTaskRepository(private val sharedPreferences: SharedPrefe
 
 class InMemoryTaskRepository : TaskRepository {
 
-    private var storedTasks = emptyList<Task<*>>()
+    private var storedTasks = emptyList<Task>()
 
-    override fun saveOrderedTasks(tasks: List<Task<*>>): Future<*> {
+    override fun saveOrderedTasks(tasks: List<Task>): Future<*> {
         this.storedTasks = tasks.toList()
         return CompletableFuture.completedFuture(null)
     }
 
-    override fun loadOrderedTasks(): List<Task<*>> =
+    override fun loadOrderedTasks(): List<Task> =
         storedTasks.toList()
 
 }

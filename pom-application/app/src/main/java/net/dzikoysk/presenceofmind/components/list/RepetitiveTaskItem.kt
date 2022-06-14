@@ -52,10 +52,10 @@ private fun PreviewOfRepetitiveTaskItem() {
 @ExperimentalTime
 @Composable
 fun createRepetitiveTaskItem(
-    task: Task<RepetitiveMetadata>,
-    updateTask: (Task<RepetitiveMetadata>) -> Unit = {}
-) : TaskItemCard<RepetitiveMetadata> {
-    val metadata = task.metadata
+    task: Task,
+    metadata: RepetitiveMetadata,
+    updateTask: (Task) -> Unit = {}
+) : TaskItemCard {
     val countdownSession = metadata.countdownSession
 
     val (isOpen, setIsOpen) = remember { mutableStateOf(countdownSession.isRunning()) }
@@ -67,12 +67,12 @@ fun createRepetitiveTaskItem(
             when (markedAs) {
                 MarkedAs.UNFINISHED -> updatedTask
                 MarkedAs.DONE -> {
-                    val stoppedCountdown = updatedTask.metadata.countdownSession
+                    val stoppedCountdown = metadata.countdownSession
                         .also { it.resetCountdown() }
 
                     updatedTask.copy(
-                        metadata = updatedTask.metadata.copy(
-                            timeSpentInSeconds = updatedTask.metadata.timeSpentInSeconds + stoppedCountdown.sessionTimeInSeconds,
+                        metadata = metadata.copy(
+                            timeSpentInSeconds = metadata.timeSpentInSeconds + stoppedCountdown.sessionTimeInSeconds,
                             countdownSession = CountdownSession()
                         )
                     )

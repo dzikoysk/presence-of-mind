@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
-import net.dzikoysk.presenceofmind.components.creator.TaskCreatorDialog
+import net.dzikoysk.presenceofmind.components.creator.TaskEditorDialog
 import net.dzikoysk.presenceofmind.components.list.MarkedAs
 import net.dzikoysk.presenceofmind.components.list.TaskList
 import net.dzikoysk.presenceofmind.task.SharedPreferencesTaskRepository
@@ -96,7 +96,7 @@ fun MainView(
     restartActivity: () -> Unit = {}
 ) {
     val selectedTasks = remember { mutableStateOf(MarkedAs.UNFINISHED) }
-    val createTaskDialogState = remember { mutableStateOf(false)  }
+    val openTaskEditorDialog = remember { mutableStateOf(false)  }
 
     PresenceOfMindTheme(lightTheme = themeRepository.isLightMode()) {
         Scaffold(
@@ -175,7 +175,13 @@ fun MainView(
                         displayMode = selectedTasks.value
                     )
 
-                    TaskCreatorDialog(createTaskDialogState, taskService)
+                    if (openTaskEditorDialog.value) {
+                        TaskEditorDialog(
+                            closeDialog = { openTaskEditorDialog.value = false },
+                            saveTask = { taskService.saveTask(it) },
+                            taskToEdit = null
+                        )
+                    }
                 }
             },
             floatingActionButton = {
@@ -186,7 +192,7 @@ fun MainView(
                             true -> MaterialTheme.colors.primaryVariant
                             false -> MaterialTheme.colors.surface
                         },
-                    onClick = { createTaskDialogState.value = true },
+                    onClick = { openTaskEditorDialog.value = true },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_add_24),

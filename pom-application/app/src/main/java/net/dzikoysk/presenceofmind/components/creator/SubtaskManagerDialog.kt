@@ -36,8 +36,8 @@ import java.util.UUID
 @Composable
 fun SubtaskManagerDialog(
     close: () -> Unit,
-    updateTask: (Task<*>) -> Unit,
-    task: Task<*>
+    updateTask: (Task) -> Unit,
+    task: Task
 ) {
     Dialog(
         onDismissRequest = { close() },
@@ -55,8 +55,8 @@ fun SubtaskManagerDialog(
 @Composable
 fun SubtaskManager(
     close: () -> Unit,
-    updateTask: (Task<*>) -> Unit,
-    task: Task<*>
+    updateTask: (Task) -> Unit,
+    task: Task
 ) {
     val subtasks = remember { mutableStateOf(task.subtasks) }
 

@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.NamedDivider
 import net.dzikoysk.presenceofmind.components.creator.SubtaskManagerDialog
-import net.dzikoysk.presenceofmind.shared.Unsafe
+import net.dzikoysk.presenceofmind.components.creator.TaskEditorDialog
 import net.dzikoysk.presenceofmind.shared.mirror.LinearProgressIndicator
 import net.dzikoysk.presenceofmind.task.*
 import org.burnoutcrew.reorderable.*
@@ -70,7 +70,12 @@ fun TaskList(
     val percent = runCatching { doneTasks.size / tasks.size.toFloat() }
         .getOrDefault(1f)
 
-    Row(Modifier.padding(horizontal = 30.dp).padding(top = 18.dp).fillMaxWidth()) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 30.dp)
+            .padding(top = 18.dp)
+            .fillMaxWidth()
+    ) {
         LinearProgressIndicator(
             progress = percent,
             color = Color(0xFFADA6F8),
@@ -88,7 +93,9 @@ fun TaskList(
     if (matchedTasks.isEmpty()) {
         NamedDivider(
             name = "No matched tasks in this group",
-            modifier = Modifier.padding(horizontal = 30.dp).padding(top = 20.dp)
+            modifier = Modifier
+                .padding(horizontal = 30.dp)
+                .padding(top = 20.dp)
         )
     }
 }
@@ -101,7 +108,7 @@ fun TaskList(
 fun TaskOrderedListColumn(
     taskService: TaskService,
     indexOfTask: (UUID) -> Int,
-    tasks: List<Task<*>>
+    tasks: List<Task>
 ) {
     val listOrderState = rememberReorderableLazyListState(
         onMove = { from, to ->
@@ -144,7 +151,7 @@ fun TaskOrderedListColumn(
                         state = listOrderState,
                         context = TaskItemContext(
                             task = task,
-                            updateTask = { taskService.updateTask(it) },
+                            updateTask = { taskService.saveTask(it) },
                             deleteTask = { taskService.deleteTask(task.id) }
                         ),
                         modifier = Modifier
@@ -158,8 +165,8 @@ fun TaskOrderedListColumn(
 }
 
 data class TaskItemContext(
-    val task: Task<*>,
-    val updateTask: (Task<*>) -> Unit = {},
+    val task: Task,
+    val updateTask: (Task) -> Unit = {},
     val deleteTask: () -> Unit = {},
     val onDone: () -> Unit = {}
 )
@@ -175,7 +182,7 @@ fun TaskListItem(
     context: TaskItemContext,
 ) {
     val taskColor =
-        context.task.metadata.policy.color
+        context.task.metadata.type.color
             .takeUnless { context.task.done }
             ?: Color.Gray
 
@@ -212,9 +219,9 @@ fun TaskListItem(
     }
 }
 
-data class TaskItemCard<M : OccurrenceMetadata>(
+data class TaskItemCard(
     val content: @Composable (() -> Unit),
-    val onDone: (Task<M>, MarkedAs) -> Task<M> = { task, _ -> task }
+    val onDone: (Task, MarkedAs) -> Task = { task, _ -> task }
 )
 
 private val SWIPE_SQUARE_SIZE = 55.dp
@@ -241,15 +248,17 @@ fun TaskItemSwipeableCard(
     val taskItemCard = when (val metadata = context.task.metadata) {
         is LongTermMetadata ->
             createLongTermTaskItem(
-                task = context.task as Task<LongTermMetadata>
+                task = context.task
             )
         is OneTimeMetadata ->
             createOneTimeTaskItem(
-                task = context.task as Task<OneTimeMetadata>,
+                task = context.task,
+                metadata = metadata
             )
         is RepetitiveMetadata ->
             createRepetitiveTaskItem(
-                task = context.task as Task<RepetitiveMetadata>,
+                task = context.task,
+                metadata = metadata,
                 updateTask = { context.updateTask(it) }
             )
         else ->
@@ -285,7 +294,7 @@ fun TaskItemSwipeableCard(
                                 done = !context.task.done,
                                 doneCount = context.task.doneCount + markedAsDone.ordinal
                             )
-                            .let { taskItemCard.onDone(Unsafe.cast(it), markedAsDone) }
+                            .let { taskItemCard.onDone(it, markedAsDone) }
                             .apply { context.updateTask(this) }
 
                         scope.launch {
@@ -306,11 +315,13 @@ fun TaskItemSwipeableCard(
                 .onGloballyPositioned { cardHeight.value = it.size.height }
                 .background(MaterialTheme.colors.surface),
             content = {
-                val subtaskManagerOpen = remember { mutableStateOf(false)  }
+                val openSubtaskManagerDialog = remember { mutableStateOf(false)  }
+                val openTaskEditorDialog = remember { mutableStateOf(false)  }
 
                 TaskHeader(
                     deleteTask = context.deleteTask,
-                    openSubtasksManager = { subtaskManagerOpen.value = true },
+                    editTask = { openTaskEditorDialog.value = true },
+                    openSubtasksManager = { openSubtaskManagerDialog.value = true },
                     content = { taskItemCard.content() },
                 )
 
@@ -319,11 +330,19 @@ fun TaskItemSwipeableCard(
                     updateTask = { context.updateTask(it) }
                 )
 
-                if (subtaskManagerOpen.value) {
+                if (openSubtaskManagerDialog.value) {
                     SubtaskManagerDialog(
-                        close = { subtaskManagerOpen.value = false },
+                        close = { openSubtaskManagerDialog.value = false },
                         updateTask= { context.updateTask(it) },
                         task = context.task
+                    )
+                }
+
+                if (openTaskEditorDialog.value) {
+                    TaskEditorDialog(
+                        closeDialog = { openTaskEditorDialog.value = false },
+                        saveTask = { context.updateTask(it) },
+                        taskToEdit = context.task
                     )
                 }
             }
