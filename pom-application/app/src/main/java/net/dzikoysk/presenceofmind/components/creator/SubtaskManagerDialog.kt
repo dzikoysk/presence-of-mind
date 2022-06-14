@@ -2,6 +2,7 @@ package net.dzikoysk.presenceofmind.components.creator
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,7 +27,7 @@ import net.dzikoysk.presenceofmind.task.OneTimeMetadata
 import net.dzikoysk.presenceofmind.task.SubTask
 import net.dzikoysk.presenceofmind.task.Task
 import org.burnoutcrew.reorderable.ReorderableItem
-import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 import java.util.UUID
@@ -57,13 +58,11 @@ fun SubtaskManager(
     updateTask: (Task<*>) -> Unit,
     task: Task<*>
 ) {
-    val subtasks = remember { mutableStateOf(task.subtasks.sortedBy { it.index }) }
+    val subtasks = remember { mutableStateOf(task.subtasks) }
 
     val subtasksState = rememberReorderableLazyListState(
         onMove = { from, to ->
             subtasks.value = subtasks.value.toMutableList().apply {
-                getOrNull(to.index)?.run { index++ }
-                getOrNull(from.index)?.run { index = to.index }
                 add(to.index, removeAt(from.index))
             }
         }
@@ -73,7 +72,7 @@ fun SubtaskManager(
         modifier = Modifier
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colors.background),
+            .background(MaterialTheme.colors.surface),
     ) {
         Column(
             modifier = Modifier.padding(24.dp),
@@ -91,13 +90,13 @@ fun SubtaskManager(
             ) {
                 items(
                     items = subtasks.value,
-                    key = { it.index }
+                    key = { it.id }
                 ) { subtask ->
                     val description = remember { mutableStateOf(subtask.description) }
 
                     ReorderableItem(
                         state = subtasksState,
-                        key = subtask.index
+                        key = subtask.id
                     ) { isDragging ->
                         val elevation = animateDpAsState(if (isDragging) 16.dp else 0.dp)
 
@@ -105,7 +104,8 @@ fun SubtaskManager(
                             modifier = Modifier
                                 .padding(vertical = 8.dp)
                                 .shadow(elevation.value)
-                                .detectReorderAfterLongPress(subtasksState)
+                                .detectReorder(subtasksState)
+                                .background(MaterialTheme.colors.background)
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
@@ -126,7 +126,13 @@ fun SubtaskManager(
                                 Icon(
                                     contentDescription = "Delete subtask",
                                     painter = painterResource(id = R.drawable.ic_baseline_close_24),
-                                    modifier = Modifier.weight(2f)
+                                    modifier = Modifier
+                                        .weight(2f)
+                                        .clickable {
+                                            subtasks.value = subtasks.value
+                                                .toMutableList()
+                                                .also { it.remove(subtask) }
+                                        }
                                 )
                             }
                         }
@@ -139,7 +145,7 @@ fun SubtaskManager(
                 onClick = {
                     subtasks.value = subtasks.value
                         .toMutableList()
-                        .also { it.add(SubTask(index = it.size)) }
+                        .also { it.add(SubTask()) }
                 },
                 content = {
                     Text("Add a new subtask")
@@ -172,17 +178,14 @@ fun SubtaskManagerPreview() {
             description = "Preview of one-time task with subtasks",
             subtasks = listOf(
                 SubTask(
-                    index = 0,
                     description = "Subtask 1",
                     done = true
                 ),
                 SubTask(
-                    index = 1,
                     description = "Subtask 2",
                     done = true
                 ),
                 SubTask(
-                    index = 2,
                     description = "Subtask 2",
                     done = false
                 )

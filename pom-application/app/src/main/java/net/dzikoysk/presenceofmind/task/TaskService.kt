@@ -30,7 +30,8 @@ class TaskService(
 
     fun updateTask(task: Task<*>) {
         val index = tasks.indexOfFirst { it.id == task.id }
-        tasks[index] = task
+        tasks.removeAt(index)
+        tasks.add(index, task)
         forceTasksSave()
     }
 
@@ -66,7 +67,7 @@ fun TaskService.createDefaultTasks() {
     ))
     createTask(CreateTaskRequest(description = "Long-term task ~ Notes", policy = LongTermMetadata))
     createTask(CreateTaskRequest(description = "Complex long-term task ~ Lists", policy = LongTermMetadata, subtasks = listOf(
-        SubTask(index = 0, description = "To do", done = false),
-        SubTask(index = 1, description = "Done", done = true),
+        SubTask(description = "To do", done = false),
+        SubTask(description = "Done", done = true),
     )))
 }

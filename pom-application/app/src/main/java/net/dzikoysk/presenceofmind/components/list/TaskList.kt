@@ -316,7 +316,7 @@ fun TaskItemSwipeableCard(
 
                 SubTaskList(
                     task = context.task,
-                    saveTask = { context.updateTask(it) }
+                    updateTask = { context.updateTask(it) }
                 )
 
                 if (subtaskManagerOpen.value) {

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import java.util.UUID
 
 data class Task<M : OccurrenceMetadata>(
-    val id: UUID,
+    val id: UUID = UUID.randomUUID(),
     @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -24,7 +24,7 @@ data class Task<M : OccurrenceMetadata>(
 )
 
 data class SubTask(
-    var index: Int,
+    val id: UUID = UUID.randomUUID(),
     var description: String = "",
     var done: Boolean = false
 )
