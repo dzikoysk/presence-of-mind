@@ -87,9 +87,9 @@ fun TaskMenuDropdown(
     itemSelected: (String) -> Unit
 ) {
     val menu = dropDownMenu<String> {
-        item(id = MANAGE_SUBTASKS_ID, title = "Manage subtasks")
-        item(id = EDIT_TASK_ID, title = "Edit task")
-        item(id = DELETE_TASK_ID, title = "Delete")
+        item(id = MANAGE_SUBTASKS_ID, title = "\uD83D\uDCDC    Manage subtasks")
+        item(id = EDIT_TASK_ID, title = "\u2712\uFE0F    Edit task")
+        item(id = DELETE_TASK_ID, title = "\uD83D\uDDD1    Delete")
     }
 
     Dropdown(
