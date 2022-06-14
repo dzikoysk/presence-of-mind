@@ -174,6 +174,7 @@ fun TaskEditor(
 
                     NamedDivider(
                         name = " ${metadata.type.displayName} configuration ",
+                        backgroundColor = MaterialTheme.colors.surface,
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
                     OutlinedTextField(

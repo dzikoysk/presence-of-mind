@@ -11,10 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -31,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.NamedDivider
@@ -41,6 +39,7 @@ import net.dzikoysk.presenceofmind.task.*
 import org.burnoutcrew.reorderable.*
 import java.util.UUID
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 
 enum class MarkedAs {
@@ -60,15 +59,22 @@ fun TaskList(
 
 ) {
     val tasks = taskService.getObservableListOfAllTasks()
-    val doneTasks = tasks.filter { it.done }
+    val doneTasks = tasks.filter { it.isDone() }
 
     val matchedTasks = when (displayMode) {
-        MarkedAs.UNFINISHED -> tasks.filterNot { it.done }
+        MarkedAs.UNFINISHED -> tasks.filterNot { it.isDone() }
         MarkedAs.DONE -> doneTasks
     }
 
     val percent = runCatching { doneTasks.size / tasks.size.toFloat() }
         .getOrDefault(1f)
+
+    LaunchedEffect(Unit) {
+        while(true) {
+            delay(1.minutes)
+            taskService.refreshTasksState()
+        }
+    }
 
     Row(
         modifier = Modifier
@@ -183,7 +189,7 @@ fun TaskListItem(
 ) {
     val taskColor =
         context.task.metadata.type.color
-            .takeUnless { context.task.done }
+            .takeUnless { context.task.isDone() }
             ?: Color.Gray
 
     Card(
@@ -285,13 +291,13 @@ fun TaskItemSwipeableCard(
                 TaskItemSwipeMenu(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     isVisible = swipeAbleState.currentValue == 1,
-                    isDone = context.task.done,
+                    isDone = context.task.isDone(),
                     onDone = {
-                        val markedAsDone = if (context.task.done) MarkedAs.UNFINISHED else MarkedAs.DONE
+                        val markedAsDone = if (context.task.isDone()) MarkedAs.UNFINISHED else MarkedAs.DONE
 
                         context.task
                             .copy(
-                                done = !context.task.done,
+                                doneDate = if (context.task.isDone()) null else System.currentTimeMillis(),
                                 doneCount = context.task.doneCount + markedAsDone.ordinal
                             )
                             .let { taskItemCard.onDone(it, markedAsDone) }

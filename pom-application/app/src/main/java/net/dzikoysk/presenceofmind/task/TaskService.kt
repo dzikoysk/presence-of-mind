@@ -2,6 +2,9 @@ package net.dzikoysk.presenceofmind.task
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import java.time.Instant
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 class TaskService(
@@ -12,6 +15,19 @@ class TaskService(
 
     init {
         tasks.addAll(taskRepository.loadOrderedTasks())
+    }
+
+    fun refreshTasksState() {
+        tasks
+            .filter { it.isDone() }
+            .filter { it.metadata is RepetitiveMetadata }
+            .map { it to it.metadata as RepetitiveMetadata }
+            .filter { (task, metadata) ->
+                val doneDate = Instant.ofEpochMilli(task.doneDate ?: 0).atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
+                val currentDate = Instant.now().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
+                return@filter ChronoUnit.DAYS.between(doneDate, currentDate) >= metadata.intervalInDays
+            }
+            .forEach { (task, _) -> saveTask(task.copy(doneDate = null)) }
     }
 
     fun saveTask(task: Task) {

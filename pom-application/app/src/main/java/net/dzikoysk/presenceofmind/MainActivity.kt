@@ -55,6 +55,8 @@ class MainActivity : ComponentActivity() {
             )
         )
 
+        tasksRepository.refreshTasksState()
+
         if (tasksRepository.findAllTasks().isEmpty()) {
             tasksRepository.createDefaultTasks()
         }
