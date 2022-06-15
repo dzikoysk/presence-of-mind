@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.Task
 
 @Composable
@@ -18,12 +18,10 @@ fun SubTaskList(
     task: Task,
     updateTask: (Task) -> Unit
 ) {
-    Box {
+    Box(modifier = Modifier.padding(start = 3.dp)) {
         task.subtasks.forEachIndexed { idx, subtask ->
             Row(
-                modifier = Modifier
-                    .padding(start = 5.dp, top = (30 * idx).dp)
-                    .scale(0.85f),
+                modifier = Modifier.padding(top = (30 * idx).dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Row {
@@ -32,12 +30,13 @@ fun SubTaskList(
                         onCheckedChange = {
                             subtask.done = !subtask.done
                             updateTask(task.copy(subtasks = task.subtasks.toList()))
-                        }
+                        },
+                        modifier = Modifier.scale(0.85f)
                     )
                     Text(
                         text = subtask.description,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(top = 13.dp)
+                        fontSize = 12.scaledSp(),
+                        modifier = Modifier.padding(top = 14.dp)
                     )
                 }
             }

@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import net.dzikoysk.presenceofmind.components.NamedDivider
+import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.*
 
 
@@ -81,7 +82,8 @@ fun TaskEditor(
             Text(
                 text = "Add a new task  \uD83C\uDFA8",
                 modifier = Modifier.padding(vertical = 7.dp),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.scaledSp()
             )
 
             OutlinedTextField(
@@ -135,6 +137,7 @@ fun TaskEditor(
                         enabled = false,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .height(58.dp)
                             .clickable { datePickerDialog.show() }
                     )
 
@@ -163,6 +166,7 @@ fun TaskEditor(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 10.dp)
+                            .height(58.dp)
                             .clickable { timePickerDialog.show() }
                     )
                 }
@@ -181,7 +185,9 @@ fun TaskEditor(
                         value = metadata.intervalInDays.toString(),
                         label = { Text("Interval in days") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(58.dp),
                         onValueChange = {
                             task = task.copy(
                                 metadata = metadata.copy(
@@ -196,7 +202,8 @@ fun TaskEditor(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 10.dp),
+                            .padding(top = 10.dp)
+                            .height(58.dp),
                         onValueChange = {
                             task = task.copy(
                                 metadata = metadata.copy(

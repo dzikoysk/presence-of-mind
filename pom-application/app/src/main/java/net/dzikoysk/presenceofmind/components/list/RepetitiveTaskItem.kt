@@ -13,11 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.plural
+import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
 import net.dzikoysk.presenceofmind.task.CountdownSession
 import net.dzikoysk.presenceofmind.task.RepetitiveMetadata
@@ -92,26 +92,26 @@ fun createRepetitiveTaskItem(
                     Column {
                         Text(
                             text = task.description,
-                            modifier = Modifier.padding(top = 12.dp)
+                            fontSize = 15.scaledSp()
                         )
                         Text(
                             text = "Every ${plural(metadata.intervalInDays.toLong(), "day")}",
-                            fontSize = 10.sp,
+                            fontSize = 10.scaledSp(),
                             color = Color.Gray,
+                            modifier = Modifier.padding(top = 2.dp)
                         )
                     }
                     Box(
                         modifier = Modifier
-                            .padding(top = 9.dp)
                             .padding(start = 5.dp)
                             .clickable { setIsOpen(!isOpen) }
                     ) {
                         Icon(
                             painter =
-                            if (isOpen)
-                                painterResource(id = R.drawable.ic_baseline_arrow_drop_up_24)
-                            else
-                                painterResource(id = R.drawable.ic_baseline_arrow_drop_down_24),
+                                if (isOpen)
+                                    painterResource(id = R.drawable.ic_baseline_arrow_drop_up_24)
+                                else
+                                    painterResource(id = R.drawable.ic_baseline_arrow_drop_down_24),
                             contentDescription = "Open repetitive task dashboard"
                         )
                     }
@@ -167,10 +167,10 @@ fun createRepetitiveTaskItem(
 
                         Text(
                             text = "${timeElapsed.seconds.timeToHumanReadableFormat()}  /  $timeToFinish",
-                            fontSize = 12.sp,
+                            fontSize = 10.scaledSp(),
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
-                                .padding(top = 10.dp)
+                                .padding(top = 11.dp)
                         )
                     }
                     Row(Modifier.padding(start = 9.dp)) {
@@ -199,11 +199,9 @@ fun createRepetitiveTaskItem(
                         StatisticsEntry(
                             description = "Avg replay time",
                             iconId = R.drawable.ic_baseline_stacked_line_chart_24,
-                            text = "$avg avg session time"
+                            text = "$avg average session"
                         )
                     }
-                } else {
-                    Box(Modifier.padding(bottom = 10.dp))
                 }
             }
         }
@@ -217,20 +215,21 @@ fun StatisticsEntry(
     text: String
 ) {
     Row(
-        Modifier
+        modifier = Modifier
             .padding(horizontal = 8.dp)
-            .padding(top = 8.dp, bottom = 10.dp)) {
+            .padding(top = 8.dp)
+    ) {
         Icon(
             painter = painterResource(id = iconId),
             contentDescription = description,
             tint = Color.Gray,
             modifier = Modifier
                 .size(14.dp)
-                .padding(top = 2.dp)
+                .padding(top = 0.dp)
         )
         Text(
             text = text,
-            fontSize = 12.sp,
+            fontSize = 10.scaledSp(),
             color = Color.Gray,
             modifier = Modifier.padding(start = 8.dp)
         )

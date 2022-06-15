@@ -67,25 +67,18 @@ val Shapes = Shapes(
     large = RoundedCornerShape(0.dp)
 )
 
-// Set of Material typography styles to start with
 val Typography = Typography(
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
-    /* Other default text styles to override
-    button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
-        fontSize = 14.sp
+        fontSize = 12.sp
     ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+    button = TextStyle(
+        fontSize = 12.sp
+    ),
+    subtitle1 = TextStyle(
         fontSize = 12.sp
     )
-    */
 )
 
 @Composable

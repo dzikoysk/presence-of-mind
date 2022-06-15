@@ -324,16 +324,13 @@ fun TaskItemSwipeableCard(
                 val openSubtaskManagerDialog = remember { mutableStateOf(false)  }
                 val openTaskEditorDialog = remember { mutableStateOf(false)  }
 
-                TaskHeader(
+                TaskCard(
+                    task = context.task,
+                    updateTask = context.updateTask,
                     deleteTask = context.deleteTask,
                     editTask = { openTaskEditorDialog.value = true },
                     openSubtasksManager = { openSubtaskManagerDialog.value = true },
                     content = { taskItemCard.content() },
-                )
-
-                SubTaskList(
-                    task = context.task,
-                    updateTask = { context.updateTask(it) }
                 )
 
                 if (openSubtaskManagerDialog.value) {

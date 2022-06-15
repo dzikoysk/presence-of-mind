@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import net.dzikoysk.presenceofmind.R
+import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.OneTimeMetadata
 import net.dzikoysk.presenceofmind.task.SubTask
 import net.dzikoysk.presenceofmind.task.Task
@@ -79,14 +82,20 @@ fun SubtaskManager(
         ) {
             Text(
                 text = "Manage subtasks",
+                fontSize = 15.scaledSp(),
                 fontWeight = FontWeight.Bold,
             )
 
             LazyColumn(
                 state = subtasksState.listState,
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
                 modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .reorderable(subtasksState),
+                    .padding(vertical = 16.dp)
+                    .reorderable(subtasksState)
+                    .heightIn(0.dp, (LocalConfiguration.current.screenHeightDp / 2).dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colors.background),
             ) {
                 items(
                     items = subtasks.value,
@@ -104,14 +113,21 @@ fun SubtaskManager(
                             modifier = Modifier
                                 .padding(vertical = 8.dp)
                                 .shadow(elevation.value)
-                                .detectReorder(subtasksState)
-                                .background(MaterialTheme.colors.background)
+                                .detectReorder(subtasksState),
+                            elevation = 0.dp,
+                            shape = RoundedCornerShape(CornerSize(12.dp)),
                         ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)
+                            ) {
                                 Icon(
                                     contentDescription = "Move subtask",
                                     painter = painterResource(id = R.drawable.ic_baseline_drag_indicator_24),
-                                    modifier = Modifier.weight(2f)
+                                    modifier = Modifier
+                                        //.weight(2f)
+                                        .size(24.dp)
                                 )
                                 OutlinedTextField(
                                     value = description.value,
@@ -120,14 +136,16 @@ fun SubtaskManager(
                                         description.value = it
                                     },
                                     modifier = Modifier
-                                        .padding(vertical = 6.dp)
-                                        .height(50.dp)
+                                        .padding(vertical = 8.dp)
+                                        .height(48.dp)
+                                        .fillMaxWidth(0.75f)
                                 )
                                 Icon(
                                     contentDescription = "Delete subtask",
                                     painter = painterResource(id = R.drawable.ic_baseline_close_24),
                                     modifier = Modifier
-                                        .weight(2f)
+                                        //.weight(2f)
+                                        .size(24.dp)
                                         .clickable {
                                             subtasks.value = subtasks.value
                                                 .toMutableList()

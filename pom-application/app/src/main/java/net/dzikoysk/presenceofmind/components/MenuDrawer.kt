@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import com.skydoves.landscapist.rememberDrawablePainter
 import net.dzikoysk.presenceofmind.BuildConfig
 import net.dzikoysk.presenceofmind.R
+import net.dzikoysk.presenceofmind.shared.scaledSp
 
 @Preview(showBackground = true)
 @Composable
@@ -57,20 +58,21 @@ fun MenuDrawer(
                    contentDescription = "Logo",
                    painter = logoPainter,
                    modifier = Modifier
-                       .size(46.dp)
+                       .size(42.dp)
                        .clip(CircleShape)
                )
                Text(
                    text = "Presence of Mind",
                    fontWeight = FontWeight.Bold,
-                   fontSize = 16.sp,
+                   fontSize = 15.scaledSp(),
                    modifier = Modifier.padding(horizontal = 16.dp)
                )
            }
-           Column(Modifier.padding(vertical = 8.dp)) {
+           Column(Modifier.padding(vertical = 16.dp)) {
                Text(
                    text = "Sources",
                    fontWeight = FontWeight.SemiBold,
+                   fontSize = 15.scaledSp(),
                    modifier = Modifier
                        .clickable { urlHandler.openUri("https://github.com/dzikoysk/presence-of-mind") }
                        .padding(vertical = 8.dp)
@@ -78,6 +80,7 @@ fun MenuDrawer(
                Text(
                    text = "Report issue",
                    fontWeight = FontWeight.SemiBold,
+                   fontSize = 15.scaledSp(),
                    modifier = Modifier
                        .clickable { urlHandler.openUri("https://github.com/dzikoysk/presence-of-mind/issues") }
                        .padding(vertical = 8.dp)
@@ -94,7 +97,7 @@ fun MenuDrawer(
                    text = "Version ${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE} (${BuildConfig.VERSION_CODE})",
                    fontSize = 9.sp,
                    fontStyle = FontStyle.Italic,
-                   color = Color(0x99ffffff)
+                   color = MaterialTheme.colors.onSurface // Color(0x99ffffff)
                )
            }
        }

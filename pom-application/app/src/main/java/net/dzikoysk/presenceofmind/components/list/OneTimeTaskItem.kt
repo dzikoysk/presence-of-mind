@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
+import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.OneTimeMetadata
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.toLocalDateTime
@@ -23,15 +23,15 @@ fun createOneTimeTaskItem(task: Task, metadata: OneTimeMetadata): TaskItemCard {
             Column(Modifier.padding(start = 16.dp)) {
                 Text(
                     text = task.description,
-                    modifier = Modifier.padding(top = 12.dp)
+                    fontSize = 15.scaledSp()
                 )
                 Text(
                     text = Duration.between(Instant.now(), metadata.eventDate.toLocalDateTime())
                         .toKotlinDuration()
                         .incomingDurationToHumanReadableFormat(),
-                    fontSize = 10.sp,
+                    fontSize = 10.scaledSp(),
                     color = Color.Gray,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    modifier = Modifier.padding(top = 2.dp)
                 )
             }
         }
