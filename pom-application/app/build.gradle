@@ -26,8 +26,8 @@ android {
         applicationId "net.dzikoysk.presenceofmind"
         minSdk 29
         targetSdk 30
-        versionCode 3
-        versionName "1.0.0-RC.3"
+        versionCode 4
+        versionName "1.0.0-RC.4"
         archivesBaseName = "presence-of-mind-$versionName"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
