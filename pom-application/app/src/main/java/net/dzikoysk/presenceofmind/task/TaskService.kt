@@ -32,7 +32,7 @@ class TaskService(
 
     fun saveTask(task: Task) {
         when (val index = tasks.indexOfFirst { it.id == task.id }) {
-            -1 -> tasks.add(task)
+            -1 -> tasks.add(0, task)
             else -> {
                 tasks.removeAt(index)
                 tasks.add(index, task)
