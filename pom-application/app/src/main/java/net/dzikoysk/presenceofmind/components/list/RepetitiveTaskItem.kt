@@ -92,7 +92,7 @@ fun createRepetitiveTaskItem(
                     Column {
                         Text(
                             text = task.description,
-                            fontSize = 15.scaledSp()
+                            fontSize = task.scaledFontSize()
                         )
                         Text(
                             text = "Every ${plural(metadata.intervalInDays.toLong(), "day")}",

@@ -23,7 +23,7 @@ fun createOneTimeTaskItem(task: Task, metadata: OneTimeMetadata): TaskItemCard {
             Column(Modifier.padding(start = 16.dp)) {
                 Text(
                     text = task.description,
-                    fontSize = 15.scaledSp()
+                    fontSize = task.scaledFontSize()
                 )
                 Text(
                     text = Duration.between(Instant.now(), metadata.eventDate.toLocalDateTime())

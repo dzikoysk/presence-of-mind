@@ -9,7 +9,8 @@ data class Task(
     val description: String = "",
     val doneDate: Long? = null,
     val doneCount: Int = 0,
-    val subtasks: List<SubTask> = emptyList()
+    val subtasks: List<SubTask> = emptyList(),
+    val categories: List<String> = emptyList()
 ) {
 
     @JsonIgnore
