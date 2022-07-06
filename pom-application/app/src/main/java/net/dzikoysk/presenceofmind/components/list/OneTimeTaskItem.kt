@@ -21,9 +21,8 @@ fun createOneTimeTaskItem(task: Task, metadata: OneTimeMetadata): TaskItemCard {
     return TaskItemCard(
         content = {
             Column(Modifier.padding(start = 16.dp)) {
-                Text(
-                    text = task.description,
-                    fontSize = task.scaledFontSize()
+                DescriptionMarkdown(
+                    description = task.description
                 )
                 Text(
                     text = Duration.between(Instant.now(), metadata.eventDate.toLocalDateTime())

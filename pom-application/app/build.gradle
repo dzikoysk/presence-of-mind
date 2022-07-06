@@ -75,6 +75,7 @@ dependencies {
     implementation("io.github.androidpoet:dropdown:1.0.1")
     implementation("io.github.vanpra.compose-material-dialogs:core:0.8.0-beta")
     implementation "com.github.skydoves:landscapist-glide:1.5.2"
+    implementation "com.github.jeziellago:compose-markdown:0.2.9"
 
     def jackson = "2.13.3"
     implementation("com.fasterxml.jackson.core:jackson-databind:$jackson")
