@@ -19,8 +19,8 @@ import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.plural
 import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
-import net.dzikoysk.presenceofmind.task.CountdownSession
-import net.dzikoysk.presenceofmind.task.RepetitiveMetadata
+import net.dzikoysk.presenceofmind.task.attributes.CountdownSession
+import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
 import net.dzikoysk.presenceofmind.task.Task
 import java.util.UUID
 import kotlin.time.Duration.Companion.milliseconds
@@ -40,7 +40,7 @@ private fun PreviewOfRepetitiveTaskItem() {
             task = Task(
                 id = UUID.randomUUID(),
                 description = "Preview of repetitive task item",
-                metadata = RepetitiveMetadata(
+                metadata = IntervalAttribute(
                     intervalInDays = 3,
                     expectedAttentionInMinutes = 30
                 )
@@ -49,11 +49,10 @@ private fun PreviewOfRepetitiveTaskItem() {
     )
 }
 
-@ExperimentalTime
 @Composable
 fun createRepetitiveTaskItem(
     task: Task,
-    metadata: RepetitiveMetadata,
+    metadata: IntervalAttribute,
     updateTask: (Task) -> Unit = {}
 ) : TaskItemCard {
     val countdownSession = metadata.countdownSession

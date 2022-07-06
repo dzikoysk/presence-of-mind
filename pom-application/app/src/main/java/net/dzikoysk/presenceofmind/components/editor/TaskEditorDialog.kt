@@ -1,9 +1,8 @@
-package net.dzikoysk.presenceofmind.components.creator
+package net.dzikoysk.presenceofmind.components.editor
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -27,9 +26,11 @@ import androidx.compose.ui.window.DialogProperties
 import net.dzikoysk.presenceofmind.components.NamedDivider
 import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.*
+import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
+import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
+import net.dzikoysk.presenceofmind.task.attributes.getDateAsString
+import net.dzikoysk.presenceofmind.task.attributes.getTimeAsString
 
-
-@ExperimentalAnimationApi
 @Preview(showBackground = true)
 @Composable
 fun TaskEditorPreview() {
@@ -40,8 +41,7 @@ fun TaskEditorPreview() {
     )
 }
 
-@ExperimentalComposeUiApi
-@ExperimentalAnimationApi
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TaskEditorDialog(
     closeDialog: () -> Unit,
@@ -61,14 +61,13 @@ fun TaskEditorDialog(
     )
 }
 
-@ExperimentalAnimationApi
 @Composable
 fun TaskEditor(
     closeDialog: () -> Unit,
     saveTask: (Task) -> Unit,
     taskToEdit: Task?
 ) {
-    var task by remember { mutableStateOf(taskToEdit ?: Task(description = "", metadata = OneTimeMetadata())) }
+    var task by remember { mutableStateOf(taskToEdit ?: Task(description = "", metadata = EventAttribute())) }
 
     Box(
         modifier = Modifier
@@ -103,7 +102,7 @@ fun TaskEditor(
 
             when (task.metadata.type) {
                 OccurrenceType.ONE_TIME -> {
-                    val metadata = task.metadata as OneTimeMetadata
+                    val metadata = task.metadata as EventAttribute
                     val eventDate = metadata.eventDate
 
                     NamedDivider(
@@ -171,7 +170,7 @@ fun TaskEditor(
                     )
                 }
                 OccurrenceType.REPETITIVE -> {
-                    val metadata = task.metadata as RepetitiveMetadata
+                    val metadata = task.metadata as IntervalAttribute
 
                     // val (intervalInDays, setIntervalInDays) = remember { mutableStateOf("1") }
                     // val (expectedAttentionInMinutes, setExpectedAttentionInMinutes) = remember { mutableStateOf("0") }

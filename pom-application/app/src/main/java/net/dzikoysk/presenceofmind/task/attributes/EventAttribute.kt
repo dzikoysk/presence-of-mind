@@ -1,13 +1,13 @@
-package net.dzikoysk.presenceofmind.task
+package net.dzikoysk.presenceofmind.task.attributes
 
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 /** One-time events */
-data class OneTimeMetadata(
+data class EventAttribute(
     val eventDate: EventDateTime = EventDateTime.now()
-) : OccurrenceMetadata(OccurrenceType.ONE_TIME)
+)
 
 data class EventDateTime(
     var year: Int,

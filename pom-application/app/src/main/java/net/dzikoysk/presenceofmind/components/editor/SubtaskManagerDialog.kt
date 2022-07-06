@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.creator
+package net.dzikoysk.presenceofmind.components.editor
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -26,9 +26,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.shared.scaledSp
-import net.dzikoysk.presenceofmind.task.OneTimeMetadata
+import net.dzikoysk.presenceofmind.task.EventAttribute
 import net.dzikoysk.presenceofmind.task.SubTask
 import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
+import net.dzikoysk.presenceofmind.task.attributes.SubTask
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -192,7 +194,7 @@ fun SubtaskManagerPreview() {
         updateTask = {},
         task = Task(
             id = UUID.randomUUID(),
-            metadata = OneTimeMetadata(),
+            metadata = EventAttribute(),
             description = "Preview of one-time task with subtasks",
             subtasks = listOf(
                 SubTask(

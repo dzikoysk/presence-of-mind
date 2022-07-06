@@ -9,15 +9,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.scaledSp
-import net.dzikoysk.presenceofmind.task.OneTimeMetadata
 import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.toLocalDateTime
+import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
+import net.dzikoysk.presenceofmind.task.attributes.toLocalDateTime
 import java.time.Duration
 import java.time.Instant
 import kotlin.time.toKotlinDuration
 
 @Composable
-fun createOneTimeTaskItem(task: Task, metadata: OneTimeMetadata): TaskItemCard {
+fun createOneTimeTaskItem(task: Task, metadata: EventAttribute): TaskItemCard {
     return TaskItemCard(
         content = {
             Column(Modifier.padding(start = 16.dp)) {

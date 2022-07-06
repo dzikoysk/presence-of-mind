@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.creator
+package net.dzikoysk.presenceofmind.components.editor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,6 +1,5 @@
 package net.dzikoysk.presenceofmind.components.list
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
@@ -32,25 +30,22 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.NamedDivider
-import net.dzikoysk.presenceofmind.components.creator.SubtaskManagerDialog
-import net.dzikoysk.presenceofmind.components.creator.TaskEditorDialog
+import net.dzikoysk.presenceofmind.components.editor.SubtaskManagerDialog
+import net.dzikoysk.presenceofmind.components.editor.TaskEditorDialog
 import net.dzikoysk.presenceofmind.shared.mirror.LinearProgressIndicator
 import net.dzikoysk.presenceofmind.task.*
+import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
+import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
 import org.burnoutcrew.reorderable.*
 import java.util.UUID
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
 
 enum class MarkedAs {
     UNFINISHED,
     DONE
 }
 
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
-@ExperimentalTime
-@ExperimentalAnimationApi
 @Composable
 @Preview(showBackground = true)
 fun TaskList(
@@ -106,10 +101,6 @@ fun TaskList(
     }
 }
 
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
-@ExperimentalTime
-@ExperimentalAnimationApi
 @Composable
 fun TaskOrderedListColumn(
     taskService: TaskService,
@@ -177,10 +168,6 @@ data class TaskItemContext(
     val onDone: () -> Unit = {}
 )
 
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
-@ExperimentalTime
-@ExperimentalAnimationApi
 @Composable
 fun TaskListItem(
     modifier: Modifier = Modifier,
@@ -232,10 +219,7 @@ data class TaskItemCard(
 
 private val SWIPE_SQUARE_SIZE = 55.dp
 
-@ExperimentalComposeUiApi
-@ExperimentalAnimationApi
-@ExperimentalTime
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TaskItemSwipeableCard(
     taskColor: Color,
@@ -256,12 +240,12 @@ fun TaskItemSwipeableCard(
             createLongTermTaskItem(
                 task = context.task
             )
-        is OneTimeMetadata ->
+        is EventAttribute ->
             createOneTimeTaskItem(
                 task = context.task,
                 metadata = metadata
             )
-        is RepetitiveMetadata ->
+        is IntervalAttribute ->
             createRepetitiveTaskItem(
                 task = context.task,
                 metadata = metadata,

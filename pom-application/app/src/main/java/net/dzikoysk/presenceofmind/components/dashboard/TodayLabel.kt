@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind
+package net.dzikoysk.presenceofmind.components.dashboard
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
