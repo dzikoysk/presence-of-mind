@@ -19,7 +19,7 @@ import java.util.Locale
 fun TodayLabel(modifier: Modifier = Modifier) {
     val todayFormatter = remember {
         DateTimeFormatter.ofPattern("E dd.MM")
-            .withLocale(Locale.getDefault())
+            .withLocale(Locale.UK)
             .withZone(ZoneId.systemDefault())
     }
 
