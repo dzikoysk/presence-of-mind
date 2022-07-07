@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.editor
+package net.dzikoysk.presenceofmind.pages.dashboard.editor
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -13,7 +13,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -21,11 +20,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import net.dzikoysk.presenceofmind.components.NamedDivider
+import net.dzikoysk.presenceofmind.components.editor.TaskEditorIntervalOption
 import net.dzikoysk.presenceofmind.shared.scaledSp
-import net.dzikoysk.presenceofmind.task.*
+import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
 import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
 import net.dzikoysk.presenceofmind.task.attributes.getDateAsString
@@ -38,26 +36,6 @@ fun TaskEditorPreview() {
         closeDialog = {},
         saveTask = {},
         taskToEdit = null
-    )
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun TaskEditorDialog(
-    closeDialog: () -> Unit,
-    saveTask: (Task) -> Unit,
-    taskToEdit: Task?
-) {
-    Dialog(
-        onDismissRequest = { closeDialog() },
-        properties = DialogProperties(usePlatformDefaultWidth = false),
-        content = {
-            TaskEditor(
-                closeDialog = closeDialog,
-                saveTask = saveTask,
-                taskToEdit = taskToEdit
-            )
-        }
     )
 }
 

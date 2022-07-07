@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.list
+package net.dzikoysk.presenceofmind.pages.dashboard.list.attributes
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

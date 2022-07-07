@@ -4,31 +4,17 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.ui.ExperimentalComposeUiApi
-import net.dzikoysk.presenceofmind.pages.Router
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.task.SharedPreferencesTaskRepository
 import net.dzikoysk.presenceofmind.task.TaskService
 import net.dzikoysk.presenceofmind.task.createDefaultTasks
 import net.dzikoysk.presenceofmind.theme.SharedPreferencesThemeRepository
-import kotlin.time.ExperimentalTime
+import kotlin.time.Duration.Companion.minutes
 
-class MainActivity : ComponentActivity() {
+class PresenceOfMindActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val tasksRepository = TaskService(
-            taskRepository = SharedPreferencesTaskRepository(
-                this.getSharedPreferences("net.dzikoysk.presenceofmind.tasks-repository.v1.0.0", Context.MODE_PRIVATE)
-            )
-        )
-
-        tasksRepository.refreshTasksState()
-
-        if (tasksRepository.findAllTasks().isEmpty()) {
-            tasksRepository.createDefaultTasks()
-        }
-
         val themeRepository = SharedPreferencesThemeRepository(
             this.getSharedPreferences("net.dzikoysk.presenceofmind.theme-repository.v1.0.0", Context.MODE_PRIVATE)
         )
@@ -40,10 +26,29 @@ class MainActivity : ComponentActivity() {
             false -> R.style.Theme_DarkPresenceOfMind
         })
 
+        val taskService = TaskService(
+            taskRepository = SharedPreferencesTaskRepository(
+                this.getSharedPreferences("net.dzikoysk.presenceofmind.tasks-repository.v1.0.0", Context.MODE_PRIVATE)
+            )
+        )
+
+        taskService.refreshTasksState()
+
+        if (taskService.findAllTasks().isEmpty()) {
+            taskService.createDefaultTasks()
+        }
+
         setContent {
+            LaunchedEffect(Unit) {
+                while(true) {
+                    delay(1.minutes)
+                    taskService.refreshTasksState()
+                }
+            }
+
             Router(
                 themeRepository = themeRepository,
-                taskService = tasksRepository,
+                taskService = taskService,
                 restartActivity = { recreate() }
             )
         }

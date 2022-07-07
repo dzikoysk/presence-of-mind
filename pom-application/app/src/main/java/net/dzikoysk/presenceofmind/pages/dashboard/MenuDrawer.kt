@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.dashboard
+package net.dzikoysk.presenceofmind.pages.dashboard
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally

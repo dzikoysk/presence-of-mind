@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.list
+package net.dzikoysk.presenceofmind.pages.dashboard.list.attributes
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
@@ -15,6 +15,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.R
+import net.dzikoysk.presenceofmind.task.MarkedAs
+import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskItemCard
+import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskCardContext
+import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskCard
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.plural
 import net.dzikoysk.presenceofmind.shared.scaledSp
@@ -35,8 +39,8 @@ import kotlin.time.ExperimentalTime
 @ExperimentalAnimationApi
 @Composable
 private fun PreviewOfRepetitiveTaskItem() {
-    TaskListItem(
-        context = TaskItemContext(
+    TaskCard(
+        context = TaskCardContext(
             task = Task(
                 id = UUID.randomUUID(),
                 description = "Preview of repetitive task item",

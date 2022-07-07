@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.list
+package net.dzikoysk.presenceofmind.pages.dashboard.list.attributes
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import net.dzikoysk.presenceofmind.pages.dashboard.list.DescriptionMarkdown
+import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskItemCard
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.Task
@@ -17,7 +19,10 @@ import java.time.Instant
 import kotlin.time.toKotlinDuration
 
 @Composable
-fun createOneTimeTaskItem(task: Task, metadata: EventAttribute): TaskItemCard {
+fun createOneTimeTaskItem(
+    task: Task,
+    eventAttribute: EventAttribute
+): TaskItemCard {
     return TaskItemCard(
         content = {
             Column(Modifier.padding(start = 16.dp)) {
@@ -25,7 +30,7 @@ fun createOneTimeTaskItem(task: Task, metadata: EventAttribute): TaskItemCard {
                     description = task.description
                 )
                 Text(
-                    text = Duration.between(Instant.now(), metadata.eventDate.toLocalDateTime())
+                    text = Duration.between(Instant.now(), eventAttribute.eventDate.toLocalDateTime())
                         .toKotlinDuration()
                         .incomingDurationToHumanReadableFormat(),
                     fontSize = 10.scaledSp(),

@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.dashboard
+package net.dzikoysk.presenceofmind.pages.dashboard
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton

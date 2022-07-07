@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.editor
+package net.dzikoysk.presenceofmind.pages.dashboard.editor
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -37,7 +37,7 @@ import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 import java.util.UUID
 
-@ExperimentalComposeUiApi
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SubtaskManagerDialog(
     close: () -> Unit,

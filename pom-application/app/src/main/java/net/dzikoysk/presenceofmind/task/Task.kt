@@ -1,5 +1,6 @@
 package net.dzikoysk.presenceofmind.task
 
+import androidx.compose.ui.graphics.Color
 import com.fasterxml.jackson.annotation.JsonIgnore
 import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
 import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
@@ -10,6 +11,7 @@ import java.util.UUID
 data class Task(
     val id: UUID = UUID.randomUUID(),
     val description: String = "",
+    val color: Color = Color.White,
     val categories: List<String> = emptyList(),
     val doneDate: Long? = null,
     val doneCount: Int = 0,

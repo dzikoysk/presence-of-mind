@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.components.dashboard
+package net.dzikoysk.presenceofmind.pages.dashboard
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.components.list.MarkedAs
+import net.dzikoysk.presenceofmind.task.MarkedAs
 
 @Composable
 fun SwapTasksButton(

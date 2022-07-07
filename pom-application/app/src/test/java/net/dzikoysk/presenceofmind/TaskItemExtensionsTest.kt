@@ -1,7 +1,7 @@
 package net.dzikoysk.presenceofmind
 
 import junit.framework.Assert.assertEquals
-import net.dzikoysk.presenceofmind.components.list.replaceRawLinkWithMarkdown
+import net.dzikoysk.presenceofmind.pages.dashboard.list.replaceRawLinkWithMarkdown
 import org.junit.Test
 
 internal class TaskItemExtensionsTest {
