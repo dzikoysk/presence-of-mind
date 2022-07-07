@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.pages.dashboard.*
+import net.dzikoysk.presenceofmind.pages.dashboard.editor.AnimatedEditorDrawer
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskList
 import net.dzikoysk.presenceofmind.task.MarkedAs
 import net.dzikoysk.presenceofmind.task.TaskService
@@ -26,7 +27,7 @@ fun Dashboard(
 ) {
     val selectedTasks = remember { mutableStateOf(MarkedAs.UNFINISHED) }
     val openMenu = remember { mutableStateOf(false)  }
-    val openTaskEditorDialog = remember { mutableStateOf(false)  }
+    val openEditorDrawer = remember { mutableStateOf(false)  }
 
     Scaffold(
         content = { padding ->
@@ -68,26 +69,27 @@ fun Dashboard(
                         taskService = taskService,
                         displayMode = selectedTasks.value
                     )
-
-                    if (openTaskEditorDialog.value) {
-//                        TaskEditorDialog(
-//                            closeDialog = { openTaskEditorDialog.value = false },
-//                            saveTask = { taskService.saveTask(it) },
-//                            taskToEdit = null
-//                        )
-                    }
                 }
                 AnimatedMenuDrawer(
                     open = openMenu.value,
                     close = { openMenu.value = false }
                 )
+
+                AnimatedEditorDrawer(
+                    open = openEditorDrawer.value,
+                    close = { openEditorDrawer.value = false },
+                    // saveTask = { taskService.saveTask(it) },
+                    // taskToEdit = null
+                )
             }
         },
         floatingActionButton = {
-            CreateTaskButton(
-                themeRepository = themeRepository,
-                openTaskEditor = { openTaskEditorDialog.value = true }
-            )
+            if (!openEditorDrawer.value) {
+                CreateTaskButton(
+                    themeRepository = themeRepository,
+                    openTaskEditor = { openEditorDrawer.value = true }
+                )
+            }
         }
     )
 }

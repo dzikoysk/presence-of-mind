@@ -70,7 +70,7 @@ fun SwipeableCardContent(
         ) {
             TaskItemSwipeMenu(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                isVisible = swipeAbleState.currentValue == SWIPE_STATE.CONTENT,
+                isVisible = swipeAbleState.currentValue == SWIPE_STATE.FINISH,
                 isDone = context.task.isDone(),
                 onDone = {
                     val markedAsDone = if (context.task.isDone()) MarkedAs.UNFINISHED else MarkedAs.DONE
@@ -84,7 +84,7 @@ fun SwipeableCardContent(
                         .apply { context.updateTask(this) }
 
                     scope.launch {
-                        swipeAbleState.snapTo(SWIPE_STATE.FINISH)
+                        swipeAbleState.snapTo(SWIPE_STATE.CONTENT)
                     }
                 }
             )
@@ -134,6 +134,10 @@ fun SwipeableCardContent(
                         .clickable {
                             if (swipeAbleState.currentValue == SWIPE_STATE.EDIT) {
                                 // open menu
+
+                                scope.launch {
+                                    swipeAbleState.snapTo(SWIPE_STATE.CONTENT)
+                                }
                             }
                         },
                 )
