@@ -7,7 +7,15 @@ data class PomodoroAttribute(
     val expectedAttentionInMinutes: Int = 60,
     val timeSpentInSeconds: Long = 0,
     val countdownSession: CountdownSession = CountdownSession()
-)
+) : Attribute {
+
+    override fun isRunning(): Boolean =
+        countdownSession.isRunning()
+
+    override fun getName(): String =
+        "Pomodoro"
+
+}
 
 data class CountdownSession(
     var sessionTimeInSeconds: Long = 0,

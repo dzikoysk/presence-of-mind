@@ -19,6 +19,8 @@ import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.task.getAccentColor
+import net.dzikoysk.presenceofmind.task.isDone
 import org.burnoutcrew.reorderable.ReorderableLazyListState
 import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -46,7 +48,7 @@ fun TaskCard(
     val openTaskEditorDialog = remember { mutableStateOf(false) }
 
     val taskColor =
-        context.task.getColor()
+        context.task.getAccentColor()
             .takeUnless { context.task.isDone() }
             ?: Color.Gray
 

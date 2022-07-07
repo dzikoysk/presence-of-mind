@@ -9,6 +9,7 @@ import net.dzikoysk.presenceofmind.components.NamedDivider
 import net.dzikoysk.presenceofmind.task.MarkedAs
 import net.dzikoysk.presenceofmind.task.TaskService
 import net.dzikoysk.presenceofmind.task.createDefaultTasks
+import net.dzikoysk.presenceofmind.task.isDone
 
 @Preview(showBackground = true)
 @Composable

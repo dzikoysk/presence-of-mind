@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import net.dzikoysk.presenceofmind.task.MarkedAs
+import net.dzikoysk.presenceofmind.task.isDone
 import kotlin.math.roundToInt
 
 val SWIPE_SQUARE_SIZE = 55.dp

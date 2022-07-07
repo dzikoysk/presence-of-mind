@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.pages.dashboard.list.attributes.*
 import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.task.isOpen
 
 @Composable
 fun TaskCardContent(
