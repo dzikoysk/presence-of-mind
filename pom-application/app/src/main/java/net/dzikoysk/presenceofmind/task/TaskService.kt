@@ -84,10 +84,10 @@ fun TaskService.createDefaultTasks() {
     )
     saveTask(Task(
         description = "Complex long-term task ~ Lists",
-        subtasksAttribute = SubtasksAttribute(
-            subtasks = listOf(
-                SubTask(description = "To do", done = false),
-                SubTask(description = "Done", done = true),
+        checklistAttribute = ChecklistAttribute(
+            list = listOf(
+                ChecklistEntry(description = "To do", done = false),
+                ChecklistEntry(description = "Done", done = true),
             )
         )
     ))

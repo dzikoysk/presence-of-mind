@@ -2,10 +2,10 @@ package net.dzikoysk.presenceofmind.task
 
 import androidx.compose.ui.graphics.Color
 import com.fasterxml.jackson.annotation.JsonIgnore
+import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
 import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
 import net.dzikoysk.presenceofmind.task.attributes.PomodoroAttribute
-import net.dzikoysk.presenceofmind.task.attributes.SubtasksAttribute
 import java.util.UUID
 
 data class Task(
@@ -16,7 +16,7 @@ data class Task(
     val doneDate: Long? = null,
     val doneCount: Int = 0,
     /* Attributes */
-    val subtasksAttribute: SubtasksAttribute? = null,
+    val checklistAttribute: ChecklistAttribute? = null,
     val eventAttribute: EventAttribute? = null,
     val interval: IntervalAttribute? = null,
     val pomodoro: PomodoroAttribute? = null,

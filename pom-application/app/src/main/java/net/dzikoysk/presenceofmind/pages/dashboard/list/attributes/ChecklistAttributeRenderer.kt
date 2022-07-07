@@ -10,28 +10,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.pages.dashboard.list.DescriptionMarkdown
-import net.dzikoysk.presenceofmind.pages.dashboard.list.scaledFontSize
 import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.attributes.SubTask
+import net.dzikoysk.presenceofmind.task.attributes.ChecklistEntry
 
 @Composable
-fun SubTaskList(
+fun ChecklistAttributeRenderer(
     task: Task,
     updateTask: (Task) -> Unit
 ) {
     val fontSize = task.description.scaledFontSize()
 
-    task.subtasksAttribute?.subtasks?.also { subtasks ->
+    task.checklistAttribute?.list?.also { subtasks ->
         Box(modifier = Modifier.padding(start = 3.dp)) {
             subtasks.forEachIndexed { idx, subtask ->
                 Row(
                     modifier = Modifier.padding(top = (30 * idx).dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    SubTask(
+                    ChecklistEntryRenderer(
                         task = task,
-                        subtask = subtask,
+                        entry = subtask,
                         fontSize = fontSize,
                         updateTask = updateTask
                     )
@@ -42,23 +40,23 @@ fun SubTaskList(
 }
 
 @Composable
-fun SubTask(
+fun ChecklistEntryRenderer(
     task: Task,
-    subtask: SubTask,
+    entry: ChecklistEntry,
     fontSize: TextUnit,
     updateTask: (Task) -> Unit
 ) {
     Row {
         Checkbox(
-            checked = subtask.done,
+            checked = entry.done,
             onCheckedChange = {
-                subtask.done = !subtask.done
-                updateTask(task.copy(subtasksAttribute = task.subtasksAttribute!!.copy()))
+                entry.done = !entry.done
+                updateTask(task.copy(checklistAttribute = task.checklistAttribute!!.copy()))
             },
             modifier = Modifier.scale(0.8f * (fontSize.value / 12f))
         )
         DescriptionMarkdown(
-            description = subtask.description,
+            description = entry.description,
             fontSize = fontSize,
             modifier = Modifier.padding(top = 15.dp)
         )

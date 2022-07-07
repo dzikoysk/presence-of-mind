@@ -26,11 +26,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.shared.scaledSp
-import net.dzikoysk.presenceofmind.task.EventAttribute
-import net.dzikoysk.presenceofmind.task.SubTask
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
-import net.dzikoysk.presenceofmind.task.attributes.SubTask
+import net.dzikoysk.presenceofmind.task.attributes.ChecklistEntry
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -165,7 +163,7 @@ fun SubtaskManager(
                 onClick = {
                     subtasks.value = subtasks.value
                         .toMutableList()
-                        .also { it.add(SubTask()) }
+                        .also { it.add(ChecklistEntry()) }
                 },
                 content = {
                     Text("Add a new subtask")
@@ -197,15 +195,15 @@ fun SubtaskManagerPreview() {
             metadata = EventAttribute(),
             description = "Preview of one-time task with subtasks",
             subtasks = listOf(
-                SubTask(
+                ChecklistEntry(
                     description = "Subtask 1",
                     done = true
                 ),
-                SubTask(
+                ChecklistEntry(
                     description = "Subtask 2",
                     done = true
                 ),
-                SubTask(
+                ChecklistEntry(
                     description = "Subtask 2",
                     done = false
                 )

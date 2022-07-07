@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.pages.dashboard.list.attributes.SubTaskList
+import net.dzikoysk.presenceofmind.pages.dashboard.list.attributes.ChecklistAttributeRenderer
 import net.dzikoysk.presenceofmind.task.Task
 
 @Composable
@@ -21,13 +21,13 @@ fun TaskCardContent(
             .padding(horizontal = 8.dp)
             .padding(
                 top = 10.dp,
-                bottom = if (task.subtasksAttribute != null) 10.dp else 0.dp
+                bottom = if (task.checklistAttribute != null) 10.dp else 0.dp
             )
     ) {
         Column {
             content()
 
-            SubTaskList(
+            ChecklistAttributeRenderer(
                 task = task,
                 updateTask = { updateTask(it) }
             )
