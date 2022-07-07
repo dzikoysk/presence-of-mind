@@ -93,7 +93,6 @@ fun SwipeableCardContent(
                     updateTask = context.updateTask,
                     deleteTask = context.deleteTask,
                     // content = { taskItemCard.content() }, TODO: specific task impl
-                    content = {}
                 )
             }
         )

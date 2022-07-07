@@ -44,9 +44,6 @@ fun IntervalAttributeRenderer(
 
     Row(Modifier.padding(start = 16.dp)) {
         Column {
-            DescriptionMarkdown(
-                description = task.description
-            )
             Text(
                 text = "Every ${plural(metadata.intervalInDays.toLong(), "day")}",
                 fontSize = 10.scaledSp(),

@@ -2,35 +2,53 @@ package net.dzikoysk.presenceofmind.pages.dashboard.list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.pages.dashboard.list.attributes.ChecklistAttributeRenderer
+import net.dzikoysk.presenceofmind.pages.dashboard.list.attributes.*
 import net.dzikoysk.presenceofmind.task.Task
 
 @Composable
 fun TaskCardContent(
     task: Task,
     updateTask: (Task) -> Unit,
-    deleteTask: () -> Unit,
-    content: @Composable (() -> Unit)
+    deleteTask: () -> Unit
 ) {
     val (isOpen, setIsOpen) = remember { mutableStateOf(task.isOpen()) }
 
     Box(
         modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .padding(
-                top = 10.dp,
-                bottom = if (task.checklistAttribute != null) 10.dp else 0.dp
-            )
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 10.dp)
     ) {
         Column {
-            content()
-
+            DescriptionMarkdown(
+                modifier = Modifier.padding(start = 16.dp),
+                description = task.description
+            )
+            task.eventAttribute?.also { eventAttribute ->
+                EventAttributeRenderer(
+                    task = task,
+                    eventAttribute = eventAttribute
+                )
+            }
+            task.intervalAttribute?.also { intervalAttribute ->
+                IntervalAttributeRenderer(
+                    task = task,
+                    metadata = intervalAttribute,
+                    updateTask = updateTask
+                )
+            }
+            task.pomodoroAttribute?.also { pomodoroAttribute ->
+                PomodoroAttributeRenderer(
+                    task = task,
+                    updateTask = updateTask
+                )
+            }
             ChecklistAttributeRenderer(
                 task = task,
                 updateTask = { updateTask(it) }

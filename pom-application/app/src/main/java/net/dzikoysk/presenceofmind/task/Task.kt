@@ -11,7 +11,7 @@ import java.util.UUID
 data class Task(
     val id: UUID = UUID.randomUUID(),
     val description: String = "",
-    val color: Color = Color.White,
+    val color: String = Color.Gray.value.toString(),
     val categories: List<String> = emptyList(),
     val doneDate: Long? = null,
     val doneCount: Int = 0,
@@ -21,6 +21,10 @@ data class Task(
     val intervalAttribute: IntervalAttribute? = null,
     val pomodoroAttribute: PomodoroAttribute? = null,
 ) {
+
+    @JsonIgnore
+    fun getColor(): Color =
+        Color(color.toULong())
 
     @JsonIgnore
     fun isOpen(): Boolean =

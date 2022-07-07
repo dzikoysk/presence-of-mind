@@ -22,9 +22,6 @@ fun EventAttributeRenderer(
     eventAttribute: EventAttribute
 ) {
     Column(Modifier.padding(start = 16.dp)) {
-        DescriptionMarkdown(
-            description = task.description
-        )
         Text(
             text = Duration.between(Instant.now(), eventAttribute.eventDate.toLocalDateTime())
                 .toKotlinDuration()

@@ -46,7 +46,7 @@ fun TaskCard(
     val openTaskEditorDialog = remember { mutableStateOf(false) }
 
     val taskColor =
-        context.task.color
+        context.task.getColor()
             .takeUnless { context.task.isDone() }
             ?: Color.Gray
 
