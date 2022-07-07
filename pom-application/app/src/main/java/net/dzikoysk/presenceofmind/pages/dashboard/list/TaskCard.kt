@@ -1,5 +1,3 @@
-@file:JvmName("TaskCardContentKt")
-
 package net.dzikoysk.presenceofmind.pages.dashboard.list
 
 import androidx.compose.foundation.layout.Box
@@ -20,8 +18,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.pages.dashboard.editor.SubtaskManagerDialog
-import net.dzikoysk.presenceofmind.pages.dashboard.editor.TaskEditor
 import net.dzikoysk.presenceofmind.task.Task
 import org.burnoutcrew.reorderable.ReorderableLazyListState
 import org.burnoutcrew.reorderable.detectReorder
@@ -72,19 +68,19 @@ fun TaskCard(
     }
 
     if (openSubtaskManagerDialog.value) {
-        SubtaskManagerDialog(
-            close = { openSubtaskManagerDialog.value = false },
-            updateTask = { context.updateTask(it) },
-            task = context.task
-        )
+//        SubtaskManagerDialog(
+//            close = { openSubtaskManagerDialog.value = false },
+//            updateTask = { context.updateTask(it) },
+//            task = context.task
+//        )
     }
 
     if (openTaskEditorDialog.value) {
-        TaskEditor(
-            closeDialog = { openTaskEditorDialog.value = false },
-            saveTask = { context.updateTask(it) },
-            taskToEdit = context.task
-        )
+//        TaskEditor(
+//            closeDialog = { openTaskEditorDialog.value = false },
+//            saveTask = { context.updateTask(it) },
+//            taskToEdit = context.task
+//        )
     }
 }
 

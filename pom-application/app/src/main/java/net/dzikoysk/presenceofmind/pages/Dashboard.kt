@@ -9,9 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.pages.dashboard.*
-import net.dzikoysk.presenceofmind.components.editor.TaskEditorDialog
-import net.dzikoysk.presenceofmind.task.MarkedAs
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskList
+import net.dzikoysk.presenceofmind.task.MarkedAs
 import net.dzikoysk.presenceofmind.task.TaskService
 import net.dzikoysk.presenceofmind.task.createDefaultTasks
 import net.dzikoysk.presenceofmind.theme.InMemoryThemeRepository
@@ -71,11 +70,11 @@ fun Dashboard(
                     )
 
                     if (openTaskEditorDialog.value) {
-                        TaskEditorDialog(
-                            closeDialog = { openTaskEditorDialog.value = false },
-                            saveTask = { taskService.saveTask(it) },
-                            taskToEdit = null
-                        )
+//                        TaskEditorDialog(
+//                            closeDialog = { openTaskEditorDialog.value = false },
+//                            saveTask = { taskService.saveTask(it) },
+//                            taskToEdit = null
+//                        )
                     }
                 }
                 AnimatedMenuDrawer(

@@ -16,7 +16,7 @@ class PresenceOfMindActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val themeRepository = SharedPreferencesThemeRepository(
-            this.getSharedPreferences("net.dzikoysk.presenceofmind.theme-repository.v1.0.0", Context.MODE_PRIVATE)
+            this.getSharedPreferences("net.dzikoysk.presenceofmind.theme-repository.v1.0.0-RC.5", Context.MODE_PRIVATE)
         )
 
         super.onCreate(savedInstanceState)
@@ -28,7 +28,7 @@ class PresenceOfMindActivity : ComponentActivity() {
 
         val taskService = TaskService(
             taskRepository = SharedPreferencesTaskRepository(
-                this.getSharedPreferences("net.dzikoysk.presenceofmind.tasks-repository.v1.0.0", Context.MODE_PRIVATE)
+                this.getSharedPreferences("net.dzikoysk.presenceofmind.tasks-repository.v1.0.0-RC.5", Context.MODE_PRIVATE)
             )
         )
 
