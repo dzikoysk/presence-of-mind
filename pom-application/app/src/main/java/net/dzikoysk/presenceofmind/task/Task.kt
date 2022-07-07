@@ -18,9 +18,13 @@ data class Task(
     /* Attributes */
     val checklistAttribute: ChecklistAttribute? = null,
     val eventAttribute: EventAttribute? = null,
-    val interval: IntervalAttribute? = null,
-    val pomodoro: PomodoroAttribute? = null,
+    val intervalAttribute: IntervalAttribute? = null,
+    val pomodoroAttribute: PomodoroAttribute? = null,
 ) {
+
+    @JsonIgnore
+    fun isOpen(): Boolean =
+        pomodoroAttribute?.countdownSession?.isRunning() ?: false
 
     @JsonIgnore
     fun isDone(): Boolean =

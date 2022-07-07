@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.SubtaskManagerDialog
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.TaskEditor
+import net.dzikoysk.presenceofmind.task.Task
 import org.burnoutcrew.reorderable.ReorderableLazyListState
 import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -30,7 +31,11 @@ import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 @Composable
 fun TaskCardPreview() {
     TaskCard(
-        context = previewTaskCardContext(),
+        context = TaskCardContext(
+            task = Task(
+                description = "Task with all attributes"
+            )
+        ),
         state = rememberReorderableLazyListState(onMove = { _, _ -> })
     )
 }

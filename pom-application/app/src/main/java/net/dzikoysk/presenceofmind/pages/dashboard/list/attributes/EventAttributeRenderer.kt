@@ -7,8 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.pages.dashboard.list.DescriptionMarkdown
-import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskItemCard
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.Task
@@ -19,25 +17,21 @@ import java.time.Instant
 import kotlin.time.toKotlinDuration
 
 @Composable
-fun createOneTimeTaskItem(
+fun EventAttributeRenderer(
     task: Task,
     eventAttribute: EventAttribute
-): TaskItemCard {
-    return TaskItemCard(
-        content = {
-            Column(Modifier.padding(start = 16.dp)) {
-                DescriptionMarkdown(
-                    description = task.description
-                )
-                Text(
-                    text = Duration.between(Instant.now(), eventAttribute.eventDate.toLocalDateTime())
-                        .toKotlinDuration()
-                        .incomingDurationToHumanReadableFormat(),
-                    fontSize = 10.scaledSp(),
-                    color = Color.Gray,
-                    modifier = Modifier.padding(top = 2.dp)
-                )
-            }
-        }
-    )
+) {
+    Column(Modifier.padding(start = 16.dp)) {
+        DescriptionMarkdown(
+            description = task.description
+        )
+        Text(
+            text = Duration.between(Instant.now(), eventAttribute.eventDate.toLocalDateTime())
+                .toKotlinDuration()
+                .incomingDurationToHumanReadableFormat(),
+            fontSize = 10.scaledSp(),
+            color = Color.Gray,
+            modifier = Modifier.padding(top = 2.dp)
+        )
+    }
 }

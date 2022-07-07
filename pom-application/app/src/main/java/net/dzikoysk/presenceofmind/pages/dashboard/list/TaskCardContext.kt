@@ -8,10 +8,3 @@ data class TaskCardContext(
     val deleteTask: () -> Unit = {},
     val onDone: () -> Unit = {}
 )
-
-fun previewTaskCardContext(): TaskCardContext =
-    TaskCardContext(
-        task = Task(
-            description = "Long-term task"
-        )
-    )

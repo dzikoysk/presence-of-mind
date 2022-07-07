@@ -21,11 +21,11 @@ class TaskService(
     fun refreshTasksState() {
         tasks
             .filter { it.isDone() }
-            .filter { it.interval != null }
+            .filter { it.intervalAttribute != null }
             .filter {
                 val doneDate = Instant.ofEpochMilli(it.doneDate ?: 0).atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
                 val currentDate = Instant.now().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
-                return@filter ChronoUnit.DAYS.between(doneDate, currentDate) >= it.interval!!.intervalInDays
+                return@filter ChronoUnit.DAYS.between(doneDate, currentDate) >= it.intervalAttribute!!.intervalInDays
             }
             .forEach { saveTask(it.copy(doneDate = null)) }
     }
@@ -69,13 +69,13 @@ fun TaskService.createDefaultTasks() {
     ))
     saveTask(Task(
         description = "Repetitive task ~ Habits",
-        interval = IntervalAttribute(
+        intervalAttribute = IntervalAttribute(
             intervalInDays = 1,
         )
     ))
     saveTask(Task(
         description = "Pomodoro task",
-        pomodoro = PomodoroAttribute(
+        pomodoroAttribute = PomodoroAttribute(
             expectedAttentionInMinutes = 75
         )
     ))

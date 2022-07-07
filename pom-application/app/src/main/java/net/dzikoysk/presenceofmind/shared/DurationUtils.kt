@@ -1,7 +1,6 @@
 package net.dzikoysk.presenceofmind.shared
 
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 
 fun Duration.incomingDurationToHumanReadableFormat(): String {
     val parts = ArrayList<String>()
@@ -27,7 +26,6 @@ fun Duration.incomingDurationToHumanReadableFormat(): String {
         ?: "Outdated"
 }
 
-@ExperimentalTime
 fun Duration.timeToHumanReadableFormat(): String {
     val parts = ArrayList<String>()
 

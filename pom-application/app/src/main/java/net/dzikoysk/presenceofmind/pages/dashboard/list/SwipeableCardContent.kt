@@ -21,6 +21,8 @@ import kotlinx.coroutines.launch
 import net.dzikoysk.presenceofmind.task.MarkedAs
 import kotlin.math.roundToInt
 
+val SWIPE_SQUARE_SIZE = 55.dp
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SwipeableCardContent(
