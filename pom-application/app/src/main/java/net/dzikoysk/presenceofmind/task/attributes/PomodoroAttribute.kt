@@ -1,5 +1,6 @@
 package net.dzikoysk.presenceofmind.task.attributes
 
+import androidx.compose.ui.graphics.Color
 import com.fasterxml.jackson.annotation.JsonIgnore
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -11,6 +12,9 @@ data class PomodoroAttribute(
 
     override fun isRunning(): Boolean =
         countdownSession.isRunning()
+
+    override fun getDefaultAccentColor(): Color =
+        Color(0xFFFFA0A0)
 
     override fun getName(): String =
         "Pomodoro"

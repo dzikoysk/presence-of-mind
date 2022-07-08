@@ -21,24 +21,6 @@ import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
 
-@Preview(showBackground = true)
-@Composable
-fun EditorDrawerPreview() {
-    Box(
-        Modifier
-            .fillMaxSize()
-            .background(Color.Black)) {
-        EditorDrawer(
-            close = {},
-            taskToEdit = Task(
-                description = "Task to edit",
-                checklistAttribute = ChecklistAttribute()
-            ),
-            saveTask = {}
-        )
-    }
-}
-
 @Composable
 fun AnimatedEditorDrawer(
     open: Boolean,

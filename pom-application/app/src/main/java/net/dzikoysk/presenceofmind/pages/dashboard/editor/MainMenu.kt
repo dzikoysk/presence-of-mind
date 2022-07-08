@@ -1,24 +1,52 @@
 package net.dzikoysk.presenceofmind.pages.dashboard.editor
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
+import androidx.compose.material.ButtonDefaults.buttonColors
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.shared.mirror.drawVerticalScrollbar
 import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
+import net.dzikoysk.presenceofmind.task.attributes.*
+
+@Preview(showBackground = true)
+@Composable
+fun MainMenuPreview() {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(Color.White)) {
+        MainMenu(
+            close = {},
+            selectTab = {},
+            task = Task(
+                description = "Task to edit",
+                checklistAttribute = ChecklistAttribute()
+            ),
+            updateTask = {},
+            saveTask = {},
+        )
+    }
+}
 
 @Composable
 fun MainMenu(
@@ -58,59 +86,62 @@ fun MainMenu(
         }
 
         item {
-            val checklistEnabled = remember { mutableStateOf(task.checklistAttribute != null) }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = checklistEnabled.value,
-                        onCheckedChange = {
-                            checklistEnabled.value = !checklistEnabled.value
-                            updateTask(
-                                when (checklistEnabled.value) {
-                                    true -> task.copy(checklistAttribute = ChecklistAttribute())
-                                    false -> task.copy(checklistAttribute = null)
-                                }
-                            )
-                        }
-                    )
-                    Text(
-                        text = "Enable checklist"
-                    )
-                }
-                task.checklistAttribute?.also {
-                    Button(
-                        onClick = { selectTab(EditorTab.CHECKLIST) },
-                        content = { Text(text = "Edit subtasks -->")}
-                    )
-                }
-            }
+            AttributeSetup(
+                attribute = task.checklistAttribute,
+                attributeName = "checklist",
+                attributeDefaultInstance = ChecklistAttribute(),
+                onEnable = { updateTask(task.copy(checklistAttribute = ChecklistAttribute())) },
+                onEdit = { selectTab(EditorTab.CHECKLIST) },
+                onDisable = { updateTask(task.copy(checklistAttribute = null)) }
+            )
         }
 
         item {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {}
-                )
-                Text(
-                    text = "Add event date"
-                )
-            }
+            AttributeSetup(
+                attribute = task.eventAttribute,
+                attributeDefaultInstance = EventAttribute(),
+                attributeName = "event",
+                onEnable = { updateTask(task.copy(eventAttribute = EventAttribute())) },
+                onEdit = {  },
+                onDisable = { updateTask(task.copy(eventAttribute = null)) }
+            )
         }
 
         item {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {}
-                )
-                Text(
-                    text = "Enable pomodoro"
+            AttributeSetup(
+                attribute = task.pomodoroAttribute,
+                attributeName = "pomodoro",
+                attributeDefaultInstance = PomodoroAttribute(),
+                onEnable = { updateTask(task.copy(pomodoroAttribute = PomodoroAttribute())) },
+                onEdit = { },
+                onDisable = { updateTask(task.copy(pomodoroAttribute = null)) }
+            )
+        }
+
+        item {
+            AttributeSetup(
+                attribute = task.intervalAttribute,
+                attributeDefaultInstance = IntervalAttribute(),
+                attributeName = "interval",
+                onEnable = { updateTask(task.copy(intervalAttribute = IntervalAttribute())) },
+                onEdit = { },
+                onDisable = { updateTask(task.copy(intervalAttribute = null)) }
+            ) { intervalAttribute ->
+                OutlinedTextField(
+                    value = intervalAttribute.intervalInDays.toString(),
+                    label = { Text("Interval in days") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                        .height(58.dp),
+                    onValueChange = {
+                        updateTask(task.copy(
+                            intervalAttribute = intervalAttribute.copy(
+                                intervalInDays = it.toIntOrNull() ?: 0
+                            ))
+                        )
+                    }
                 )
             }
         }
@@ -126,6 +157,80 @@ fun MainMenu(
                     close()
                 },
                 content = { Text(text = "Save") }
+            )
+        }
+    }
+}
+
+@Composable
+fun <A : Attribute> AttributeSetup(
+    attribute: A?,
+    attributeDefaultInstance: A,
+    attributeName: String,
+    onEnable: () -> Unit,
+    onEdit: () -> Unit,
+    onDisable: () -> Unit,
+    content: @Composable (A) -> Unit = {}
+) {
+    val sharedButtonModifier = Modifier
+        .padding(vertical = 8.dp, horizontal = 10.dp)
+
+    if (attribute == null) {
+        Button(
+            modifier = Modifier.padding(vertical = 8.dp),
+            colors = buttonColors(MaterialTheme.colors.surface),
+            shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(1.dp, attributeDefaultInstance.getDefaultAccentColor() ?: MaterialTheme.colors.primary),
+            onClick = { onEnable() }
+        ) {
+            Text(
+                text = attributeName.replaceFirstChar { it.uppercase() },
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    } else {
+        Box(Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .border(
+                        width = 1.dp,
+                        color = Color.LightGray,
+                        shape = RoundedCornerShape(6.dp)
+                    )
+            ) {
+                content(attribute)
+
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .then(sharedButtonModifier),
+                        colors = buttonColors(backgroundColor = attribute.getDefaultAccentColor() ?: Color.LightGray),
+                        onClick = { onEdit() },
+                        content = { Text(text = "Modify") }
+                    )
+                    Button(
+                        modifier = Modifier.fillMaxWidth().then(sharedButtonModifier),
+                        onClick = { onDisable() },
+                        content = { Text(text = "Disable") }
+                    )
+                }
+            }
+            Text(
+                text = "Configure $attributeName",
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .background(MaterialTheme.colors.surface)
             )
         }
     }

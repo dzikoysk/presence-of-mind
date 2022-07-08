@@ -1,10 +1,14 @@
 package net.dzikoysk.presenceofmind.task.attributes
 
+import androidx.compose.ui.graphics.Color
 import java.util.UUID
 
 data class ChecklistAttribute(
     val list: List<ChecklistEntry> = emptyList()
 ) : Attribute {
+
+    override fun getDefaultAccentColor(): Color =
+        Color(0xFFFFDD78)
 
     override fun getName(): String =
         "Checklist"
