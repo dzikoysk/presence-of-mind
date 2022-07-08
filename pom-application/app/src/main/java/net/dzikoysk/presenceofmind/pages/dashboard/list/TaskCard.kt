@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -37,12 +38,17 @@ fun TaskCardPreview() {
     )
 }
 
+typealias OnDone = (Task, MarkedAs) -> Task
+typealias SubscribeToOnDone = (OnDone) -> Unit
+
 @Composable
 fun TaskCard(
     modifier: Modifier = Modifier,
     state: ReorderableLazyListState,
     context: TaskCardContext,
 ) {
+    val subscribedToOnDone = remember { mutableListOf<OnDone>() }
+
     val taskColor =
         context.task.getAccentColor()
             .takeUnless { context.task.isDone() }
@@ -69,24 +75,23 @@ fun TaskCard(
                         onDone = {
                             val markedAsDone = if (context.task.isDone()) MarkedAs.UNFINISHED else MarkedAs.DONE
 
-                            context.task
+                            var updatedTask = context.task
                                 .copy(
                                     doneDate = if (context.task.isDone()) null else System.currentTimeMillis(),
                                     doneCount = context.task.doneCount + markedAsDone.ordinal
                                 )
-                                //.let { taskItemCard.onDone(it, markedAsDone) } TODO: notify task supervisor
-                                .apply { context.updateTask(this) }
 
+                            subscribedToOnDone.forEach { updatedTask = it(updatedTask, markedAsDone) }
+                            context.updateTask(updatedTask)
                             snapTo(SwipeState.CONTENT)
                         }
                     )
                 },
-                content = { swipeState, snapTo ->
+                content = { _, _ ->
                     TaskCardContent(
                         task = context.task,
                         updateTask = context.updateTask,
-                        deleteTask = context.deleteTask,
-                        // content = { taskItemCard.content() }, TODO: specific task impl
+                        subscribeToOnDone = { subscribedToOnDone.add(it) }
                     )
                 },
                 rightEntry = { swipeState, snapTo ->

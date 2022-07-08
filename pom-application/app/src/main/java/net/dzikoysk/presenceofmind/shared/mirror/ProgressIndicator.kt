@@ -420,7 +420,7 @@ private fun DrawScope.drawIndeterminateCircularIndicator(
 }
 
 // LinearProgressIndicator Material specs
-// TODO: there are currently 3 fixed widths in Android, should this be flexible? Material says
+// TO FIX: there are currently 3 fixed widths in Android, should this be flexible? Material says
 // the width should be 240dp here.
 private val LinearIndicatorHeight = ProgressIndicatorDefaults.StrokeWidth
 private val LinearIndicatorWidth = 240.dp

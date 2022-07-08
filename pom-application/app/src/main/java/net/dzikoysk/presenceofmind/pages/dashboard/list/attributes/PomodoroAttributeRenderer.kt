@@ -15,13 +15,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.R
+import net.dzikoysk.presenceofmind.pages.dashboard.list.SubscribeToOnDone
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
 import net.dzikoysk.presenceofmind.task.MarkedAs
 import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.task.attributes.CountdownSession
 import net.dzikoysk.presenceofmind.task.attributes.PomodoroAttribute
-import java.util.function.BiFunction
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -36,6 +37,7 @@ fun PomodoroAttributeRendererPreview() {
                 expectedAttentionInMinutes = 30
             )
         ),
+        subscribeToOnDone = { },
         updateTask = {}
     )
 }
@@ -43,6 +45,7 @@ fun PomodoroAttributeRendererPreview() {
 @Composable
 fun PomodoroAttributeRenderer(
     task: Task,
+    subscribeToOnDone: SubscribeToOnDone,
     updateTask: (Task) -> Unit
 ) {
     val pomodoroAttribute = task.pomodoroAttribute!!
@@ -51,19 +54,17 @@ fun PomodoroAttributeRenderer(
     val (isStarted, setIsStarted) = remember { mutableStateOf(countdownSession.isRunning()) }
     var countdownWatcher by remember { mutableStateOf(0) }
 
-    val onDone = BiFunction<Task, MarkedAs, Task> { updatedTask, markedAs ->
+    subscribeToOnDone { updatedTask, markedAs ->
         when (markedAs) {
             MarkedAs.UNFINISHED -> updatedTask
             MarkedAs.DONE -> {
                 val stoppedCountdown = countdownSession.also { it.resetCountdown() }
-// TODO: Try to make countdown immutable?
-//                updatedTask.copy(
-//                    metadata = metadata.copy(
-//                        timeSpentInSeconds = metadata.timeSpentInSeconds + stoppedCountdown.sessionTimeInSeconds,
-//                        countdownSession = CountdownSession()
-//                    )
-//                )
-                updatedTask
+                updatedTask.copy(
+                    pomodoroAttribute = pomodoroAttribute.copy(
+                        timeSpentInSeconds = pomodoroAttribute.timeSpentInSeconds + stoppedCountdown.sessionTimeInSeconds,
+                        countdownSession = CountdownSession()
+                    )
+                )
             }
         }
     }
