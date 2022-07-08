@@ -12,6 +12,7 @@ import net.dzikoysk.presenceofmind.pages.dashboard.*
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.AnimatedEditorDrawer
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskList
 import net.dzikoysk.presenceofmind.task.MarkedAs
+import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.TaskService
 import net.dzikoysk.presenceofmind.task.createDefaultTasks
 import net.dzikoysk.presenceofmind.theme.InMemoryThemeRepository
@@ -27,7 +28,7 @@ fun Dashboard(
 ) {
     val selectedTasks = remember { mutableStateOf(MarkedAs.UNFINISHED) }
     val openMenu = remember { mutableStateOf(false)  }
-    val openEditorDrawer = remember { mutableStateOf(false)  }
+    val openEditorDrawer = remember { mutableStateOf<Task?>(null)  }
 
     Scaffold(
         content = { padding ->
@@ -67,6 +68,7 @@ fun Dashboard(
                     }
                     TaskList(
                         taskService = taskService,
+                        openTaskEditor = { openEditorDrawer.value = it },
                         displayMode = selectedTasks.value
                     )
                 }
@@ -76,18 +78,18 @@ fun Dashboard(
                 )
 
                 AnimatedEditorDrawer(
-                    open = openEditorDrawer.value,
-                    close = { openEditorDrawer.value = false },
-                    // saveTask = { taskService.saveTask(it) },
-                    // taskToEdit = null
+                    open = openEditorDrawer.value != null,
+                    close = { openEditorDrawer.value = null },
+                    saveTask = { taskService.saveTask(it) },
+                    taskToEdit = openEditorDrawer.value
                 )
             }
         },
         floatingActionButton = {
-            if (!openEditorDrawer.value) {
+            if (openEditorDrawer.value == null) {
                 CreateTaskButton(
                     themeRepository = themeRepository,
-                    openTaskEditor = { openEditorDrawer.value = true }
+                    openTaskEditor = { openEditorDrawer.value = Task() }
                 )
             }
         }

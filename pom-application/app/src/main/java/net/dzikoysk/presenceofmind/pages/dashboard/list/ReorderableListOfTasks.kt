@@ -24,7 +24,8 @@ import java.util.UUID
 fun ReorderableListOfTasks(
     taskService: TaskService,
     indexOfTask: (UUID) -> Int,
-    tasks: List<Task>
+    tasks: List<Task>,
+    openTaskEditor: (Task) -> Unit,
 ) {
     val listOrderState = rememberReorderableLazyListState(
         onMove = { from, to ->
@@ -69,6 +70,7 @@ fun ReorderableListOfTasks(
                         state = listOrderState,
                         context = TaskCardContext(
                             task = task,
+                            openTaskEditor = { openTaskEditor(task) },
                             updateTask = { taskService.saveTask(it) },
                             deleteTask = { taskService.deleteTask(task.id) }
                         ),

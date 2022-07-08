@@ -43,9 +43,9 @@
 //fun TaskEditor(
 //    closeDialog: () -> Unit,
 //    saveTask: (Task) -> Unit,
-//    taskToEdit: Task?
+//
 //) {
-//    var task by remember { mutableStateOf(taskToEdit ?: Task(description = "", metadata = EventAttribute())) }
+//
 //
 //    Box(
 //        modifier = Modifier
@@ -56,22 +56,9 @@
 //        Column(
 //            modifier = Modifier.padding(24.dp),
 //        ) {
-//            Text(
-//                text = "Add a new task  \uD83C\uDFA8",
-//                modifier = Modifier.padding(vertical = 7.dp),
-//                fontWeight = FontWeight.Bold,
-//                fontSize = 16.scaledSp()
-//            )
 //
-//            OutlinedTextField(
-//                value = task.description,
-//                label = { Text("Describe your task") },
-//                modifier = Modifier
-//                    .padding(vertical = 7.dp)
-//                    .height(160.dp)
-//                    .fillMaxWidth(),
-//                onValueChange = { task = task.copy(description = it) },
-//            )
+//
+//
 //
 //            TaskEditorIntervalOption(
 //                selectedType = task.metadata.type,
@@ -195,16 +182,7 @@
 //                }
 //            }
 //
-//            Button(
-//                modifier = Modifier
-//                    .padding(vertical = 12.dp)
-//                    .fillMaxWidth(),
-//                onClick = {
-//                    saveTask(task)
-//                    closeDialog()
-//                },
-//                content = { Text(text = "Save") }
-//            )
+//
 //        }
 //    }
 //}
