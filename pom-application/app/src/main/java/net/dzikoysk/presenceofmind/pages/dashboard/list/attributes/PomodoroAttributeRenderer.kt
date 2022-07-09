@@ -15,9 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.R
+import net.dzikoysk.presenceofmind.components.scaledSp
 import net.dzikoysk.presenceofmind.pages.dashboard.list.SubscribeToOnDone
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
-import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
 import net.dzikoysk.presenceofmind.task.MarkedAs
 import net.dzikoysk.presenceofmind.task.Task

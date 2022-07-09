@@ -14,9 +14,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.shared.SwipeState
-import net.dzikoysk.presenceofmind.shared.SwipeableCard
-import net.dzikoysk.presenceofmind.shared.drawTaskColorAccent
+import net.dzikoysk.presenceofmind.components.SwipeState
+import net.dzikoysk.presenceofmind.components.SwipeableCard
+import net.dzikoysk.presenceofmind.components.drawTaskColorAccent
 import net.dzikoysk.presenceofmind.task.MarkedAs
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.getAccentColor

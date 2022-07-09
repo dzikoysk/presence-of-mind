@@ -1,11 +1,11 @@
 package net.dzikoysk.presenceofmind.pages.dashboard.editor
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults.buttonColors
@@ -21,8 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.shared.mirror.drawVerticalScrollbar
-import net.dzikoysk.presenceofmind.shared.scaledSp
+import net.dzikoysk.presenceofmind.components.drawVerticalScrollbar
+import net.dzikoysk.presenceofmind.components.scaledSp
 import net.dzikoysk.presenceofmind.task.SaveTask
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.UpdateTask
@@ -62,7 +62,8 @@ fun MainMenu(
         modifier = Modifier
             .fillMaxSize()
             .drawVerticalScrollbar(state),
-        state = state
+        state = state,
+        contentPadding = PaddingValues(horizontal = 24.dp)
     ) {
         item {
             Text(
@@ -104,7 +105,13 @@ fun MainMenu(
                 onEnable = { updateTask(task.copy(eventAttribute = EventAttribute())) },
                 onEdit = {  },
                 onDisable = { updateTask(task.copy(eventAttribute = null)) }
-            )
+            ) {
+                EventConfiguration(
+                    task = task,
+                    eventAttribute = it,
+                    updateTask = updateTask
+                )
+            }
         }
 
         item {
@@ -115,7 +122,13 @@ fun MainMenu(
                 onEnable = { updateTask(task.copy(pomodoroAttribute = PomodoroAttribute())) },
                 onEdit = { },
                 onDisable = { updateTask(task.copy(pomodoroAttribute = null)) }
-            )
+            ) {
+                PomodoroConfiguration(
+                    task = task,
+                    pomodoroAttribute = it,
+                    updateTask = updateTask
+                )
+            }
         }
 
         item {
@@ -169,15 +182,26 @@ fun <A : Attribute> AttributeSetup(
             modifier = Modifier.padding(vertical = 8.dp),
             colors = buttonColors(MaterialTheme.colors.surface),
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, attributeDefaultInstance.getDefaultAccentColor() ?: MaterialTheme.colors.primary),
             onClick = { onEnable() }
         ) {
-            Text(
-                text = attributeName.replaceFirstChar { it.uppercase() },
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.SemiBold,
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
-            )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(14.dp)
+                        .clip(CircleShape)
+                        .background(attributeDefaultInstance.getDefaultAccentColor())
+                )
+                Text(
+                    text = attributeName.replaceFirstChar { it.uppercase() },
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
         }
     } else {
         Box(Modifier.fillMaxWidth()) {
@@ -195,7 +219,9 @@ fun <A : Attribute> AttributeSetup(
                 content(attribute)
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -203,12 +229,14 @@ fun <A : Attribute> AttributeSetup(
                         modifier = Modifier
                             .fillMaxWidth(0.5f)
                             .then(sharedButtonModifier),
-                        colors = buttonColors(backgroundColor = attribute.getDefaultAccentColor() ?: Color.LightGray),
+                        colors = buttonColors(backgroundColor = attribute.getDefaultAccentColor()),
                         onClick = { onEdit() },
                         content = { Text(text = "Modify") }
                     )
                     Button(
-                        modifier = Modifier.fillMaxWidth().then(sharedButtonModifier),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(sharedButtonModifier),
                         onClick = { onDisable() },
                         content = { Text(text = "Disable") }
                     )

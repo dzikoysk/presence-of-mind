@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.TextUnit
 import dev.jeziellago.compose.markdowntext.MarkdownText
-import net.dzikoysk.presenceofmind.shared.scaledSp
+import net.dzikoysk.presenceofmind.components.scaledSp
 import java.lang.Integer.max
 import java.util.StringTokenizer
 

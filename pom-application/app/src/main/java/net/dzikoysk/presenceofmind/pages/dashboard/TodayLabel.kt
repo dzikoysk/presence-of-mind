@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import net.dzikoysk.presenceofmind.shared.scaledSp
+import net.dzikoysk.presenceofmind.components.scaledSp
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

@@ -14,39 +14,39 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.UpdateTask
-import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
+import net.dzikoysk.presenceofmind.task.attributes.PomodoroAttribute
 
 @Preview(showBackground = true)
 @Composable
-fun IntervalConfigurationPreview() {
-    IntervalConfiguration(
+fun PomodoroConfigurationPreview() {
+    PomodoroConfiguration(
         task = Task(),
-        intervalAttribute = IntervalAttribute(5),
+        pomodoroAttribute = PomodoroAttribute(90),
         updateTask = {}
     )
 }
 
 @Composable
-fun IntervalConfiguration(
+fun PomodoroConfiguration(
     task: Task,
-    intervalAttribute: IntervalAttribute,
+    pomodoroAttribute: PomodoroAttribute,
     updateTask: UpdateTask
 ) {
     Column(Modifier.padding(12.dp)) {
         OutlinedTextField(
-            value = intervalAttribute.intervalInDays.takeIf { it != 0 }?.toString() ?: "",
-            label = { Text("Interval in days") },
+            value = pomodoroAttribute.expectedAttentionInMinutes.takeIf { it != 0 }?.toString() ?: "",
+            label = { Text("Expected attention in minutes") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(6.dp)
+                .padding(top = 10.dp)
                 .height(58.dp),
             onValueChange = {
                 updateTask(task.copy(
-                    intervalAttribute = intervalAttribute.copy(
-                        intervalInDays = it.toIntOrNull() ?: 0
-                    ))
-                )
+                    pomodoroAttribute = pomodoroAttribute.copy(
+                        expectedAttentionInMinutes = it.toIntOrNull() ?: 0
+                    )
+                ))
             }
         )
     }

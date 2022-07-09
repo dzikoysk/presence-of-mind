@@ -7,9 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import net.dzikoysk.presenceofmind.components.scaledSp
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
-import net.dzikoysk.presenceofmind.shared.scaledSp
-import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
 import net.dzikoysk.presenceofmind.task.attributes.toLocalDateTime
 import java.time.Duration
@@ -18,7 +17,6 @@ import kotlin.time.toKotlinDuration
 
 @Composable
 fun EventAttributeRenderer(
-    task: Task,
     eventAttribute: EventAttribute
 ) {
     Column(Modifier.padding(start = 16.dp)) {

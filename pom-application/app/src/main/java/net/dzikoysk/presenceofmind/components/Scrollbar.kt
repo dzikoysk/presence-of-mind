@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.shared.mirror
+package net.dzikoysk.presenceofmind.components
 
 /* https://gist.github.com/mxalbert1996/33a360fcab2105a31e5355af98216f5a */
 

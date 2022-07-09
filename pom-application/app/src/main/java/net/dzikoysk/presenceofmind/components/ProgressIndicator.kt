@@ -16,7 +16,7 @@
 
 @file:Suppress("UNUSED_PARAMETER", "KDocUnresolvedReference")
 
-package net.dzikoysk.presenceofmind.shared.mirror
+package net.dzikoysk.presenceofmind.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas

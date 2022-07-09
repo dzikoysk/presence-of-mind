@@ -28,7 +28,6 @@ fun TaskCardContent(
             )
             task.eventAttribute?.also { eventAttribute ->
                 EventAttributeRenderer(
-                    task = task,
                     eventAttribute = eventAttribute
                 )
             }

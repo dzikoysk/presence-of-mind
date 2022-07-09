@@ -28,7 +28,7 @@ import androidx.core.content.ContextCompat
 import com.skydoves.landscapist.rememberDrawablePainter
 import net.dzikoysk.presenceofmind.BuildConfig
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.shared.scaledSp
+import net.dzikoysk.presenceofmind.components.scaledSp
 
 @Preview(showBackground = true)
 @Composable

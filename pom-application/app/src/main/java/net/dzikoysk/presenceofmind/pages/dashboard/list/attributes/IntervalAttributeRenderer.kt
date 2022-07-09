@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.dzikoysk.presenceofmind.components.scaledSp
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskCard
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskCardContext
 import net.dzikoysk.presenceofmind.shared.plural
-import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState

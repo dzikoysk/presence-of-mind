@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.shared.mirror.LinearProgressIndicator
+import net.dzikoysk.presenceofmind.components.LinearProgressIndicator
 
 @Composable
 fun ProgressIndicator(

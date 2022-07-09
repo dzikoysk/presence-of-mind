@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.shared
+package net.dzikoysk.presenceofmind.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation

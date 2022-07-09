@@ -79,7 +79,6 @@ fun EditorDrawer(
                     .fillMaxSize()
                     .clip(RoundedCornerShape(topStart = 36.dp, topEnd = 36.dp))
                     .background(MaterialTheme.colors.surface)
-                    .padding(horizontal = 24.dp)
             ) {
                 when (selectedTab.value) {
                     EditorTab.MAIN ->
