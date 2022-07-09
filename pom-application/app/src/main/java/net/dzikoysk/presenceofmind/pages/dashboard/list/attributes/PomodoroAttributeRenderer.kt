@@ -22,8 +22,7 @@ import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
 import net.dzikoysk.presenceofmind.task.MarkedAs
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.UpdateTask
-import net.dzikoysk.presenceofmind.task.attributes.CountdownSession
-import net.dzikoysk.presenceofmind.task.attributes.PomodoroAttribute
+import net.dzikoysk.presenceofmind.task.attributes.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -59,10 +58,9 @@ fun PomodoroAttributeRenderer(
         when (markedAs) {
             MarkedAs.UNFINISHED -> updatedTask
             MarkedAs.DONE -> {
-                val stoppedCountdown = countdownSession.also { it.resetCountdown() }
                 updatedTask.copy(
                     pomodoroAttribute = pomodoroAttribute.copy(
-                        timeSpentInSeconds = pomodoroAttribute.timeSpentInSeconds + stoppedCountdown.sessionTimeInSeconds,
+                        timeSpentInSeconds = pomodoroAttribute.timeSpentInSeconds + countdownSession.withAccumulatedCountdown().sessionTimeInSeconds,
                         countdownSession = CountdownSession()
                     )
                 )
@@ -73,7 +71,7 @@ fun PomodoroAttributeRenderer(
     LaunchedEffect(Unit) {
         while(true) {
             countdownWatcher++
-            delay(1.seconds)
+            delay(500.milliseconds)
         }
     }
 
@@ -92,8 +90,11 @@ fun PomodoroAttributeRenderer(
                 modifier = Modifier
                     .clickable {
                         setIsStarted(false)
-                        countdownSession.resetCountdown()
-                        updateTask(task)
+                        updateTask(task.copy(
+                            pomodoroAttribute = pomodoroAttribute.copy(
+                                countdownSession = countdownSession.withAccumulatedCountdown()
+                            )
+                        ))
                     }
                     .then(playbackModifier)
             )
@@ -104,8 +105,11 @@ fun PomodoroAttributeRenderer(
                 modifier = Modifier
                     .clickable {
                         setIsStarted(true)
-                        countdownSession.startCountdown()
-                        updateTask(task)
+                        updateTask(task.copy(
+                            pomodoroAttribute = pomodoroAttribute.copy(
+                                countdownSession = countdownSession.withStartedCountdown()
+                            )
+                        ))
                     }
                     .then(playbackModifier)
             )

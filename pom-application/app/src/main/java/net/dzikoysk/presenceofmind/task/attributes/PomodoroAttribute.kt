@@ -1,7 +1,7 @@
 package net.dzikoysk.presenceofmind.task.attributes
 
+import androidx.annotation.CheckResult
 import androidx.compose.ui.graphics.Color
-import com.fasterxml.jackson.annotation.JsonIgnore
 import kotlin.time.Duration.Companion.milliseconds
 
 data class PomodoroAttribute(
@@ -25,23 +25,23 @@ data class PomodoroAttribute(
 }
 
 data class CountdownSession(
-    var sessionTimeInSeconds: Long = 0,
-    var startTimeInMillis: Long = 0
-) {
+    val sessionTimeInSeconds: Long = 0,
+    val startTimeInMillis: Long = 0
+)
 
-    fun startCountdown() {
-        this.startTimeInMillis = System.currentTimeMillis()
+fun CountdownSession.isRunning(): Boolean =
+    startTimeInMillis != 0L
+
+@CheckResult
+fun CountdownSession.withStartedCountdown(): CountdownSession =
+    copy(startTimeInMillis = System.currentTimeMillis())
+
+@CheckResult
+fun CountdownSession.withAccumulatedCountdown(): CountdownSession =
+    when {
+        isRunning() -> copy(
+            sessionTimeInSeconds = sessionTimeInSeconds + (System.currentTimeMillis() - startTimeInMillis).milliseconds.inWholeSeconds,
+            startTimeInMillis = 0
+        )
+        else -> this
     }
-
-    fun resetCountdown() {
-        if (isRunning()) {
-            this.sessionTimeInSeconds += (System.currentTimeMillis() - startTimeInMillis).milliseconds.inWholeSeconds
-            this.startTimeInMillis = 0
-        }
-    }
-
-    @JsonIgnore
-    fun isRunning(): Boolean =
-        startTimeInMillis != 0L
-
-}

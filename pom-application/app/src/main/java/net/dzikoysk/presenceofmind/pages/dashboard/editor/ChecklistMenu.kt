@@ -33,6 +33,7 @@ import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.UpdateTask
 import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.task.attributes.ChecklistEntry
+import net.dzikoysk.presenceofmind.task.attributes.withUpdatedEntry
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -64,6 +65,10 @@ fun ChecklistEditor(
 ) {
     val checklistAttribute = task.checklistAttribute ?: ChecklistAttribute()
     val subtasks = remember { mutableStateOf(checklistAttribute.list) }
+
+    val updateSubtask: (ChecklistEntry) -> Unit = { entry ->
+        subtasks.value = checklistAttribute.withUpdatedEntry(entry).list
+    }
 
     val subtasksState = rememberReorderableLazyListState(
         onMove = { from, to ->
@@ -112,11 +117,7 @@ fun ChecklistEditor(
             modifier = Modifier
                 .size(40.dp)
                 .padding(8.dp)
-                .clickable {
-                    subtasks.value = subtasks.value
-                        .toMutableList()
-                        .also { it.add(ChecklistEntry()) }
-                }
+                .clickable { updateSubtask(ChecklistEntry()) }
         )
     }
 
@@ -137,8 +138,6 @@ fun ChecklistEditor(
             items = subtasks.value,
             key = { it.id }
         ) { subtask ->
-            val description = remember { mutableStateOf(subtask.description) }
-
             ReorderableItem(
                 state = subtasksState,
                 key = subtask.id
@@ -168,11 +167,8 @@ fun ChecklistEditor(
                                     .padding(horizontal = 5.dp, vertical = 10.dp)
                             ) {
                                 OutlinedTextField(
-                                    value = description.value,
-                                    onValueChange = {
-                                        subtask.description = it
-                                        description.value = it
-                                    },
+                                    value = subtask.description,
+                                    onValueChange = { updateSubtask(subtask.copy(description = it)) },
                                     modifier = Modifier
                                         .height(48.dp)
                                         .fillMaxWidth()
@@ -181,7 +177,7 @@ fun ChecklistEditor(
                                 )
                             }
                         },
-                        rightEntry = { swipeState, snapTo ->
+                        rightEntry = { swipeState, _ ->
                             Icon(
                                 contentDescription = "Delete subtask",
                                 painter = painterResource(id = R.drawable.ic_baseline_delete_24),

@@ -12,7 +12,9 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.UpdateTask
+import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.task.attributes.ChecklistEntry
+import net.dzikoysk.presenceofmind.task.attributes.withUpdatedEntry
 
 @Composable
 fun ChecklistAttributeRenderer(
@@ -21,15 +23,16 @@ fun ChecklistAttributeRenderer(
 ) {
     val fontSize = task.description.scaledFontSize()
 
-    task.checklistAttribute?.list?.also { subtasks ->
+    task.checklistAttribute?.also { checklistAttribute ->
         Box(modifier = Modifier.padding(start = 3.dp)) {
-            subtasks.forEachIndexed { idx, subtask ->
+            checklistAttribute.list.forEachIndexed { idx, subtask ->
                 Row(
                     modifier = Modifier.padding(top = (30 * idx).dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     ChecklistEntryRenderer(
                         task = task,
+                        checklistAttribute = checklistAttribute,
                         entry = subtask,
                         fontSize = fontSize,
                         updateTask = updateTask
@@ -43,6 +46,7 @@ fun ChecklistAttributeRenderer(
 @Composable
 fun ChecklistEntryRenderer(
     task: Task,
+    checklistAttribute: ChecklistAttribute,
     entry: ChecklistEntry,
     fontSize: TextUnit,
     updateTask: UpdateTask
@@ -51,8 +55,13 @@ fun ChecklistEntryRenderer(
         Checkbox(
             checked = entry.done,
             onCheckedChange = {
-                entry.done = !entry.done
-                updateTask(task.copy(checklistAttribute = task.checklistAttribute!!.copy()))
+                updateTask(task.copy(
+                    checklistAttribute = checklistAttribute.withUpdatedEntry(
+                        entry = entry.copy(
+                            done = !entry.done
+                        )
+                    )
+                ))
             },
             modifier = Modifier.scale(0.8f * (fontSize.value / 12f))
         )

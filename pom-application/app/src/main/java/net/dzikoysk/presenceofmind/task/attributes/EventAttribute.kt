@@ -22,11 +22,11 @@ data class EventAttribute(
 }
 
 data class EventDateTime(
-    var year: Int,
-    var month: Int,
-    var day: Int,
-    var hour: Int,
-    var minute: Int,
+    val year: Int,
+    val month: Int,
+    val day: Int,
+    val hour: Int,
+    val minute: Int,
 ) {
 
     companion object {

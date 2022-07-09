@@ -1,5 +1,6 @@
 package net.dzikoysk.presenceofmind.task.attributes
 
+import androidx.annotation.CheckResult
 import androidx.compose.ui.graphics.Color
 import java.util.UUID
 
@@ -18,8 +19,18 @@ data class ChecklistAttribute(
 
 }
 
+@CheckResult
+fun ChecklistAttribute.withUpdatedEntry(entry: ChecklistEntry): ChecklistAttribute =
+    copy(
+        list = list
+            .indexOfFirst { it.id == entry.id }
+            .takeIf { it != -1 }
+            ?.let { list.toMutableList().apply { set(it, entry) } }
+            ?: list.toMutableList().apply { add(entry) }
+    )
+
 data class ChecklistEntry(
     val id: UUID = UUID.randomUUID(),
-    var description: String = "",
-    var done: Boolean = false
+    val description: String = "",
+    val done: Boolean = false
 )
