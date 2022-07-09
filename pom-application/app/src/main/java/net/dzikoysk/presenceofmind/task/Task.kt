@@ -31,6 +31,7 @@ inline fun <reified A : Attribute> Task.getAttribute(): A? =
 
 fun Task.getAccentColor(): Color =
     attributes
+        .sortedBy { it.getPriority() }
         .firstNotNullOfOrNull { it.getDefaultAccentColor() }
         ?: Color(0xFFC3EEFF)
 

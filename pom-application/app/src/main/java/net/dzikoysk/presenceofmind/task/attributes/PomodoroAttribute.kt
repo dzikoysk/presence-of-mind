@@ -13,6 +13,9 @@ data class PomodoroAttribute(
     override fun isRunning(): Boolean =
         countdownSession.isRunning()
 
+    override fun getPriority(): Priority =
+        3
+
     override fun getDefaultAccentColor(): Color =
         Color(0xFFFFA0A0)
 

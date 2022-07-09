@@ -6,6 +6,9 @@ data class IntervalAttribute(
     val intervalInDays: Int = 1
 ) : Attribute {
 
+    override fun getPriority(): Int =
+        1
+
     override fun getDefaultAccentColor(): Color =
         Color(0xFFBBF0B1)
 

@@ -7,6 +7,9 @@ data class ChecklistAttribute(
     val list: List<ChecklistEntry> = emptyList()
 ) : Attribute {
 
+    override fun getPriority(): Int =
+        4
+
     override fun getDefaultAccentColor(): Color =
         Color(0xFFFFDD78)
 

@@ -10,6 +10,9 @@ data class EventAttribute(
     val eventDate: EventDateTime = EventDateTime.now()
 ) : Attribute {
 
+    override fun getPriority(): Priority =
+        2
+
     override fun getDefaultAccentColor(): Color =
         Color(0xFFFFCCF8)
 
