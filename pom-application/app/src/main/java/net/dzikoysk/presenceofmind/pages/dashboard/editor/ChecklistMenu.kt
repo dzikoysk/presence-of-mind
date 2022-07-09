@@ -26,6 +26,7 @@ import net.dzikoysk.presenceofmind.shared.SwipeableCard
 import net.dzikoysk.presenceofmind.shared.mirror.drawVerticalScrollbar
 import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.task.UpdateTask
 import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.task.attributes.ChecklistEntry
 import org.burnoutcrew.reorderable.ReorderableItem
@@ -54,7 +55,7 @@ fun ChecklistEditorPreview() {
 @Composable
 fun ChecklistEditor(
     task: Task,
-    updateTask: (Task) -> Unit,
+    updateTask: UpdateTask,
     close: () -> Unit
 ) {
     val checklistAttribute = task.checklistAttribute ?: ChecklistAttribute()

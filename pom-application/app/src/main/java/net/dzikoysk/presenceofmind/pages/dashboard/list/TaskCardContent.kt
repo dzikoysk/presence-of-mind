@@ -34,12 +34,10 @@ fun TaskCardContent(
             }
             task.intervalAttribute?.also { intervalAttribute ->
                 IntervalAttributeRenderer(
-                    task = task,
-                    metadata = intervalAttribute,
-                    updateTask = updateTask
+                    intervalAttribute = intervalAttribute,
                 )
             }
-            task.pomodoroAttribute?.also { pomodoroAttribute ->
+            task.pomodoroAttribute?.also {
                 PomodoroAttributeRenderer(
                     task = task,
                     subscribeToOnDone = subscribeToOnDone,

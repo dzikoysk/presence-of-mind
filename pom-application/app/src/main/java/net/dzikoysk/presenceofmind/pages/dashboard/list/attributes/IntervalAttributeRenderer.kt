@@ -37,15 +37,13 @@ private fun IntervalAttributeRendererPreview() {
 
 @Composable
 fun IntervalAttributeRenderer(
-    task: Task,
-    metadata: IntervalAttribute,
-    updateTask: (Task) -> Unit
+    intervalAttribute: IntervalAttribute,
 ) {
 
     Row(Modifier.padding(start = 16.dp)) {
         Column {
             Text(
-                text = "Every ${plural(metadata.intervalInDays.toLong(), "day")}",
+                text = "Every ${plural(intervalAttribute.intervalInDays.toLong(), "day")}",
                 fontSize = 10.scaledSp(),
                 color = Color.Gray,
                 modifier = Modifier.padding(top = 2.dp)

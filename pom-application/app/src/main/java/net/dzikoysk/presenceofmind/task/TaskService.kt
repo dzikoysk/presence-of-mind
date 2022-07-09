@@ -2,11 +2,13 @@ package net.dzikoysk.presenceofmind.task
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import net.dzikoysk.presenceofmind.task.attributes.*
 import java.time.Instant
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.UUID
+
+typealias SaveTask = (Task) -> Unit
+typealias UpdateTask = (Task) -> Unit
 
 class TaskService(
     val taskRepository: TaskRepository = InMemoryTaskRepository()
@@ -60,35 +62,4 @@ class TaskService(
     fun getObservableListOfAllTasks(): SnapshotStateList<Task> =
         tasks
 
-}
-
-fun TaskService.createDefaultTasks() {
-    saveTask(Task(
-        description = "One-time task ~ Events",
-        eventAttribute = EventAttribute()
-    ))
-    saveTask(Task(
-        description = "Repetitive task ~ Habits",
-        intervalAttribute = IntervalAttribute(
-            intervalInDays = 1,
-        )
-    ))
-    saveTask(Task(
-        description = "Pomodoro task",
-        pomodoroAttribute = PomodoroAttribute(
-            expectedAttentionInMinutes = 75
-        )
-    ))
-    saveTask(
-        Task(description = "Long-term task ~ Notes")
-    )
-    saveTask(Task(
-        description = "Complex long-term task ~ Lists",
-        checklistAttribute = ChecklistAttribute(
-            list = listOf(
-                ChecklistEntry(description = "To do", done = false),
-                ChecklistEntry(description = "Done", done = true),
-            )
-        )
-    ))
 }

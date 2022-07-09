@@ -21,6 +21,7 @@ import net.dzikoysk.presenceofmind.shared.scaledSp
 import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
 import net.dzikoysk.presenceofmind.task.MarkedAs
 import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.task.UpdateTask
 import net.dzikoysk.presenceofmind.task.attributes.CountdownSession
 import net.dzikoysk.presenceofmind.task.attributes.PomodoroAttribute
 import kotlin.time.Duration.Companion.milliseconds
@@ -46,7 +47,7 @@ fun PomodoroAttributeRendererPreview() {
 fun PomodoroAttributeRenderer(
     task: Task,
     subscribeToOnDone: SubscribeToOnDone,
-    updateTask: (Task) -> Unit
+    updateTask: UpdateTask
 ) {
     val pomodoroAttribute = task.pomodoroAttribute!!
     val countdownSession = pomodoroAttribute.countdownSession

@@ -7,8 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.task.SharedPreferencesTaskRepository
+import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.TaskService
-import net.dzikoysk.presenceofmind.task.createDefaultTasks
+import net.dzikoysk.presenceofmind.task.attributes.*
 import net.dzikoysk.presenceofmind.theme.SharedPreferencesThemeRepository
 import kotlin.time.Duration.Companion.minutes
 
@@ -51,9 +52,49 @@ class PresenceOfMindActivity : ComponentActivity() {
             Router(
                 themeRepository = themeRepository,
                 taskService = taskService,
-                restartActivity = { recreate() }
+                restartActivity = { recreate() },
+                page = Page.DASHBOARD
             )
         }
     }
 
+}
+
+fun TaskService.createDefaultTasks() {
+    saveTask(
+        Task(
+        description = "One-time task ~ Events",
+        eventAttribute = EventAttribute()
+    )
+    )
+    saveTask(
+        Task(
+        description = "Repetitive task ~ Habits",
+        intervalAttribute = IntervalAttribute(
+            intervalInDays = 1,
+        )
+    )
+    )
+    saveTask(
+        Task(
+        description = "Pomodoro task",
+        pomodoroAttribute = PomodoroAttribute(
+            expectedAttentionInMinutes = 75
+        )
+    )
+    )
+    saveTask(
+        Task(description = "Long-term task ~ Notes")
+    )
+    saveTask(
+        Task(
+        description = "Complex long-term task ~ Lists",
+        checklistAttribute = ChecklistAttribute(
+            list = listOf(
+                ChecklistEntry(description = "To do", done = false),
+                ChecklistEntry(description = "Done", done = true),
+            )
+        )
+    )
+    )
 }

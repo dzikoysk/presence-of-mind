@@ -11,12 +11,13 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.task.UpdateTask
 import net.dzikoysk.presenceofmind.task.attributes.ChecklistEntry
 
 @Composable
 fun ChecklistAttributeRenderer(
     task: Task,
-    updateTask: (Task) -> Unit
+    updateTask: UpdateTask
 ) {
     val fontSize = task.description.scaledFontSize()
 
@@ -44,7 +45,7 @@ fun ChecklistEntryRenderer(
     task: Task,
     entry: ChecklistEntry,
     fontSize: TextUnit,
-    updateTask: (Task) -> Unit
+    updateTask: UpdateTask
 ) {
     Row {
         Checkbox(

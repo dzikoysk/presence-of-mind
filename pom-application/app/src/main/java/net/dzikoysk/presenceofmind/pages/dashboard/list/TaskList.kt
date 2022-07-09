@@ -6,7 +6,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.components.NamedDivider
-import net.dzikoysk.presenceofmind.task.*
+import net.dzikoysk.presenceofmind.createDefaultTasks
+import net.dzikoysk.presenceofmind.task.MarkedAs
+import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.task.TaskService
+import net.dzikoysk.presenceofmind.task.isDone
 
 @Preview(showBackground = true)
 @Composable

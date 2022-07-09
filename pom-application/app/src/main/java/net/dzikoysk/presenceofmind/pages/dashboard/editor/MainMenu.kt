@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.MaterialTheme
@@ -19,13 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.shared.mirror.drawVerticalScrollbar
 import net.dzikoysk.presenceofmind.shared.scaledSp
+import net.dzikoysk.presenceofmind.task.SaveTask
 import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.task.UpdateTask
 import net.dzikoysk.presenceofmind.task.attributes.*
 
 @Preview(showBackground = true)
@@ -52,9 +52,9 @@ fun MainMenuPreview() {
 fun MainMenu(
     close: () -> Unit,
     task: Task,
-    selectTab: (EditorTab) -> Unit,
-    updateTask: (Task) -> Unit,
-    saveTask: (Task) -> Unit,
+    selectTab: SelectTab,
+    updateTask: UpdateTask,
+    saveTask: SaveTask,
 ) {
     val state = rememberLazyListState()
 
@@ -126,22 +126,11 @@ fun MainMenu(
                 onEnable = { updateTask(task.copy(intervalAttribute = IntervalAttribute())) },
                 onEdit = { },
                 onDisable = { updateTask(task.copy(intervalAttribute = null)) }
-            ) { intervalAttribute ->
-                OutlinedTextField(
-                    value = intervalAttribute.intervalInDays.toString(),
-                    label = { Text("Interval in days") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                        .height(58.dp),
-                    onValueChange = {
-                        updateTask(task.copy(
-                            intervalAttribute = intervalAttribute.copy(
-                                intervalInDays = it.toIntOrNull() ?: 0
-                            ))
-                        )
-                    }
+            ) {
+                IntervalConfiguration(
+                    task = task,
+                    intervalAttribute = it,
+                    updateTask = updateTask
                 )
             }
         }
