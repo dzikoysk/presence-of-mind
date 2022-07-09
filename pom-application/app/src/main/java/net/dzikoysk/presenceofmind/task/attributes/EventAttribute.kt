@@ -1,13 +1,22 @@
-package net.dzikoysk.presenceofmind.task
+package net.dzikoysk.presenceofmind.task.attributes
 
+import androidx.compose.ui.graphics.Color
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 /** One-time events */
-data class OneTimeMetadata(
+data class EventAttribute(
     val eventDate: EventDateTime = EventDateTime.now()
-) : OccurrenceMetadata(OccurrenceType.ONE_TIME)
+) : Attribute {
+
+    override fun getDefaultAccentColor(): Color =
+        Color(0xFFFFCCF8)
+
+    override fun getName(): String =
+        "Event"
+
+}
 
 data class EventDateTime(
     var year: Int,

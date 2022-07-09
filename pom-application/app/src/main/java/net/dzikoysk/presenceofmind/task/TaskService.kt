@@ -7,6 +7,9 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
+typealias SaveTask = (Task) -> Unit
+typealias UpdateTask = (Task) -> Unit
+
 class TaskService(
     val taskRepository: TaskRepository = InMemoryTaskRepository()
 ) {
@@ -20,14 +23,13 @@ class TaskService(
     fun refreshTasksState() {
         tasks
             .filter { it.isDone() }
-            .filter { it.metadata is RepetitiveMetadata }
-            .map { it to it.metadata as RepetitiveMetadata }
-            .filter { (task, metadata) ->
-                val doneDate = Instant.ofEpochMilli(task.doneDate ?: 0).atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
+            .filter { it.intervalAttribute != null }
+            .filter {
+                val doneDate = Instant.ofEpochMilli(it.doneDate ?: 0).atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
                 val currentDate = Instant.now().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
-                return@filter ChronoUnit.DAYS.between(doneDate, currentDate) >= metadata.intervalInDays
+                return@filter ChronoUnit.DAYS.between(doneDate, currentDate) >= it.intervalAttribute!!.intervalInDays
             }
-            .forEach { (task, _) -> saveTask(task.copy(doneDate = null)) }
+            .forEach { saveTask(it.copy(doneDate = null)) }
     }
 
     fun saveTask(task: Task) {
@@ -60,20 +62,4 @@ class TaskService(
     fun getObservableListOfAllTasks(): SnapshotStateList<Task> =
         tasks
 
-}
-
-fun TaskService.createDefaultTasks() {
-    saveTask(Task(description = "One-time task ~ Events", metadata = OneTimeMetadata()))
-    saveTask(Task(
-        description = "Repetitive task ~ Habits",
-        metadata = RepetitiveMetadata(
-            intervalInDays = 1,
-            expectedAttentionInMinutes = 75
-        )
-    ))
-    saveTask(Task(description = "Long-term task ~ Notes", metadata = LongTermMetadata))
-    saveTask(Task(description = "Complex long-term task ~ Lists", metadata = LongTermMetadata, subtasks = listOf(
-        SubTask(description = "To do", done = false),
-        SubTask(description = "Done", done = true),
-    )))
 }

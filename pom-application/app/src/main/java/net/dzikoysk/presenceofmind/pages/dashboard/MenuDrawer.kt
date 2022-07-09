@@ -1,5 +1,7 @@
-package net.dzikoysk.presenceofmind.components
+package net.dzikoysk.presenceofmind.pages.dashboard
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +36,25 @@ fun MenuDrawerPreview() {
     MenuDrawer(
         closeMenu = {}
     )
+}
+
+@Composable
+fun AnimatedMenuDrawer(
+    open: Boolean,
+    close: () -> Unit
+) {
+    val density = LocalDensity.current
+
+    AnimatedVisibility(
+        visible = open,
+        enter = slideInHorizontally {
+            with(density) { -50.dp.roundToPx() }
+        }
+    ) {
+        MenuDrawer(
+            closeMenu = { close() }
+        )
+    }
 }
 
 @Composable

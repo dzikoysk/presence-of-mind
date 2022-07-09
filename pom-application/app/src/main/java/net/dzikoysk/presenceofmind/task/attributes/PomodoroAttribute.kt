@@ -1,15 +1,25 @@
-package net.dzikoysk.presenceofmind.task
+package net.dzikoysk.presenceofmind.task.attributes
 
+import androidx.compose.ui.graphics.Color
 import com.fasterxml.jackson.annotation.JsonIgnore
 import kotlin.time.Duration.Companion.milliseconds
 
-/** Habits / Pomodoro / Daily routine **/
-data class RepetitiveMetadata(
-    val intervalInDays: Int = 1,
+data class PomodoroAttribute(
     val expectedAttentionInMinutes: Int = 60,
     val timeSpentInSeconds: Long = 0,
     val countdownSession: CountdownSession = CountdownSession()
-) : OccurrenceMetadata(OccurrenceType.REPETITIVE)
+) : Attribute {
+
+    override fun isRunning(): Boolean =
+        countdownSession.isRunning()
+
+    override fun getDefaultAccentColor(): Color =
+        Color(0xFFFFA0A0)
+
+    override fun getName(): String =
+        "Pomodoro"
+
+}
 
 data class CountdownSession(
     var sessionTimeInSeconds: Long = 0,
@@ -32,4 +42,3 @@ data class CountdownSession(
         startTimeInMillis != 0L
 
 }
-

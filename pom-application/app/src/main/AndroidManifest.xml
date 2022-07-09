@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LightPresenceOfMind">
         <activity
-            android:name=".MainActivity"
+            android:name=".PresenceOfMindActivity"
             android:exported="true"
             android:theme="@style/Theme.LightPresenceOfMind">
             <intent-filter>

@@ -27,6 +27,7 @@ class SharedPreferencesTaskRepository(private val sharedPreferences: SharedPrefe
     override fun saveOrderedTasks(tasks: List<Task>): Future<*> =
         executor.submit {
             val result = DEFAULT_OBJECT_MAPPER.writeValueAsString(tasks)
+            println(result)
             sharedPreferences.edit { putString(ORDERED_TASKS_ID, result) }
         }
 

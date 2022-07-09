@@ -1,26 +1,41 @@
 package net.dzikoysk.presenceofmind.task
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+import androidx.compose.ui.graphics.Color
+import net.dzikoysk.presenceofmind.task.attributes.*
+import java.io.Serializable
 import java.util.UUID
 
 data class Task(
     val id: UUID = UUID.randomUUID(),
-    val metadata: OccurrenceMetadata,
     val description: String = "",
+    val categories: List<String> = emptyList(),
     val doneDate: Long? = null,
     val doneCount: Int = 0,
-    val subtasks: List<SubTask> = emptyList(),
-    val categories: List<String> = emptyList()
-) {
+    /* Attributes */
+    val checklistAttribute: ChecklistAttribute? = null,
+    val eventAttribute: EventAttribute? = null,
+    val intervalAttribute: IntervalAttribute? = null,
+    val pomodoroAttribute: PomodoroAttribute? = null,
+) : Serializable
 
-    @JsonIgnore
-    fun isDone(): Boolean =
-        doneDate != null
+val Task.attributes: Collection<Attribute>
+    get() = listOfNotNull(
+        checklistAttribute,
+        eventAttribute,
+        intervalAttribute,
+        pomodoroAttribute
+    )
 
-}
+inline fun <reified A : Attribute> Task.getAttribute(): A? =
+    attributes.find { it is A } as A?
 
-data class SubTask(
-    val id: UUID = UUID.randomUUID(),
-    var description: String = "",
-    var done: Boolean = false
-)
+fun Task.getAccentColor(): Color =
+    attributes
+        .firstNotNullOfOrNull { it.getDefaultAccentColor() }
+        ?: Color(0xFFC3EEFF)
+
+fun Task.isOpen(): Boolean =
+    attributes.find { it.isRunning() } != null
+
+fun Task.isDone(): Boolean =
+    doneDate != null
