@@ -1,24 +1,18 @@
 package net.dzikoysk.presenceofmind.pages.dashboard.editor
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults.buttonColors
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.components.drawVerticalScrollbar
@@ -26,7 +20,10 @@ import net.dzikoysk.presenceofmind.components.scaledSp
 import net.dzikoysk.presenceofmind.task.SaveTask
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.UpdateTask
-import net.dzikoysk.presenceofmind.task.attributes.*
+import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
+import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
+import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
+import net.dzikoysk.presenceofmind.task.attributes.PomodoroAttribute
 
 @Preview(showBackground = true)
 @Composable
@@ -92,9 +89,17 @@ fun MainMenu(
                 attributeName = "checklist",
                 attributeDefaultInstance = ChecklistAttribute(),
                 onEnable = { updateTask(task.copy(checklistAttribute = ChecklistAttribute())) },
-                onEdit = { selectTab(EditorTab.CHECKLIST) },
                 onDisable = { updateTask(task.copy(checklistAttribute = null)) }
-            )
+            ) {
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp, horizontal = 10.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = it.getDefaultAccentColor()),
+                    onClick = { selectTab(EditorTab.CHECKLIST) },
+                    content = { Text(text = "Modify") }
+                )
+            }
         }
 
         item {
@@ -103,7 +108,6 @@ fun MainMenu(
                 attributeDefaultInstance = EventAttribute(),
                 attributeName = "event",
                 onEnable = { updateTask(task.copy(eventAttribute = EventAttribute())) },
-                onEdit = {  },
                 onDisable = { updateTask(task.copy(eventAttribute = null)) }
             ) {
                 EventConfiguration(
@@ -120,7 +124,6 @@ fun MainMenu(
                 attributeName = "pomodoro",
                 attributeDefaultInstance = PomodoroAttribute(),
                 onEnable = { updateTask(task.copy(pomodoroAttribute = PomodoroAttribute())) },
-                onEdit = { },
                 onDisable = { updateTask(task.copy(pomodoroAttribute = null)) }
             ) {
                 PomodoroConfiguration(
@@ -137,7 +140,6 @@ fun MainMenu(
                 attributeDefaultInstance = IntervalAttribute(),
                 attributeName = "interval",
                 onEnable = { updateTask(task.copy(intervalAttribute = IntervalAttribute())) },
-                onEdit = { },
                 onDisable = { updateTask(task.copy(intervalAttribute = null)) }
             ) {
                 IntervalConfiguration(
@@ -153,7 +155,7 @@ fun MainMenu(
                 modifier = Modifier
                     .padding(vertical = 12.dp)
                     .fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(6.dp),
                 onClick = {
                     saveTask(task)
                     close()
@@ -164,91 +166,3 @@ fun MainMenu(
     }
 }
 
-@Composable
-fun <A : Attribute> AttributeSetup(
-    attribute: A?,
-    attributeDefaultInstance: A,
-    attributeName: String,
-    onEnable: () -> Unit,
-    onEdit: () -> Unit,
-    onDisable: () -> Unit,
-    content: @Composable (A) -> Unit = {}
-) {
-    val sharedButtonModifier = Modifier
-        .padding(vertical = 8.dp, horizontal = 10.dp)
-
-    if (attribute == null) {
-        Button(
-            modifier = Modifier.padding(vertical = 8.dp),
-            colors = buttonColors(MaterialTheme.colors.surface),
-            shape = RoundedCornerShape(16.dp),
-            onClick = { onEnable() }
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(14.dp)
-                        .clip(CircleShape)
-                        .background(attributeDefaultInstance.getDefaultAccentColor())
-                )
-                Text(
-                    text = attributeName.replaceFirstChar { it.uppercase() },
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
-        }
-    } else {
-        Box(Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .clip(RoundedCornerShape(6.dp))
-                    .border(
-                        width = 1.dp,
-                        color = Color.LightGray,
-                        shape = RoundedCornerShape(6.dp)
-                    )
-            ) {
-                content(attribute)
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .then(sharedButtonModifier),
-                        colors = buttonColors(backgroundColor = attribute.getDefaultAccentColor()),
-                        onClick = { onEdit() },
-                        content = { Text(text = "Modify") }
-                    )
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .then(sharedButtonModifier),
-                        onClick = { onDisable() },
-                        content = { Text(text = "Disable") }
-                    )
-                }
-            }
-            Text(
-                text = "Configure $attributeName",
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .background(MaterialTheme.colors.surface)
-            )
-        }
-    }
-}

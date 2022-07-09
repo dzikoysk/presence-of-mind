@@ -39,7 +39,6 @@ fun IntervalConfiguration(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(6.dp)
                 .height(58.dp),
             onValueChange = {
                 updateTask(task.copy(
