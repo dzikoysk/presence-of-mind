@@ -10,18 +10,22 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
+import net.dzikoysk.presenceofmind.shared.SwipeState
 import net.dzikoysk.presenceofmind.shared.SwipeableCard
 import net.dzikoysk.presenceofmind.shared.mirror.drawVerticalScrollbar
 import net.dzikoysk.presenceofmind.shared.scaledSp
@@ -94,7 +98,8 @@ fun ChecklistEditor(
         modifier = Modifier
             .padding(horizontal = 12.dp)
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = "Manage subtasks",
@@ -105,7 +110,8 @@ fun ChecklistEditor(
             contentDescription = "Add new subtask",
             painter = painterResource(id = R.drawable.ic_baseline_add_24),
             modifier = Modifier
-                .size(24.dp)
+                .size(40.dp)
+                .padding(8.dp)
                 .clickable {
                     subtasks.value = subtasks.value
                         .toMutableList()
@@ -116,13 +122,14 @@ fun ChecklistEditor(
 
     LazyColumn(
         state = subtasksState.listState,
-        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(vertical = 16.dp)
             .reorderable(subtasksState)
             .drawVerticalScrollbar(subtasksState.listState)
             // .heightIn(0.dp, (LocalConfiguration.current.screenHeightDp / 2).dp)
+            .fillMaxHeight()
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
     ) {
@@ -137,6 +144,7 @@ fun ChecklistEditor(
                 key = subtask.id
             ) { isDragging ->
                 val elevation = animateDpAsState(if (isDragging) 16.dp else 0.dp)
+                val focusRequester = remember { FocusRequester() }
 
                 Card(
                     modifier = Modifier
@@ -152,7 +160,7 @@ fun ChecklistEditor(
                         menuSize = 56.dp,
                         menuBackgroundColor = Color.LightGray,
                         leftContent = null,
-                        content = { swipeState, snapTo ->
+                        content = { _, _ ->
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -169,6 +177,7 @@ fun ChecklistEditor(
                                         .height(48.dp)
                                         .fillMaxWidth()
                                         .background(MaterialTheme.colors.background)
+                                        .focusRequester(focusRequester)
                                 )
                             }
                         },
@@ -180,13 +189,21 @@ fun ChecklistEditor(
                                 modifier = Modifier
                                     .size(24.dp)
                                     .clickable {
-                                        subtasks.value = subtasks.value
-                                            .toMutableList()
-                                            .also { it.remove(subtask) }
+                                        if (swipeState == SwipeState.RIGHT) {
+                                            subtasks.value = subtasks.value
+                                                .toMutableList()
+                                                .also { it.remove(subtask) }
+                                        }
                                     }
                             )
                         }
                     )
+                }
+
+                if (subtask.description.isEmpty()) {
+                    LaunchedEffect(Unit) {
+                        focusRequester.requestFocus()
+                    }
                 }
             }
         }
