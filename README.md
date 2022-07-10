@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img height="280" src="https://user-images.githubusercontent.com/4235722/172057221-fc8c256b-d988-44cf-b876-be4a9d0863fc.png" />
+  <img height="340" src="https://user-images.githubusercontent.com/4235722/178143366-0a7a1117-d7cd-4822-b75e-38c8eb9341c7.png" />
   <br><br>
   <a href="https://github.com/dzikoysk/presence-of-mind/actions/workflows/gradle.yml">
     <img src="https://github.com/dzikoysk/presence-of-mind/actions/workflows/gradle.yml/badge.svg" />
