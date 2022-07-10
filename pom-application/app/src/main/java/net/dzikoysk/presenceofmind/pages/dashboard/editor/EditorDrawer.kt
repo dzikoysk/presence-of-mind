@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import net.dzikoysk.presenceofmind.task.DeleteTask
 import net.dzikoysk.presenceofmind.task.SaveTask
 import net.dzikoysk.presenceofmind.task.Task
 
@@ -25,7 +26,8 @@ fun AnimatedEditorDrawer(
     open: Boolean,
     close: () -> Unit,
     taskToEdit: Task?,
-    saveTask: SaveTask
+    saveTask: SaveTask,
+    deleteTask: DeleteTask
 ) {
     AnimatedVisibility(
         visible = open,
@@ -35,7 +37,8 @@ fun AnimatedEditorDrawer(
         EditorDrawer(
             close = { close() },
             taskToEdit = taskToEdit,
-            saveTask = saveTask
+            saveTask = saveTask,
+            deleteTask = deleteTask
         )
     }
 }
@@ -51,7 +54,8 @@ typealias SelectTab = (EditorTab) -> Unit
 fun EditorDrawer(
     close: () -> Unit,
     taskToEdit: Task?,
-    saveTask: SaveTask
+    saveTask: SaveTask,
+    deleteTask: DeleteTask
 ) {
     val task = remember { mutableStateOf(taskToEdit ?: Task(description = "")) }
     val interactionSource = remember { MutableInteractionSource() }
@@ -88,6 +92,7 @@ fun EditorDrawer(
                             selectTab = { selectedTab.value = it },
                             updateTask = { task.value = it },
                             saveTask = saveTask,
+                            deleteTask = deleteTask
                         )
                     EditorTab.CHECKLIST ->
                         ChecklistEditor(

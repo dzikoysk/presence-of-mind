@@ -6,7 +6,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ButtonDefaults.buttonColors
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.components.drawVerticalScrollbar
 import net.dzikoysk.presenceofmind.components.scaledSp
+import net.dzikoysk.presenceofmind.task.DeleteTask
 import net.dzikoysk.presenceofmind.task.SaveTask
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.UpdateTask
@@ -41,6 +43,7 @@ fun MainMenuPreview() {
             ),
             updateTask = {},
             saveTask = {},
+            deleteTask = {}
         )
     }
 }
@@ -52,6 +55,7 @@ fun MainMenu(
     selectTab: SelectTab,
     updateTask: UpdateTask,
     saveTask: SaveTask,
+    deleteTask: DeleteTask
 ) {
     val state = rememberLazyListState()
 
@@ -95,7 +99,7 @@ fun MainMenu(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp, horizontal = 10.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = it.getDefaultAccentColor()),
+                    colors = buttonColors(backgroundColor = it.getDefaultAccentColor()),
                     onClick = { selectTab(EditorTab.CHECKLIST) },
                     content = { Text(text = "Modify") }
                 )
@@ -151,17 +155,36 @@ fun MainMenu(
         }
 
         item {
-            Button(
-                modifier = Modifier
-                    .padding(vertical = 12.dp)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(6.dp),
-                onClick = {
-                    saveTask(task)
-                    close()
-                },
-                content = { Text(text = "Save") }
-            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(
+                    modifier = Modifier
+                        .padding(vertical = 12.dp)
+                        .fillMaxWidth(0.5f),
+                    shape = RoundedCornerShape(6.dp),
+                    colors = buttonColors(
+                        backgroundColor = MaterialTheme.colors.secondary
+                    ),
+                    onClick = {
+                        saveTask(task)
+                        close()
+                    },
+                    content = { Text(text = "Save") }
+                )
+                Button(
+                    modifier = Modifier
+                        .padding(vertical = 12.dp)
+                        .fillMaxWidth(0.9f),
+                    shape = RoundedCornerShape(6.dp),
+                    onClick = {
+                        deleteTask(task)
+                        close()
+                    },
+                    content = { Text(text = "Delete") }
+                )
+            }
         }
     }
 }

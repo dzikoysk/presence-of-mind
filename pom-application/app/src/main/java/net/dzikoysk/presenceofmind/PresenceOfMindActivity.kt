@@ -13,7 +13,7 @@ import net.dzikoysk.presenceofmind.task.attributes.*
 import net.dzikoysk.presenceofmind.theme.SharedPreferencesThemeRepository
 import kotlin.time.Duration.Companion.minutes
 
-const val DATA_VERSION = "v1.0.0-RC.5-1"
+const val DATA_VERSION = "v1.0.0-RC.5-3"
 
 class PresenceOfMindActivity : ComponentActivity() {
 
@@ -62,39 +62,50 @@ class PresenceOfMindActivity : ComponentActivity() {
 
 fun TaskService.createDefaultTasks() {
     saveTask(
-        Task(
-        description = "One-time task ~ Events",
-        eventAttribute = EventAttribute()
-    )
+        Task(description = "**Long-term** task")
     )
     saveTask(
         Task(
-        description = "Repetitive task ~ Habits",
-        intervalAttribute = IntervalAttribute(
-            intervalInDays = 1,
+            description = "**Event** task",
+            eventAttribute = EventAttribute()
         )
     )
-    )
     saveTask(
         Task(
-        description = "Pomodoro task",
-        pomodoroAttribute = PomodoroAttribute(
-            expectedAttentionInMinutes = 75
-        )
-    )
-    )
-    saveTask(
-        Task(description = "Long-term task ~ Notes")
-    )
-    saveTask(
-        Task(
-        description = "Complex long-term task ~ Lists",
-        checklistAttribute = ChecklistAttribute(
-            list = listOf(
-                ChecklistEntry(description = "To do", done = false),
-                ChecklistEntry(description = "Done", done = true),
+            description = "**Habit** task",
+            intervalAttribute = IntervalAttribute(
+                intervalInDays = 1,
             )
         )
     )
+    saveTask(
+        Task(
+            description = "**Pomodoro** task",
+            pomodoroAttribute = PomodoroAttribute(
+                expectedAttentionInMinutes = 75
+            )
+        )
+    )
+    saveTask(
+        Task(
+            description = "**Checklist** task",
+            checklistAttribute = ChecklistAttribute(
+                list = listOf(ChecklistEntry(description = "Done", done = true))
+            )
+        )
+    )
+    saveTask(
+        Task(
+            description = "**All-in-one** task",
+            eventAttribute = EventAttribute(EventDateTime.now().copy(year = 2023)),
+            intervalAttribute = IntervalAttribute(intervalInDays = 1),
+            pomodoroAttribute = PomodoroAttribute(90),
+            checklistAttribute = ChecklistAttribute(
+                list = listOf(
+                    ChecklistEntry(description = "https://github.com/dzikoysk/presence-of-mind"),
+                    ChecklistEntry(description = "Done", done = true),
+                )
+            )
+        )
     )
 }

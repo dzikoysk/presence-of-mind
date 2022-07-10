@@ -7,8 +7,9 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
-typealias SaveTask = (Task) -> Unit
 typealias UpdateTask = (Task) -> Unit
+typealias SaveTask = (Task) -> Unit
+typealias DeleteTask = (Task) -> Unit
 
 class TaskService(
     val taskRepository: TaskRepository = InMemoryTaskRepository()

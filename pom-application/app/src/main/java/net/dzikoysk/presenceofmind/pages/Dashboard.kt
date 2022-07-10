@@ -92,6 +92,7 @@ fun Dashboard(
                     open = openEditorDrawer.value != null,
                     close = { openEditorDrawer.value = null },
                     saveTask = { taskService.saveTask(it) },
+                    deleteTask = { taskService.deleteTask(it.id) },
                     taskToEdit = openEditorDrawer.value
                 )
             }
