@@ -36,10 +36,7 @@ private fun IntervalAttributeRendererPreview() {
 }
 
 @Composable
-fun IntervalAttributeRenderer(
-    intervalAttribute: IntervalAttribute,
-) {
-
+fun IntervalAttributeRenderer(intervalAttribute: IntervalAttribute) {
     Row(Modifier.padding(start = 16.dp)) {
         Column {
             Text(

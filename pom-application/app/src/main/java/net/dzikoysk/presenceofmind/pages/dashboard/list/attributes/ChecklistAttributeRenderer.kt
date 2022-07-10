@@ -19,25 +19,24 @@ import net.dzikoysk.presenceofmind.task.attributes.withUpdatedEntry
 @Composable
 fun ChecklistAttributeRenderer(
     task: Task,
+    checklistAttribute: ChecklistAttribute,
     updateTask: UpdateTask
 ) {
     val fontSize = task.description.scaledFontSize()
 
-    task.checklistAttribute?.also { checklistAttribute ->
-        Box(modifier = Modifier.padding(start = 3.dp)) {
-            checklistAttribute.list.forEachIndexed { idx, subtask ->
-                Row(
-                    modifier = Modifier.padding(top = (30 * idx).dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    ChecklistEntryRenderer(
-                        task = task,
-                        checklistAttribute = checklistAttribute,
-                        entry = subtask,
-                        fontSize = fontSize,
-                        updateTask = updateTask
-                    )
-                }
+    Box(modifier = Modifier.padding(start = 3.dp)) {
+        checklistAttribute.list.forEachIndexed { idx, subtask ->
+            Row(
+                modifier = Modifier.padding(top = (30 * idx).dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                ChecklistEntryRenderer(
+                    task = task,
+                    checklistAttribute = checklistAttribute,
+                    entry = subtask,
+                    fontSize = fontSize,
+                    updateTask = updateTask
+                )
             }
         }
     }

@@ -13,6 +13,10 @@ interface Attribute {
         false
 
     @JsonIgnore
+    fun isConcealable(): Boolean =
+        false
+
+    @JsonIgnore
     fun getPriority(): Priority
 
     @JsonIgnore

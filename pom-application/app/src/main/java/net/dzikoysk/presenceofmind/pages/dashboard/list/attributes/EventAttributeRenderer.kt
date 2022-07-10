@@ -16,9 +16,7 @@ import java.time.Instant
 import kotlin.time.toKotlinDuration
 
 @Composable
-fun EventAttributeRenderer(
-    eventAttribute: EventAttribute
-) {
+fun EventAttributeRenderer(eventAttribute: EventAttribute) {
     Column(Modifier.padding(start = 16.dp)) {
         Text(
             text = Duration.between(Instant.now(), eventAttribute.eventDate.toLocalDateTime())

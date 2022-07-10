@@ -11,6 +11,7 @@ data class Task(
     val categories: List<String> = emptyList(),
     val doneDate: Long? = null,
     val doneCount: Int = 0,
+    val open: Boolean = true,
     /* Attributes */
     val checklistAttribute: ChecklistAttribute? = null,
     val eventAttribute: EventAttribute? = null,
@@ -35,8 +36,11 @@ fun Task.getAccentColor(): Color =
         .firstNotNullOfOrNull { it.getDefaultAccentColor() }
         ?: Color(0xFFC3EEFF)
 
+fun Task.isConcealable(): Boolean =
+    attributes.any { it.isConcealable() }
+
 fun Task.isOpen(): Boolean =
-    attributes.find { it.isRunning() } != null
+    open || attributes.find { it.isRunning() } != null
 
 fun Task.isDone(): Boolean =
     doneDate != null

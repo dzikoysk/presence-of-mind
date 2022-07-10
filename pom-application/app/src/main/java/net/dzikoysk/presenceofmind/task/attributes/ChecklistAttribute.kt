@@ -8,6 +8,9 @@ data class ChecklistAttribute(
     val list: List<ChecklistEntry> = emptyList()
 ) : Attribute {
 
+    override fun isConcealable(): Boolean =
+        true
+
     override fun getPriority(): Int =
         4
 

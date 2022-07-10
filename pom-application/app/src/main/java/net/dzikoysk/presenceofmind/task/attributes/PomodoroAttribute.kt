@@ -13,6 +13,9 @@ data class PomodoroAttribute(
     override fun isRunning(): Boolean =
         countdownSession.isRunning()
 
+    override fun isConcealable(): Boolean =
+        true
+
     override fun getPriority(): Priority =
         3
 
