@@ -73,7 +73,7 @@ fun TaskService.createDefaultTasks() {
     saveTask(
         Task(
             description = "**Habit** task",
-            intervalAttribute = IntervalAttribute(
+            repetitiveAttribute = RepetitiveAttribute(
                 intervalInDays = 1,
             )
         )
@@ -98,7 +98,7 @@ fun TaskService.createDefaultTasks() {
         Task(
             description = "**All-in-one** task",
             eventAttribute = EventAttribute(EventDateTime.now().copy(year = 2023)),
-            intervalAttribute = IntervalAttribute(intervalInDays = 1),
+            repetitiveAttribute = RepetitiveAttribute(intervalInDays = 1),
             pomodoroAttribute = PomodoroAttribute(90),
             checklistAttribute = ChecklistAttribute(
                 list = listOf(

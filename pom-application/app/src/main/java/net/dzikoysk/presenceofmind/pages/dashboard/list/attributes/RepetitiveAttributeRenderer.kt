@@ -14,7 +14,7 @@ import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskCard
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskCardContext
 import net.dzikoysk.presenceofmind.shared.plural
 import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
+import net.dzikoysk.presenceofmind.task.attributes.RepetitiveAttribute
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import java.util.UUID
 
@@ -27,7 +27,7 @@ private fun IntervalAttributeRendererPreview() {
             task = Task(
                 id = UUID.randomUUID(),
                 description = "Preview of repetitive task item",
-                intervalAttribute = IntervalAttribute(
+                repetitiveAttribute = RepetitiveAttribute(
                     intervalInDays = 3,
                 )
             )
@@ -36,11 +36,17 @@ private fun IntervalAttributeRendererPreview() {
 }
 
 @Composable
-fun IntervalAttributeRenderer(intervalAttribute: IntervalAttribute) {
+fun IntervalAttributeRenderer(repetitiveAttribute: RepetitiveAttribute) {
+    val attributeDescription = when {
+        repetitiveAttribute.intervalInDays != null -> "Every ${plural(repetitiveAttribute.intervalInDays.toLong(), "day")}"
+        repetitiveAttribute.daysOfWeek != null -> "In ${repetitiveAttribute.daysOfWeek.joinToString(",") { it.abbreviation }}"
+        else -> "Unknown interval"
+    }
+
     Row(Modifier.padding(start = 16.dp)) {
         Column {
             Text(
-                text = "Every ${plural(intervalAttribute.intervalInDays.toLong(), "day")}",
+                text = attributeDescription,
                 fontSize = 10.scaledSp(),
                 color = Color.Gray,
                 modifier = Modifier.padding(top = 2.dp)

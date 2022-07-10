@@ -24,11 +24,11 @@ class TaskService(
     fun refreshTasksState() {
         tasks
             .filter { it.isDone() }
-            .filter { it.intervalAttribute != null }
+            .filter { it.repetitiveAttribute != null }
             .filter {
                 val doneDate = Instant.ofEpochMilli(it.doneDate ?: 0).atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
                 val currentDate = Instant.now().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
-                return@filter ChronoUnit.DAYS.between(doneDate, currentDate) >= it.intervalAttribute!!.intervalInDays
+                return@filter ChronoUnit.DAYS.between(doneDate, currentDate) >= (it.repetitiveAttribute?.intervalInDays ?: 0) // TOFIX: Other interval types
             }
             .forEach { saveTask(it.copy(doneDate = null)) }
     }

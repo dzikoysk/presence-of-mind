@@ -15,7 +15,7 @@ data class Task(
     /* Attributes */
     val checklistAttribute: ChecklistAttribute? = null,
     val eventAttribute: EventAttribute? = null,
-    val intervalAttribute: IntervalAttribute? = null,
+    val repetitiveAttribute: RepetitiveAttribute? = null,
     val pomodoroAttribute: PomodoroAttribute? = null,
 ) : Serializable
 
@@ -23,7 +23,7 @@ val Task.attributes: Collection<Attribute>
     get() = listOfNotNull(
         checklistAttribute,
         eventAttribute,
-        intervalAttribute,
+        repetitiveAttribute,
         pomodoroAttribute
     )
 

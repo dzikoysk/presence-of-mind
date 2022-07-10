@@ -24,8 +24,8 @@ import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.UpdateTask
 import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
-import net.dzikoysk.presenceofmind.task.attributes.IntervalAttribute
 import net.dzikoysk.presenceofmind.task.attributes.PomodoroAttribute
+import net.dzikoysk.presenceofmind.task.attributes.RepetitiveAttribute
 
 @Preview(showBackground = true)
 @Composable
@@ -124,6 +124,22 @@ fun MainMenu(
 
         item {
             AttributeSetup(
+                attribute = task.repetitiveAttribute,
+                attributeDefaultInstance = RepetitiveAttribute(),
+                attributeName = "repetitive",
+                onEnable = { updateTask(task.copy(repetitiveAttribute = RepetitiveAttribute())) },
+                onDisable = { updateTask(task.copy(repetitiveAttribute = null)) }
+            ) {
+                RepetitiveConfiguration(
+                    task = task,
+                    repetitiveAttribute = it,
+                    updateTask = updateTask
+                )
+            }
+        }
+
+        item {
+            AttributeSetup(
                 attribute = task.pomodoroAttribute,
                 attributeName = "pomodoro",
                 attributeDefaultInstance = PomodoroAttribute(),
@@ -133,22 +149,6 @@ fun MainMenu(
                 PomodoroConfiguration(
                     task = task,
                     pomodoroAttribute = it,
-                    updateTask = updateTask
-                )
-            }
-        }
-
-        item {
-            AttributeSetup(
-                attribute = task.intervalAttribute,
-                attributeDefaultInstance = IntervalAttribute(),
-                attributeName = "interval",
-                onEnable = { updateTask(task.copy(intervalAttribute = IntervalAttribute())) },
-                onDisable = { updateTask(task.copy(intervalAttribute = null)) }
-            ) {
-                IntervalConfiguration(
-                    task = task,
-                    intervalAttribute = it,
                     updateTask = updateTask
                 )
             }
