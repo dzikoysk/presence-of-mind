@@ -20,7 +20,7 @@ import java.util.UUID
 
 @Preview(showBackground = true)
 @Composable
-private fun IntervalAttributeRendererPreview() {
+private fun RepetitiveAttributeRendererPreview() {
     TaskCard(
         state = rememberReorderableLazyListState(onMove = { _, _ -> }),
         context = TaskCardContext(
@@ -36,10 +36,10 @@ private fun IntervalAttributeRendererPreview() {
 }
 
 @Composable
-fun IntervalAttributeRenderer(repetitiveAttribute: RepetitiveAttribute) {
+fun RepetitiveAttributeRenderer(repetitiveAttribute: RepetitiveAttribute) {
     val attributeDescription = when {
         repetitiveAttribute.intervalInDays != null -> "Every ${plural(repetitiveAttribute.intervalInDays.toLong(), "day")}"
-        repetitiveAttribute.daysOfWeek != null -> "In ${repetitiveAttribute.daysOfWeek.joinToString(",") { it.abbreviation }}"
+        repetitiveAttribute.daysOfWeek != null -> "In ${repetitiveAttribute.daysOfWeek.joinToString(", ") { it.abbreviation }}"
         else -> "Unknown interval"
     }
 

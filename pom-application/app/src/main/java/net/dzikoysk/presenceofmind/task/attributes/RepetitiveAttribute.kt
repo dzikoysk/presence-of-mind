@@ -34,8 +34,8 @@ enum class DayOfWeek(val abbreviation: String) {
     WEDNESDAY("W"),
     THURSDAY("Th"),
     FRIDAY("F"),
-    SATURDAY("Su"),
-    SUNDAY("Sa")
+    SATURDAY("Sa"),
+    SUNDAY("Su")
 }
 
 

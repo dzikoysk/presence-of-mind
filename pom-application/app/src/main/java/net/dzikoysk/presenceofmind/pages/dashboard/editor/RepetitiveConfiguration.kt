@@ -37,7 +37,9 @@ fun RepetitiveConfigurationPreviewOfIntervalInDays() {
 fun RepetitiveConfigurationPreviewOfDaysOfWeek() {
     RepetitiveConfiguration(
         task = Task(),
-        repetitiveAttribute = RepetitiveAttribute(daysOfWeek = listOf(DayOfWeek.WEDNESDAY, DayOfWeek.SATURDAY )),
+        repetitiveAttribute = RepetitiveAttribute(
+            daysOfWeek = listOf(DayOfWeek.WEDNESDAY, DayOfWeek.SATURDAY )
+        ),
         updateTask = {}
     )
 }
@@ -48,6 +50,8 @@ fun RepetitiveConfiguration(
     repetitiveAttribute: RepetitiveAttribute,
     updateTask: UpdateTask
 ) {
+    val daysOfWeek = repetitiveAttribute.daysOfWeek ?: emptyList()
+
     val updateRepetitiveAttribute: (RepetitiveAttribute) -> Unit = {
         updateTask(task.copy(repetitiveAttribute = it))
     }
@@ -55,12 +59,12 @@ fun RepetitiveConfiguration(
     val tabs = linkedMapOf(
         DAYS_OF_WEEK to {
             updateRepetitiveAttribute(RepetitiveAttribute(
-                    daysOfWeek = listOf()
+                daysOfWeek = daysOfWeek
             ))
         },
         INTERVAL_IN_DAYS to {
             updateRepetitiveAttribute(RepetitiveAttribute(
-                    intervalInDays = 0
+                intervalInDays = 0
             ))
         }
     )
@@ -93,16 +97,26 @@ fun RepetitiveConfiguration(
                             modifier = Modifier
                                 .clip(CircleShape)
                                 .size(35.dp)
-                                .background(MaterialTheme.colors.secondary)
+                                .background(when {
+                                    daysOfWeek.contains(dayOfWeek) -> MaterialTheme.colors.primary
+                                    else -> MaterialTheme.colors.secondary
+                                })
                                 .clickable {
                                     updateRepetitiveAttribute(RepetitiveAttribute(
-                                        daysOfWeek = repetitiveAttribute.daysOfWeek
+                                        daysOfWeek = when {
+                                            daysOfWeek.contains(dayOfWeek) -> daysOfWeek.toMutableList().apply { remove(dayOfWeek) }
+                                            else -> daysOfWeek.toMutableList().apply { add(dayOfWeek) }
+                                        }
                                     ))
                                 }
                         ) {
                             Text(
                                 text = dayOfWeek.abbreviation,
                                 textAlign = TextAlign.Center,
+                                color = when {
+                                    daysOfWeek.contains(dayOfWeek) -> MaterialTheme.colors.onPrimary
+                                    else -> MaterialTheme.colors.onSecondary
+                                }
                             )
                         }
                     }

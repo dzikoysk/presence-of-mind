@@ -57,7 +57,7 @@ fun TaskCardContent(
                 )
             }
             task.repetitiveAttribute?.also { intervalAttribute ->
-                IntervalAttributeRenderer(
+                RepetitiveAttributeRenderer(
                     repetitiveAttribute = intervalAttribute,
                 )
             }
