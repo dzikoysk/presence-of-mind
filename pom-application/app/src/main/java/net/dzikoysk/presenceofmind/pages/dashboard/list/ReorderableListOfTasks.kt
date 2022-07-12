@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.TaskService
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.TaskService
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable

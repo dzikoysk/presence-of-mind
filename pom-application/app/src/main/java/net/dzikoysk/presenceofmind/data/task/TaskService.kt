@@ -1,10 +1,10 @@
-package net.dzikoysk.presenceofmind.task
+package net.dzikoysk.presenceofmind.data.task
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import net.dzikoysk.presenceofmind.shared.DefaultTimeProvider
 import net.dzikoysk.presenceofmind.shared.TimeProvider
-import net.dzikoysk.presenceofmind.task.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.data.attributes.RepetitiveAttribute
 import java.time.Instant
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit

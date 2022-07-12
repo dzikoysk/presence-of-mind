@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.task.attributes
+package net.dzikoysk.presenceofmind.data.attributes
 
 import androidx.compose.ui.graphics.Color
 import java.time.Instant

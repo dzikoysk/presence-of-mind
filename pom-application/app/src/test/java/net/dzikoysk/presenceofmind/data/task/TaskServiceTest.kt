@@ -1,12 +1,9 @@
-package net.dzikoysk.presenceofmind.task.attributes
+package net.dzikoysk.presenceofmind.data.task
 
 import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
 import net.dzikoysk.presenceofmind.shared.TimeProvider
-import net.dzikoysk.presenceofmind.task.InMemoryTaskRepository
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.TaskService
-import net.dzikoysk.presenceofmind.task.isDone
+import net.dzikoysk.presenceofmind.data.attributes.RepetitiveAttribute
 import org.junit.Test
 import java.time.DayOfWeek
 import java.time.Instant

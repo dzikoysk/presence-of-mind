@@ -13,11 +13,11 @@ import net.dzikoysk.presenceofmind.createDefaultTasks
 import net.dzikoysk.presenceofmind.pages.dashboard.*
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.AnimatedEditorDrawer
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskList
-import net.dzikoysk.presenceofmind.task.MarkedAs
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.TaskService
-import net.dzikoysk.presenceofmind.theme.InMemoryThemeRepository
-import net.dzikoysk.presenceofmind.theme.ThemeRepository
+import net.dzikoysk.presenceofmind.data.task.MarkedAs
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.TaskService
+import net.dzikoysk.presenceofmind.data.theme.InMemoryThemeRepository
+import net.dzikoysk.presenceofmind.data.theme.ThemeRepository
 
 /** List of tasks */
 

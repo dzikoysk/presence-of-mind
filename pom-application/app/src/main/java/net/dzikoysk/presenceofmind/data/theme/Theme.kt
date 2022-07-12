@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.theme
+package net.dzikoysk.presenceofmind.data.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape

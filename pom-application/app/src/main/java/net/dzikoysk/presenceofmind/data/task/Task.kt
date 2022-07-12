@@ -1,14 +1,14 @@
-package net.dzikoysk.presenceofmind.task
+package net.dzikoysk.presenceofmind.data.task
 
 import androidx.compose.ui.graphics.Color
-import net.dzikoysk.presenceofmind.task.attributes.*
+import net.dzikoysk.presenceofmind.data.attributes.*
 import java.io.Serializable
 import java.util.UUID
 
 data class Task(
     val id: UUID = UUID.randomUUID(),
     val description: String = "",
-    val categories: List<String> = emptyList(),
+    val categories: List<UUID> = emptyList(),
     val doneDate: Long? = null,
     val doneCount: Int = 0,
     val open: Boolean = true,

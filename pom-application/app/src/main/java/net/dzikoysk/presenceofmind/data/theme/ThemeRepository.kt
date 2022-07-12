@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.theme
+package net.dzikoysk.presenceofmind.data.theme
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -11,20 +11,21 @@ sealed interface ThemeRepository {
 
 }
 
-class SharedPreferencesThemeRepository(private val sharedPreferences: SharedPreferences) : ThemeRepository {
+class SharedPreferencesThemeRepository(
+    private val sharedPreferences: SharedPreferences,
+    version: String
+) : ThemeRepository {
 
-    private companion object {
-        private const val LIGHT_MODE_ID = "light-mode"
-    }
+    private val lightModeId = "light-mode-$version"
 
     override fun setColorMode(isLightMode: Boolean) {
         sharedPreferences.edit(commit = true) {
-            putBoolean(LIGHT_MODE_ID, isLightMode)
+            putBoolean(lightModeId, isLightMode)
         }
     }
 
     override fun isLightMode(): Boolean =
-        sharedPreferences.getBoolean(LIGHT_MODE_ID, true)
+        sharedPreferences.getBoolean(lightModeId, true)
 
 }
 

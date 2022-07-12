@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.isConcealable
+import net.dzikoysk.presenceofmind.data.task.isOpen
 import net.dzikoysk.presenceofmind.pages.dashboard.list.attributes.*
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.isConcealable
-import net.dzikoysk.presenceofmind.task.isOpen
 
 @Composable
 fun TaskCardContent(
@@ -37,7 +37,7 @@ fun TaskCardContent(
                             contentDescription = "Hide attributes",
                             painter = when (task.isOpen()) {
                                 true -> painterResource(id = R.drawable.ic_baseline_arrow_drop_up_24)
-                                false -> painterResource(id = R.drawable.ic_baseline_arrow_drop_up_24)
+                                false -> painterResource(id = R.drawable.ic_baseline_arrow_drop_down_24)
                             },
                             modifier = Modifier.clickable {
                                 updateTask(

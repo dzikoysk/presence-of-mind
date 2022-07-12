@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.task
+package net.dzikoysk.presenceofmind.data.task
 
 import junit.framework.Assert.assertEquals
 import net.dzikoysk.presenceofmind.pages.dashboard.list.attributes.replaceRawLinkWithMarkdown

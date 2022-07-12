@@ -9,8 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.components.scaledSp
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
-import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
-import net.dzikoysk.presenceofmind.task.attributes.toLocalDateTime
+import net.dzikoysk.presenceofmind.data.attributes.EventAttribute
+import net.dzikoysk.presenceofmind.data.attributes.toLocalDateTime
 import java.time.Duration
 import java.time.Instant
 import kotlin.time.toKotlinDuration

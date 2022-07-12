@@ -18,13 +18,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.UpdateTask
-import net.dzikoysk.presenceofmind.task.attributes.RepetitiveAttribute
-import net.dzikoysk.presenceofmind.task.attributes.RepetitiveVariant
-import net.dzikoysk.presenceofmind.task.attributes.RepetitiveVariant.DAYS_OF_WEEK
-import net.dzikoysk.presenceofmind.task.attributes.RepetitiveVariant.INTERVAL_IN_DAYS
-import net.dzikoysk.presenceofmind.task.attributes.getShortAbbreviation
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.UpdateTask
+import net.dzikoysk.presenceofmind.data.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.data.attributes.RepetitiveVariant
+import net.dzikoysk.presenceofmind.data.attributes.RepetitiveVariant.DAYS_OF_WEEK
+import net.dzikoysk.presenceofmind.data.attributes.RepetitiveVariant.INTERVAL_IN_DAYS
+import net.dzikoysk.presenceofmind.data.attributes.getShortAbbreviation
 import java.time.DayOfWeek
 
 @Preview(showBackground = true)

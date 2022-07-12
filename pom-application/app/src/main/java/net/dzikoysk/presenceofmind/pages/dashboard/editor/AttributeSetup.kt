@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.task.attributes.Attribute
+import net.dzikoysk.presenceofmind.data.attributes.Attribute
 
 @Composable
 fun <A : Attribute> AttributeSetup(

@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.theme.ThemeRepository
+import net.dzikoysk.presenceofmind.data.theme.ThemeRepository
 
 @Composable
 fun ChangeThemeButton(

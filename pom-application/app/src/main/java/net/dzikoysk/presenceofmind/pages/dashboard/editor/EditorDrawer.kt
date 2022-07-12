@@ -17,9 +17,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.task.DeleteTask
-import net.dzikoysk.presenceofmind.task.SaveTask
-import net.dzikoysk.presenceofmind.task.Task
+import net.dzikoysk.presenceofmind.data.task.DeleteTask
+import net.dzikoysk.presenceofmind.data.task.SaveTask
+import net.dzikoysk.presenceofmind.data.task.Task
 
 @Composable
 fun AnimatedEditorDrawer(

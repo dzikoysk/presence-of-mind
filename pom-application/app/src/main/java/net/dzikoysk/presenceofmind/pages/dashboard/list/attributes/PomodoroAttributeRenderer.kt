@@ -19,10 +19,10 @@ import net.dzikoysk.presenceofmind.components.scaledSp
 import net.dzikoysk.presenceofmind.pages.dashboard.list.SubscribeToOnDone
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
-import net.dzikoysk.presenceofmind.task.MarkedAs
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.UpdateTask
-import net.dzikoysk.presenceofmind.task.attributes.*
+import net.dzikoysk.presenceofmind.data.task.MarkedAs
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.UpdateTask
+import net.dzikoysk.presenceofmind.data.attributes.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds

@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.task
+package net.dzikoysk.presenceofmind.data.task
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -16,11 +16,12 @@ sealed interface TaskRepository {
 
 }
 
-class SharedPreferencesTaskRepository(private val sharedPreferences: SharedPreferences) : TaskRepository {
+class SharedPreferencesTaskRepository(
+    private val sharedPreferences: SharedPreferences,
+    version: String
+) : TaskRepository {
 
-    private companion object {
-        const val ORDERED_TASKS_ID = "ordered-tasks-v1-2"
-    }
+    private val orderedTasksId = "ordered-tasks-$version"
 
     private val executor = Executors.newSingleThreadExecutor()
 
@@ -28,11 +29,11 @@ class SharedPreferencesTaskRepository(private val sharedPreferences: SharedPrefe
         executor.submit {
             val result = DEFAULT_OBJECT_MAPPER.writeValueAsString(tasks)
             println(result)
-            sharedPreferences.edit { putString(ORDERED_TASKS_ID, result) }
+            sharedPreferences.edit { putString(orderedTasksId, result) }
         }
 
     override fun loadOrderedTasks(): List<Task> =
-        sharedPreferences.getString(ORDERED_TASKS_ID, null)
+        sharedPreferences.getString(orderedTasksId, null)
             ?.let { DEFAULT_OBJECT_MAPPER.readValue(it) }
             ?: emptyList()
 

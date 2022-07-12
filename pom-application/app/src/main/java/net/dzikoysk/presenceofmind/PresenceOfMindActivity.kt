@@ -6,11 +6,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.delay
-import net.dzikoysk.presenceofmind.task.SharedPreferencesTaskRepository
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.TaskService
-import net.dzikoysk.presenceofmind.task.attributes.*
-import net.dzikoysk.presenceofmind.theme.SharedPreferencesThemeRepository
+import net.dzikoysk.presenceofmind.data.attributes.*
+import net.dzikoysk.presenceofmind.data.category.CategoryService
+import net.dzikoysk.presenceofmind.data.category.SharedPreferencesCategoryRepository
+import net.dzikoysk.presenceofmind.data.task.SharedPreferencesTaskRepository
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.TaskService
+import net.dzikoysk.presenceofmind.data.theme.SharedPreferencesThemeRepository
+import net.dzikoysk.presenceofmind.pages.Page
+import net.dzikoysk.presenceofmind.pages.Router
 import kotlin.time.Duration.Companion.minutes
 
 const val DATA_VERSION = "v1.0.0-RC.5-3"
@@ -19,7 +23,11 @@ class PresenceOfMindActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val themeRepository = SharedPreferencesThemeRepository(
-            this.getSharedPreferences("net.dzikoysk.presenceofmind.theme-repository.$DATA_VERSION", Context.MODE_PRIVATE)
+            sharedPreferences = getSharedPreferences(
+                "net.dzikoysk.presenceofmind.data.theme-repository",
+                Context.MODE_PRIVATE
+            ),
+            version = DATA_VERSION
         )
 
         super.onCreate(savedInstanceState)
@@ -29,9 +37,23 @@ class PresenceOfMindActivity : ComponentActivity() {
             false -> R.style.Theme_DarkPresenceOfMind
         })
 
+        val categoryService = CategoryService(
+            categoryRepository = SharedPreferencesCategoryRepository(
+                sharedPreferences = getSharedPreferences(
+                    "net.dzikoysk.presenceofmind.category-repository",
+                    Context.MODE_PRIVATE
+                ),
+                version = DATA_VERSION
+            )
+        )
+
         val taskService = TaskService(
             taskRepository = SharedPreferencesTaskRepository(
-                this.getSharedPreferences("net.dzikoysk.presenceofmind.tasks-repository.$DATA_VERSION", Context.MODE_PRIVATE)
+                sharedPreferences = getSharedPreferences(
+                    "net.dzikoysk.presenceofmind.tasks-repository",
+                    Context.MODE_PRIVATE
+                ),
+                version = DATA_VERSION
             )
         )
 

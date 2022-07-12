@@ -29,11 +29,11 @@ import net.dzikoysk.presenceofmind.components.SwipeState
 import net.dzikoysk.presenceofmind.components.SwipeableCard
 import net.dzikoysk.presenceofmind.components.drawVerticalScrollbar
 import net.dzikoysk.presenceofmind.components.scaledSp
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.UpdateTask
-import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
-import net.dzikoysk.presenceofmind.task.attributes.ChecklistEntry
-import net.dzikoysk.presenceofmind.task.attributes.withUpdatedEntry
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.UpdateTask
+import net.dzikoysk.presenceofmind.data.attributes.ChecklistAttribute
+import net.dzikoysk.presenceofmind.data.attributes.ChecklistEntry
+import net.dzikoysk.presenceofmind.data.attributes.withUpdatedEntry
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState

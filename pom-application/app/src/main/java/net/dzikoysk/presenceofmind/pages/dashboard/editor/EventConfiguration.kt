@@ -14,11 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.UpdateTask
-import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
-import net.dzikoysk.presenceofmind.task.attributes.getDateAsString
-import net.dzikoysk.presenceofmind.task.attributes.getTimeAsString
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.UpdateTask
+import net.dzikoysk.presenceofmind.data.attributes.EventAttribute
+import net.dzikoysk.presenceofmind.data.attributes.getDateAsString
+import net.dzikoysk.presenceofmind.data.attributes.getTimeAsString
 
 @Composable
 fun EventConfiguration(

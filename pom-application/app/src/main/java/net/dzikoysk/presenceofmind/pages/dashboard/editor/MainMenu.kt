@@ -18,14 +18,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.components.drawVerticalScrollbar
 import net.dzikoysk.presenceofmind.components.scaledSp
-import net.dzikoysk.presenceofmind.task.DeleteTask
-import net.dzikoysk.presenceofmind.task.SaveTask
-import net.dzikoysk.presenceofmind.task.Task
-import net.dzikoysk.presenceofmind.task.UpdateTask
-import net.dzikoysk.presenceofmind.task.attributes.ChecklistAttribute
-import net.dzikoysk.presenceofmind.task.attributes.EventAttribute
-import net.dzikoysk.presenceofmind.task.attributes.PomodoroAttribute
-import net.dzikoysk.presenceofmind.task.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.data.task.DeleteTask
+import net.dzikoysk.presenceofmind.data.task.SaveTask
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.UpdateTask
+import net.dzikoysk.presenceofmind.data.attributes.ChecklistAttribute
+import net.dzikoysk.presenceofmind.data.attributes.EventAttribute
+import net.dzikoysk.presenceofmind.data.attributes.PomodoroAttribute
+import net.dzikoysk.presenceofmind.data.attributes.RepetitiveAttribute
 
 @Preview(showBackground = true)
 @Composable

@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.task
+package net.dzikoysk.presenceofmind.data.task
 
 enum class MarkedAs {
     UNFINISHED,
