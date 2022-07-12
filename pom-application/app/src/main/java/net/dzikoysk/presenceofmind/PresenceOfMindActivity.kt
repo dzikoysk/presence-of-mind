@@ -17,7 +17,7 @@ import net.dzikoysk.presenceofmind.pages.Page
 import net.dzikoysk.presenceofmind.pages.Router
 import kotlin.time.Duration.Companion.minutes
 
-const val DATA_VERSION = "v1.0.0-RC.5-3"
+const val DATA_VERSION = "v1.0.0-RC.5"
 
 class PresenceOfMindActivity : ComponentActivity() {
 
@@ -50,7 +50,7 @@ class PresenceOfMindActivity : ComponentActivity() {
         val taskService = TaskService(
             taskRepository = SharedPreferencesTaskRepository(
                 sharedPreferences = getSharedPreferences(
-                    "net.dzikoysk.presenceofmind.tasks-repository",
+                    "net.dzikoysk.presenceofmind.task-repository",
                     Context.MODE_PRIVATE
                 ),
                 version = DATA_VERSION
