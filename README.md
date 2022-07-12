@@ -5,11 +5,14 @@
   <a href="https://github.com/dzikoysk/presence-of-mind/actions/workflows/gradle.yml">
     <img src="https://github.com/dzikoysk/presence-of-mind/actions/workflows/gradle.yml/badge.svg" />
   </a>
+    <a href="https://www.codefactor.io/repository/github/dzikoysk/presence-of-mind">
+    <img src="https://www.codefactor.io/repository/github/dzikoysk/presence-of-mind/badge?s=311879689c7855499217cb3456b06f67ef7588e8" alt="CodeFactor" />
+  </a>
   <a href="https://opensource.org/licenses/Apache-2.0">
     <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" />
   </a>
-  <a href="https://www.codefactor.io/repository/github/dzikoysk/presence-of-mind">
-    <img src="https://www.codefactor.io/repository/github/dzikoysk/presence-of-mind/badge?s=311879689c7855499217cb3456b06f67ef7588e8" alt="CodeFactor" />
+  <a href="">
+    <img height="20" src="https://img.shields.io/badge/Google_Play-414141?style=for-the-badge&logo=google-play&logoColor=white" />
   </a>
   <!--
   <a href="https://discord.gg/qGRqmGjUFX">
