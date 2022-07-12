@@ -1,6 +1,7 @@
 package net.dzikoysk.presenceofmind.task.attributes
 
 import androidx.compose.ui.graphics.Color
+import java.time.DayOfWeek
 
 /**
  * Repeat task by:
@@ -28,15 +29,14 @@ enum class RepetitiveVariant(val description: String) {
     INTERVAL_IN_DAYS("Interval in days")
 }
 
-enum class DayOfWeek(val abbreviation: String) {
-    MONDAY("M"),
-    TUESDAY("Tu"),
-    WEDNESDAY("W"),
-    THURSDAY("Th"),
-    FRIDAY("F"),
-    SATURDAY("Sa"),
-    SUNDAY("Su")
-}
-
-
-
+/** Fixed size abbreviations */
+fun getShortAbbreviation(dayOfWeek: DayOfWeek): String =
+    when (dayOfWeek) {
+        DayOfWeek.MONDAY -> "Mo"
+        DayOfWeek.TUESDAY -> "Tu"
+        DayOfWeek.WEDNESDAY -> "We"
+        DayOfWeek.THURSDAY -> "Th"
+        DayOfWeek.FRIDAY -> "Fr"
+        DayOfWeek.SATURDAY -> "Sa"
+        DayOfWeek.SUNDAY -> "Su"
+    }

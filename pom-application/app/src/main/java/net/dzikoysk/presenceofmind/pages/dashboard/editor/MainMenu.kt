@@ -82,7 +82,7 @@ fun MainMenu(
                 onValueChange = { updateTask(task.copy(description = it)) },
                 modifier = Modifier
                     .padding(vertical = 7.dp)
-                    .height(160.dp)
+                    .height(140.dp)
                     .fillMaxWidth(),
             )
         }
@@ -99,7 +99,11 @@ fun MainMenu(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp, horizontal = 10.dp),
-                    colors = buttonColors(backgroundColor = it.getDefaultAccentColor()),
+                    colors = buttonColors(
+                        contentColor = MaterialTheme.colors.onSecondary,
+                        backgroundColor = MaterialTheme.colors.secondary
+                    ),
+                    shape = RoundedCornerShape(6.dp),
                     onClick = { selectTab(EditorTab.CHECKLIST) },
                     content = { Text(text = "Modify") }
                 )

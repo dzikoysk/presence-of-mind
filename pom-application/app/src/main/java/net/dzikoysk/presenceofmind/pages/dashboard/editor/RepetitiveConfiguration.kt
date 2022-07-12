@@ -4,23 +4,28 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.UpdateTask
-import net.dzikoysk.presenceofmind.task.attributes.DayOfWeek
 import net.dzikoysk.presenceofmind.task.attributes.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.task.attributes.RepetitiveVariant
 import net.dzikoysk.presenceofmind.task.attributes.RepetitiveVariant.DAYS_OF_WEEK
 import net.dzikoysk.presenceofmind.task.attributes.RepetitiveVariant.INTERVAL_IN_DAYS
+import net.dzikoysk.presenceofmind.task.attributes.getShortAbbreviation
+import java.time.DayOfWeek
 
 @Preview(showBackground = true)
 @Composable
@@ -44,6 +49,7 @@ fun RepetitiveConfigurationPreviewOfDaysOfWeek() {
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RepetitiveConfiguration(
     task: Task,
@@ -69,7 +75,8 @@ fun RepetitiveConfiguration(
         }
     )
 
-    var selectedTab by remember { mutableStateOf(repetitiveAttribute.daysOfWeek?.let { 0 } ?: 1) }
+    var selectedTab by remember { mutableStateOf(repetitiveAttribute.intervalInDays?.let { 1 } ?: 0) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(Modifier.padding(12.dp)) {
         TabRow(selectedTabIndex = selectedTab) {
@@ -98,8 +105,8 @@ fun RepetitiveConfiguration(
                                 .clip(CircleShape)
                                 .size(35.dp)
                                 .background(when {
-                                    daysOfWeek.contains(dayOfWeek) -> MaterialTheme.colors.primary
-                                    else -> MaterialTheme.colors.secondary
+                                    daysOfWeek.contains(dayOfWeek) -> MaterialTheme.colors.secondary
+                                    else -> MaterialTheme.colors.primary
                                 })
                                 .clickable {
                                     updateRepetitiveAttribute(RepetitiveAttribute(
@@ -111,7 +118,7 @@ fun RepetitiveConfiguration(
                                 }
                         ) {
                             Text(
-                                text = dayOfWeek.abbreviation,
+                                text = getShortAbbreviation(dayOfWeek),
                                 textAlign = TextAlign.Center,
                                 color = when {
                                     daysOfWeek.contains(dayOfWeek) -> MaterialTheme.colors.onPrimary
@@ -125,15 +132,21 @@ fun RepetitiveConfiguration(
                 OutlinedTextField(
                     value = repetitiveAttribute.intervalInDays.takeIf { it != 0 }?.toString() ?: "",
                     label = { Text("Interval in days") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(58.dp),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    ),
                     onValueChange = {
                         updateTask(
                             task.copy(
                                 repetitiveAttribute = repetitiveAttribute.copy(
-                                    intervalInDays = it.toIntOrNull() ?: 0
+                                    intervalInDays = it.trim().toIntOrNull() ?: 0
                                 )
                             )
                         )

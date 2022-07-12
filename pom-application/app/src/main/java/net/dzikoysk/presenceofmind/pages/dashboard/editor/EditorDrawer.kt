@@ -65,7 +65,7 @@ fun EditorDrawer(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.1f)
+                .fillMaxHeight(0.07f)
                 .background(Brush.verticalGradient(listOf(Color.Transparent, Color(0x44000000))))
                 .clickable(
                     interactionSource = interactionSource,

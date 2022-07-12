@@ -15,6 +15,7 @@ import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskCardContext
 import net.dzikoysk.presenceofmind.shared.plural
 import net.dzikoysk.presenceofmind.task.Task
 import net.dzikoysk.presenceofmind.task.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.task.attributes.getShortAbbreviation
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import java.util.UUID
 
@@ -39,7 +40,7 @@ private fun RepetitiveAttributeRendererPreview() {
 fun RepetitiveAttributeRenderer(repetitiveAttribute: RepetitiveAttribute) {
     val attributeDescription = when {
         repetitiveAttribute.intervalInDays != null -> "Every ${plural(repetitiveAttribute.intervalInDays.toLong(), "day")}"
-        repetitiveAttribute.daysOfWeek != null -> "In ${repetitiveAttribute.daysOfWeek.joinToString(", ") { it.abbreviation }}"
+        repetitiveAttribute.daysOfWeek != null -> "In ${repetitiveAttribute.daysOfWeek.joinToString(", ") { getShortAbbreviation(it) }}"
         else -> "Unknown interval"
     }
 
