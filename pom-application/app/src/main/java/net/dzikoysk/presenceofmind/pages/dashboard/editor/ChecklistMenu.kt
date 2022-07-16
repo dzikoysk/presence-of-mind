@@ -8,20 +8,25 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
@@ -29,11 +34,11 @@ import net.dzikoysk.presenceofmind.components.SwipeState
 import net.dzikoysk.presenceofmind.components.SwipeableCard
 import net.dzikoysk.presenceofmind.components.drawVerticalScrollbar
 import net.dzikoysk.presenceofmind.components.scaledSp
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.UpdateTask
 import net.dzikoysk.presenceofmind.data.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.data.attributes.ChecklistEntry
 import net.dzikoysk.presenceofmind.data.attributes.withUpdatedEntry
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.UpdateTask
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -57,6 +62,7 @@ fun ChecklistEditorPreview() {
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ChecklistEditor(
     task: Task,
@@ -66,8 +72,11 @@ fun ChecklistEditor(
     val checklistAttribute = task.checklistAttribute ?: ChecklistAttribute()
     val subtasks = remember { mutableStateOf(checklistAttribute.list) }
 
-    val updateSubtask: (ChecklistEntry) -> Unit = { entry ->
-        subtasks.value = checklistAttribute.withUpdatedEntry(entry).list
+    val updateSubtask: (ChecklistEntry) -> Unit = {
+        subtasks.value = checklistAttribute
+            .copy(list = subtasks.value)
+            .withUpdatedEntry(it)
+            .list
     }
 
     val subtasksState = rememberReorderableLazyListState(
@@ -88,6 +97,7 @@ fun ChecklistEditor(
                         task.copy(
                             checklistAttribute = checklistAttribute.copy(
                                 list = subtasks.value
+                                    .filter { it.description.trim().isNotEmpty() }
                             )
                         )
                     )
@@ -147,6 +157,7 @@ fun ChecklistEditor(
                 ) { isDragging ->
                     val elevation = animateDpAsState(if (isDragging) 16.dp else 0.dp)
                     val focusRequester = remember { FocusRequester() }
+                    val keyboardController = LocalSoftwareKeyboardController.current
 
                     Card(
                         modifier = Modifier
@@ -172,6 +183,17 @@ fun ChecklistEditor(
                                     OutlinedTextField(
                                         value = subtask.description,
                                         onValueChange = { updateSubtask(subtask.copy(description = it)) },
+                                        keyboardOptions = KeyboardOptions(
+                                            imeAction = ImeAction.Done
+                                        ),
+                                        keyboardActions = KeyboardActions(
+                                            onDone = {
+                                                when {
+                                                    subtask.description.trim().isEmpty() -> keyboardController?.hide()
+                                                    else -> updateSubtask(ChecklistEntry())
+                                                }
+                                            }
+                                        ),
                                         modifier = Modifier
                                             .height(48.dp)
                                             .fillMaxWidth()
