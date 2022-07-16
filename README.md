@@ -1,6 +1,7 @@
-
 <div align="center">
-  <img height="340" src="https://user-images.githubusercontent.com/4235722/178143366-0a7a1117-d7cd-4822-b75e-38c8eb9341c7.png" />
+  <img height="200" src="https://user-images.githubusercontent.com/4235722/179370207-90b95b15-dbde-478d-bc77-4d626df5c53b.png" />
+  <br>
+  <img height="100" src="https://user-images.githubusercontent.com/4235722/179370220-a66d67f0-c2f7-4388-81e0-3562adf9ba7c.png" />
   <br><br>
   <a href="https://github.com/dzikoysk/presence-of-mind/actions/workflows/gradle.yml">
     <img src="https://github.com/dzikoysk/presence-of-mind/actions/workflows/gradle.yml/badge.svg" />
