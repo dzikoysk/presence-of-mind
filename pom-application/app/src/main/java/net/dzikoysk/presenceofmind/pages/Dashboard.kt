@@ -10,14 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.createDefaultTasks
-import net.dzikoysk.presenceofmind.pages.dashboard.*
-import net.dzikoysk.presenceofmind.pages.dashboard.editor.AnimatedEditorDrawer
-import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskList
 import net.dzikoysk.presenceofmind.data.task.MarkedAs
-import net.dzikoysk.presenceofmind.data.task.Task
 import net.dzikoysk.presenceofmind.data.task.TaskService
 import net.dzikoysk.presenceofmind.data.theme.InMemoryThemeRepository
 import net.dzikoysk.presenceofmind.data.theme.ThemeRepository
+import net.dzikoysk.presenceofmind.pages.dashboard.*
+import net.dzikoysk.presenceofmind.pages.dashboard.editor.AnimatedEditorDrawer
+import net.dzikoysk.presenceofmind.pages.dashboard.editor.TaskToEdit
+import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskList
 
 /** List of tasks */
 
@@ -39,7 +39,7 @@ fun Dashboard(
 ) {
     val selectedTasks = remember { mutableStateOf(MarkedAs.UNFINISHED) }
     val openMenu = remember { mutableStateOf(false)  }
-    val openEditorDrawer = remember { mutableStateOf<Task?>(null)  }
+    val openEditorDrawer = remember { mutableStateOf<TaskToEdit?>(null)  }
 
     Scaffold(
         content = { padding ->
@@ -79,7 +79,7 @@ fun Dashboard(
                     }
                     TaskList(
                         taskService = taskService,
-                        openTaskEditor = { openEditorDrawer.value = it },
+                        openTaskEditor = { openEditorDrawer.value = TaskToEdit(isNew = false, it) },
                         displayMode = selectedTasks.value
                     )
                 }
@@ -93,7 +93,7 @@ fun Dashboard(
                     close = { openEditorDrawer.value = null },
                     saveTask = { taskService.saveTask(it) },
                     deleteTask = { taskService.deleteTask(it.id) },
-                    taskToEdit = openEditorDrawer.value
+                    taskToEdit = openEditorDrawer.value ?: TaskToEdit(isNew = true)
                 )
             }
         },
@@ -101,7 +101,7 @@ fun Dashboard(
             if (openEditorDrawer.value == null) {
                 CreateTaskButton(
                     themeRepository = themeRepository,
-                    openTaskEditor = { openEditorDrawer.value = Task() }
+                    openTaskEditor = { openEditorDrawer.value = TaskToEdit(isNew = true) }
                 )
             }
         }

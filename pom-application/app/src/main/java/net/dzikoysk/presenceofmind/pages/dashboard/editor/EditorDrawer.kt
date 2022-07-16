@@ -21,11 +21,16 @@ import net.dzikoysk.presenceofmind.data.task.DeleteTask
 import net.dzikoysk.presenceofmind.data.task.SaveTask
 import net.dzikoysk.presenceofmind.data.task.Task
 
+data class TaskToEdit(
+    val isNew: Boolean,
+    val task: Task = Task()
+)
+
 @Composable
 fun AnimatedEditorDrawer(
     open: Boolean,
     close: () -> Unit,
-    taskToEdit: Task?,
+    taskToEdit: TaskToEdit,
     saveTask: SaveTask,
     deleteTask: DeleteTask
 ) {
@@ -53,11 +58,11 @@ typealias SelectTab = (EditorTab) -> Unit
 @Composable
 fun EditorDrawer(
     close: () -> Unit,
-    taskToEdit: Task?,
+    taskToEdit: TaskToEdit,
     saveTask: SaveTask,
     deleteTask: DeleteTask
 ) {
-    val task = remember { mutableStateOf(taskToEdit ?: Task(description = "")) }
+    val task = remember { mutableStateOf(taskToEdit.task) }
     val interactionSource = remember { MutableInteractionSource() }
     val selectedTab = remember { mutableStateOf(EditorTab.MAIN) }
 
@@ -88,6 +93,7 @@ fun EditorDrawer(
                     EditorTab.MAIN ->
                         MainMenu(
                             close = close,
+                            isNew = taskToEdit.isNew,
                             task = task.value,
                             selectTab = { selectedTab.value = it },
                             updateTask = { task.value = it },

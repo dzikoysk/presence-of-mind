@@ -1,31 +1,32 @@
 package net.dzikoysk.presenceofmind.pages.dashboard.editor
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
+import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.drawVerticalScrollbar
 import net.dzikoysk.presenceofmind.components.scaledSp
-import net.dzikoysk.presenceofmind.data.task.DeleteTask
-import net.dzikoysk.presenceofmind.data.task.SaveTask
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.UpdateTask
 import net.dzikoysk.presenceofmind.data.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.data.attributes.EventAttribute
 import net.dzikoysk.presenceofmind.data.attributes.PomodoroAttribute
 import net.dzikoysk.presenceofmind.data.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.data.task.DeleteTask
+import net.dzikoysk.presenceofmind.data.task.SaveTask
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.UpdateTask
 
 @Preview(showBackground = true)
 @Composable
@@ -37,6 +38,7 @@ fun MainMenuPreview() {
         MainMenu(
             close = {},
             selectTab = {},
+            isNew = true,
             task = Task(
                 description = "Task to edit",
                 checklistAttribute = ChecklistAttribute()
@@ -51,6 +53,7 @@ fun MainMenuPreview() {
 @Composable
 fun MainMenu(
     close: () -> Unit,
+    isNew: Boolean,
     task: Task,
     selectTab: SelectTab,
     updateTask: UpdateTask,
@@ -67,12 +70,29 @@ fun MainMenu(
         contentPadding = PaddingValues(horizontal = 24.dp)
     ) {
         item {
-            Text(
-                text = "Add a new task  \uD83C\uDFA8",
-                modifier = Modifier.padding(top = 24.dp, bottom = 5.dp),
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.scaledSp()
-            )
+            val message = when (isNew) {
+                true -> "Add a new task  \uD83C\uDFA8"
+                false -> "Modify task  \uD83C\uDFA8"
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp, bottom = 5.dp)
+            ) {
+                Text(
+                    text = message,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.scaledSp()
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_close_24),
+                    contentDescription = "Close editor",
+                    modifier = Modifier.clickable { close() }
+                )
+            }
         }
 
         item {
@@ -186,7 +206,12 @@ fun MainMenu(
                         deleteTask(task)
                         close()
                     },
-                    content = { Text(text = "Delete") }
+                    content = {
+                        when (isNew) {
+                            true -> Text(text = "Cancel")
+                            false -> Text(text = "Delete")
+                        }
+                    }
                 )
             }
         }
