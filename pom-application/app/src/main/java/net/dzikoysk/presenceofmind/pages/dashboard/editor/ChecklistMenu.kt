@@ -170,9 +170,19 @@ fun ChecklistEditor(
                         shape = RoundedCornerShape(CornerSize(2.dp)),
                     ) {
                         SwipeableCard(
-                            menuSize = 56.dp,
+                            swipeThreshold = 0.7f,
                             menuBackgroundColor = Color.LightGray,
-                            leftContent = null,
+                            onStateChange = { swipeContext ->
+                                when (swipeContext.currentState()) {
+                                    SwipeState.LEFT -> {}
+                                    SwipeState.CONTENT -> {}
+                                    SwipeState.RIGHT -> {
+                                        subtasks.value = subtasks.value
+                                            .toMutableList()
+                                            .also { it.remove(subtask) }
+                                    }
+                                }
+                            },
                             content = { _, _ ->
                                 Box(
                                     modifier = Modifier
@@ -202,20 +212,12 @@ fun ChecklistEditor(
                                     )
                                 }
                             },
-                            rightEntry = { swipeState, _ ->
+                            rightContent = { _, _ ->
                                 Icon(
                                     contentDescription = "Delete subtask",
                                     painter = painterResource(id = R.drawable.ic_baseline_delete_24),
                                     tint = MaterialTheme.colors.onBackground,
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                        .clickable {
-                                            if (swipeState == SwipeState.RIGHT) {
-                                                subtasks.value = subtasks.value
-                                                    .toMutableList()
-                                                    .also { it.remove(subtask) }
-                                            }
-                                        }
+                                    modifier = Modifier.size(24.dp)
                                 )
                             }
                         )

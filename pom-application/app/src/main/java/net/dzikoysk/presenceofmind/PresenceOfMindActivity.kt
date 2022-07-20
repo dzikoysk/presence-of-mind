@@ -13,6 +13,7 @@ import net.dzikoysk.presenceofmind.data.task.SharedPreferencesTaskRepository
 import net.dzikoysk.presenceofmind.data.task.Task
 import net.dzikoysk.presenceofmind.data.task.TaskService
 import net.dzikoysk.presenceofmind.data.theme.SharedPreferencesThemeRepository
+import net.dzikoysk.presenceofmind.data.theme.ThemeRepository
 import net.dzikoysk.presenceofmind.pages.Page
 import net.dzikoysk.presenceofmind.pages.Router
 import kotlin.time.Duration.Companion.minutes
@@ -21,8 +22,14 @@ const val DATA_VERSION = "v1.0.0-RC.5"
 
 class PresenceOfMindActivity : ComponentActivity() {
 
+    private lateinit var themeRepository: ThemeRepository
+    private lateinit var categoryService: CategoryService
+    private lateinit var taskService: TaskService
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        val themeRepository = SharedPreferencesThemeRepository(
+        super.onCreate(savedInstanceState)
+
+        this.themeRepository = SharedPreferencesThemeRepository(
             sharedPreferences = getSharedPreferences(
                 "net.dzikoysk.presenceofmind.data.theme-repository",
                 Context.MODE_PRIVATE
@@ -30,14 +37,12 @@ class PresenceOfMindActivity : ComponentActivity() {
             version = DATA_VERSION
         )
 
-        super.onCreate(savedInstanceState)
-
         setTheme(when (themeRepository.isLightMode()) {
             true -> R.style.Theme_LightPresenceOfMind
             false -> R.style.Theme_DarkPresenceOfMind
         })
 
-        val categoryService = CategoryService(
+        this.categoryService = CategoryService(
             categoryRepository = SharedPreferencesCategoryRepository(
                 sharedPreferences = getSharedPreferences(
                     "net.dzikoysk.presenceofmind.category-repository",
@@ -47,7 +52,7 @@ class PresenceOfMindActivity : ComponentActivity() {
             )
         )
 
-        val taskService = TaskService(
+        this.taskService = TaskService(
             taskRepository = SharedPreferencesTaskRepository(
                 sharedPreferences = getSharedPreferences(
                     "net.dzikoysk.presenceofmind.task-repository",
@@ -74,10 +79,17 @@ class PresenceOfMindActivity : ComponentActivity() {
             Router(
                 themeRepository = themeRepository,
                 taskService = taskService,
-                restartActivity = { recreate() },
+                restartActivity = {
+                    recreate()
+                },
                 page = Page.DASHBOARD
             )
         }
+    }
+
+    override fun onStop() {
+        taskService.forceTasksSave(sync = true)
+        super.onStop()
     }
 
 }

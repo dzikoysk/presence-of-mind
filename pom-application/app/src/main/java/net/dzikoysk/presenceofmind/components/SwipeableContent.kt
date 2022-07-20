@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -36,80 +35,103 @@ enum class SwipeState {
 typealias SnapTo = (SwipeState) -> Unit
 typealias SwipeableContent = (SwipeState, SnapTo) -> Unit
 
+data class SwipeContext(
+    val currentState: () -> SwipeState,
+    val snapTo: SnapTo,
+)
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SwipeableCard(
-    menuSize: Dp,
+    swipeThreshold: Float,
     menuBackgroundColor: Color,
-    leftContent: @Composable SwipeableContent?,
+    onStateChange: @Composable ((SwipeContext) -> Unit) = {},
+    leftContent: @Composable SwipeableContent? = null,
     content: @Composable SwipeableContent,
-    rightEntry: @Composable SwipeableContent?
+    rightContent: @Composable SwipeableContent? = null
 ) {
-    val swipeAbleState = rememberSwipeableState(initialValue = SwipeState.CONTENT)
-    val contentSize = remember { mutableStateOf(IntSize(0, 0)) }
-    val sizePx = with(LocalDensity.current) { menuSize.toPx() }
-
     val scope = rememberCoroutineScope()
-    val swipeTo: (SwipeState) -> Unit = {
-        scope.launch {
-            swipeAbleState.snapTo(it)
-        }
-    }
+
+    val contentSize = remember { mutableStateOf(IntSize(1, 1)) }
+    val swipeThresholdInDp = with(LocalDensity.current) { contentSize.value.width.toDp() }
+    val contentWidthInDp = with(LocalDensity.current) { contentSize.value.height.toDp() }
 
     val anchors = mutableMapOf<Float, SwipeState>()
-    rightEntry?.run { anchors.put(-sizePx, SwipeState.RIGHT) }
-    anchors.put(0f, SwipeState.CONTENT)
-    leftContent?.run { anchors.put(sizePx, SwipeState.LEFT) }
+    rightContent?.run { anchors.put(-contentSize.value.width * swipeThreshold, SwipeState.RIGHT) }
+    anchors[0f] = SwipeState.CONTENT
+    leftContent?.run { anchors.put(contentSize.value.width * swipeThreshold, SwipeState.LEFT) }
+
+    val previousSwipeState = remember { mutableStateOf(SwipeState.CONTENT) }
+    val swipeableState = rememberSwipeableState(initialValue = SwipeState.CONTENT)
+    val swipeContext = remember {
+        SwipeContext(
+            currentState = { swipeableState.currentValue },
+            snapTo = {
+                scope.launch {
+                    swipeableState.snapTo(it)
+                }
+            }
+        )
+    }
+
+    if (swipeableState.currentValue != previousSwipeState.value) {
+        onStateChange(swipeContext)
+        previousSwipeState.value = swipeableState.currentValue
+    }
 
     Box(
         modifier = Modifier
             .swipeable(
-                state = swipeAbleState,
+                state = swipeableState,
                 anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(fraction = menuSize.value) },
-                orientation = Orientation.Horizontal
+                thresholds = { _, _ -> FractionalThreshold(fraction = 0.9f) },
+                orientation = Orientation.Horizontal,
+                velocityThreshold = swipeThresholdInDp
             )
             .background(menuBackgroundColor, shape = RoundedCornerShape(CornerSize(9.dp))),
     ) {
-        leftContent?.also {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.width(swipeThresholdInDp)
+        ) {
             Column(
                 modifier = Modifier
-                    .width(menuSize)
-                    .height(LocalDensity.current.run { contentSize.value.height.toDp() }),
+                    .width(56.dp)
+                    .height(contentWidthInDp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                content = { it(swipeAbleState.currentValue, swipeTo) }
+                content = {
+                    leftContent?.also {
+                        it(swipeableState.currentValue, swipeContext.snapTo)
+                    }
+                }
+            )
+            Column(
+                modifier = Modifier
+                    .width(56.dp)
+                    .height(contentWidthInDp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                content = {
+                    rightContent?.also {
+                        it(swipeableState.currentValue, swipeContext.snapTo)
+                    }
+                }
             )
         }
         Column(
             modifier = Modifier
                 .offset { // NOTE: offset has to be the first value in modifier to properly notify background
                     IntOffset(
-                        x = swipeAbleState.offset.value.roundToInt(),
+                        x = swipeableState.offset.value.roundToInt(),
                         y = 0
                     )
                 }
                 .onGloballyPositioned { contentSize.value = it.size }
                 .background(MaterialTheme.colors.surface),
-            content = { content(swipeAbleState.currentValue, swipeTo) }
+            content = { content(swipeableState.currentValue, swipeContext.snapTo) }
         )
-        rightEntry?.also {
-            Column(
-                modifier = Modifier
-                    .width(menuSize)
-                    .height(LocalDensity.current.run { contentSize.value.height.toDp() })
-                    .offset {
-                        IntOffset(
-                            x = swipeAbleState.offset.value.roundToInt() + contentSize.value.width,
-                            y = 0
-                        )
-                    }
-                ,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                content = { it(swipeAbleState.currentValue, swipeTo) }
-            )
-        }
     }
 }
 

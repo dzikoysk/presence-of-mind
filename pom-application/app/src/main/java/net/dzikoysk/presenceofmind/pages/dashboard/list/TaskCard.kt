@@ -1,6 +1,6 @@
 package net.dzikoysk.presenceofmind.pages.dashboard.list
 
-import androidx.compose.foundation.clickable
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,11 +8,13 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.talhafaki.composablesweettoast.util.SweetToastUtil.SweetSuccess
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.SwipeState
 import net.dzikoysk.presenceofmind.components.SwipeableCard
@@ -47,12 +49,13 @@ fun TaskCard(
     state: ReorderableLazyListState,
     context: TaskCardContext,
 ) {
-    val subscribedToOnDone = remember { mutableListOf<OnDone>() }
-
+    val task = context.task
     val taskColor =
-        context.task.getAccentColor()
-            .takeUnless { context.task.isDone() }
+        task.getAccentColor()
+            .takeUnless { task.isDone() }
             ?: Color.Gray
+
+    val subscribedToOnDone = remember { mutableListOf<OnDone>() }
 
     Card(
         modifier = Modifier
@@ -65,50 +68,70 @@ fun TaskCard(
     ) {
         Box(Modifier.drawTaskColorAccent(taskColor)) {
             SwipeableCard(
-                menuSize = 55.dp,
+                swipeThreshold = 0.7f,
                 menuBackgroundColor = taskColor,
-                leftContent = { swipeState, snapTo ->
-                    TaskItemSwipeMenu(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        isVisible = swipeState == SwipeState.LEFT,
-                        isDone = context.task.isDone(),
-                        onDone = {
-                            val markedAsDone = if (context.task.isDone()) MarkedAs.UNFINISHED else MarkedAs.DONE
+                onStateChange = { swipeContext ->
+                    when (swipeContext.currentState()) {
+                        SwipeState.LEFT -> {
+                            val markedAsDone = if (task.isDone()) MarkedAs.UNFINISHED else MarkedAs.DONE
 
-                            var updatedTask = context.task
-                                .copy(
-                                    doneDate = if (context.task.isDone()) null else System.currentTimeMillis(),
-                                    doneCount = context.task.doneCount + markedAsDone.ordinal
-                                )
+                            var updatedTask = task.copy(
+                                doneDate = if (task.isDone()) null else System.currentTimeMillis(),
+                                doneCount = task.doneCount + markedAsDone.ordinal
+                            )
 
-                            subscribedToOnDone.forEach { updatedTask = it(updatedTask, markedAsDone) }
+                            subscribedToOnDone.forEach { onDone ->
+                                updatedTask = onDone(updatedTask, markedAsDone)
+                            }
+
                             context.updateTask(updatedTask)
-                            snapTo(SwipeState.CONTENT)
+                            println(updatedTask)
+                            swipeContext.snapTo(SwipeState.CONTENT)
+
+                            SweetSuccess(
+                                message = when (markedAsDone) {
+                                    MarkedAs.DONE -> "Marked as done"
+                                    MarkedAs.UNFINISHED -> "Task has been restored!"
+                                },
+                                duration = Toast.LENGTH_SHORT,
+                                padding = PaddingValues(top = 16.dp),
+                                contentAlignment = Alignment.TopCenter
+                            )
                         }
-                    )
+                        SwipeState.CONTENT -> {}
+                        SwipeState.RIGHT -> {
+                            context.openTaskEditor()
+                            swipeContext.snapTo(SwipeState.CONTENT)
+                        }
+                    }
+                },
+                leftContent = { _, _ ->
+                    Box(Modifier.padding(horizontal = 16.dp)) {
+                        Icon(
+                            painter = painterResource(id = when {
+                                task.isDone() -> R.drawable.ic_baseline_replay_24
+                                else -> R.drawable.ic_baseline_check_24
+                            }),
+                            contentDescription = "Done",
+                            tint = Color.White,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
                 },
                 content = { _, _ ->
                     TaskCardContent(
-                        task = context.task,
+                        task = task,
                         updateTask = context.updateTask,
                         subscribeToOnDone = { subscribedToOnDone.add(it) }
                     )
                 },
-                rightEntry = { swipeState, snapTo ->
-                    Box(Modifier.padding(horizontal = 18.dp)) {
+                rightContent = { _, _ ->
+                    Box(Modifier.padding(horizontal = 16.dp)) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_baseline_edit_24),
                             contentDescription = "Done",
                             tint = Color.White,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .fillMaxSize()
-                                .clickable {
-                                    if (swipeState == SwipeState.RIGHT) {
-                                        context.openTaskEditor()
-                                        snapTo(SwipeState.CONTENT)
-                                    }
-                                },
+                            modifier = Modifier.size(40.dp)
                         )
                     }
                 }

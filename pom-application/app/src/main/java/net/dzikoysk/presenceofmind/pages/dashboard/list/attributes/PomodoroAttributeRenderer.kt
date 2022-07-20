@@ -16,13 +16,13 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.scaledSp
-import net.dzikoysk.presenceofmind.pages.dashboard.list.SubscribeToOnDone
-import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
-import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
+import net.dzikoysk.presenceofmind.data.attributes.*
 import net.dzikoysk.presenceofmind.data.task.MarkedAs
 import net.dzikoysk.presenceofmind.data.task.Task
 import net.dzikoysk.presenceofmind.data.task.UpdateTask
-import net.dzikoysk.presenceofmind.data.attributes.*
+import net.dzikoysk.presenceofmind.pages.dashboard.list.SubscribeToOnDone
+import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
+import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -57,14 +57,13 @@ fun PomodoroAttributeRenderer(
     subscribeToOnDone { updatedTask, markedAs ->
         when (markedAs) {
             MarkedAs.UNFINISHED -> updatedTask
-            MarkedAs.DONE -> {
+            MarkedAs.DONE ->
                 updatedTask.copy(
                     pomodoroAttribute = pomodoroAttribute.copy(
                         timeSpentInSeconds = pomodoroAttribute.timeSpentInSeconds + countdownSession.withAccumulatedCountdown().sessionTimeInSeconds,
                         countdownSession = CountdownSession()
                     )
                 )
-            }
         }
     }
 

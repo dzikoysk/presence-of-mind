@@ -2,13 +2,14 @@ package net.dzikoysk.presenceofmind.data.task
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import net.dzikoysk.presenceofmind.data.attributes.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.shared.DefaultTimeProvider
 import net.dzikoysk.presenceofmind.shared.TimeProvider
-import net.dzikoysk.presenceofmind.data.attributes.RepetitiveAttribute
 import java.time.Instant
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.UUID
+import java.util.concurrent.Executors
 
 typealias UpdateTask = (Task) -> Unit
 typealias SaveTask = (Task) -> Unit
@@ -20,6 +21,7 @@ class TaskService(
 ) {
 
     private val tasks = mutableStateListOf<Task>()
+    private val executor = Executors.newSingleThreadExecutor()
 
     init {
         tasks.addAll(taskRepository.loadOrderedTasks())
@@ -75,8 +77,11 @@ class TaskService(
         tasks.add(to, tasks.removeAt(from))
     }
 
-    fun forceTasksSave() {
-        taskRepository.saveOrderedTasks(tasks)
+    fun forceTasksSave(sync: Boolean = false) {
+        when (sync) {
+            true -> taskRepository.saveOrderedTasks(tasks)
+            false -> executor.submit { forceTasksSave(sync = true) }
+        }
     }
 
     fun deleteTask(id: UUID) {
