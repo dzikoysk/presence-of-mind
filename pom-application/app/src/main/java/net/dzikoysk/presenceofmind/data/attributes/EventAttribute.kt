@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 
 /** One-time events */
 data class EventAttribute(
@@ -59,7 +60,6 @@ fun EventDateTime.getTime(): Pair<Int, Int> =
 fun EventDateTime.getTimeAsString(): String =
     "${hour.getPrettyNumber()}:${minute.getPrettyNumber()}"
 
-fun EventDateTime.toLocalDateTime(): Instant =
+fun EventDateTime.toLocalDateTime(): ZonedDateTime =
     LocalDateTime.of(year, month, day, hour, minute)
         .atZone(ZoneId.systemDefault())
-        .toInstant()
