@@ -22,18 +22,20 @@ data class ChecklistAttribute(
 
 }
 
-@CheckResult
-fun ChecklistAttribute.withUpdatedEntry(entry: ChecklistEntry): ChecklistAttribute =
-    copy(
-        list = list
-            .indexOfFirst { it.id == entry.id }
-            .takeIf { it != -1 }
-            ?.let { list.toMutableList().apply { set(it, entry) } }
-            ?: list.toMutableList().apply { add(entry) }
-    )
-
 data class ChecklistEntry(
     val id: UUID = UUID.randomUUID(),
     val description: String = "",
     val done: Boolean = false
 )
+
+@CheckResult
+fun ChecklistAttribute.withUpdatedEntry(entry: ChecklistEntry): ChecklistAttribute =
+    copy(list = list.updateEntry(entry))
+
+private fun List<ChecklistEntry>.updateEntry(entry: ChecklistEntry): List<ChecklistEntry> =
+    toMutableList().also {
+        when (val id = it.indexOfFirst { element -> element.id == entry.id }) {
+            -1 -> it.add(entry)
+            else -> it[id] = entry
+        }
+    }

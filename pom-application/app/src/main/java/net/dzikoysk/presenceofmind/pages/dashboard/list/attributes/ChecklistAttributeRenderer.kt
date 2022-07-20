@@ -10,11 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.UpdateTask
 import net.dzikoysk.presenceofmind.data.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.data.attributes.ChecklistEntry
 import net.dzikoysk.presenceofmind.data.attributes.withUpdatedEntry
+import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.data.task.UpdateTask
 
 @Composable
 fun ChecklistAttributeRenderer(
@@ -25,20 +25,22 @@ fun ChecklistAttributeRenderer(
     val fontSize = task.description.scaledFontSize()
 
     Box(modifier = Modifier.padding(start = 3.dp)) {
-        checklistAttribute.list.forEachIndexed { idx, subtask ->
-            Row(
-                modifier = Modifier.padding(top = (30 * idx).dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                ChecklistEntryRenderer(
-                    task = task,
-                    checklistAttribute = checklistAttribute,
-                    entry = subtask,
-                    fontSize = fontSize,
-                    updateTask = updateTask
-                )
+        checklistAttribute.list
+            .sortedBy { it.done }
+            .forEachIndexed { idx, subtask ->
+                Row(
+                    modifier = Modifier.padding(top = (30 * idx).dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    ChecklistEntryRenderer(
+                        task = task,
+                        checklistAttribute = checklistAttribute,
+                        entry = subtask,
+                        fontSize = fontSize,
+                        updateTask = updateTask
+                    )
+                }
             }
-        }
     }
 }
 
