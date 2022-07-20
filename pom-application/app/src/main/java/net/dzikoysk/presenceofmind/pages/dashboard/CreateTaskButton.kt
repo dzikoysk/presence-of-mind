@@ -11,18 +11,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.data.theme.ThemeRepository
+import net.dzikoysk.presenceofmind.data.presence.PresenceRepository
 
 @Composable
 fun CreateTaskButton(
-    themeRepository: ThemeRepository,
+    presenceRepository: PresenceRepository,
     openTaskEditor: () -> Unit
 ) {
     FloatingActionButton(
         modifier = Modifier.size(48.dp),
         shape = RoundedCornerShape(12.dp),
         backgroundColor =
-            when (themeRepository.isLightMode()) {
+            when (presenceRepository.isLightMode()) {
                 true -> MaterialTheme.colors.primaryVariant
                 false -> MaterialTheme.colors.surface
             },

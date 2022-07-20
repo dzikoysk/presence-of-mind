@@ -1,46 +1,67 @@
 package net.dzikoysk.presenceofmind
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE
+import com.google.android.play.core.install.model.UpdateAvailability.UPDATE_AVAILABLE
 import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.data.attributes.*
 import net.dzikoysk.presenceofmind.data.category.CategoryService
 import net.dzikoysk.presenceofmind.data.category.SharedPreferencesCategoryRepository
+import net.dzikoysk.presenceofmind.data.presence.PresenceRepository
+import net.dzikoysk.presenceofmind.data.presence.SharedPreferencesPresenceRepository
 import net.dzikoysk.presenceofmind.data.task.SharedPreferencesTaskRepository
 import net.dzikoysk.presenceofmind.data.task.Task
 import net.dzikoysk.presenceofmind.data.task.TaskService
-import net.dzikoysk.presenceofmind.data.theme.SharedPreferencesThemeRepository
-import net.dzikoysk.presenceofmind.data.theme.ThemeRepository
 import net.dzikoysk.presenceofmind.pages.Page
 import net.dzikoysk.presenceofmind.pages.Router
 import kotlin.time.Duration.Companion.minutes
 
 const val DATA_VERSION = "v1.0.0-RC.5"
+const val UPDATE_CODE = 0xFADED
 
 class PresenceOfMindActivity : ComponentActivity() {
 
-    private lateinit var themeRepository: ThemeRepository
+    private lateinit var presenceRepository: PresenceRepository
     private lateinit var categoryService: CategoryService
     private lateinit var taskService: TaskService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.themeRepository = SharedPreferencesThemeRepository(
+        this.presenceRepository = SharedPreferencesPresenceRepository(
             sharedPreferences = getSharedPreferences(
                 "net.dzikoysk.presenceofmind.data.theme-repository",
-                Context.MODE_PRIVATE
+                MODE_PRIVATE
             ),
             version = DATA_VERSION
         )
 
-        setTheme(when (themeRepository.isLightMode()) {
+        setTheme(when (presenceRepository.isLightMode()) {
             true -> R.style.Theme_LightPresenceOfMind
             false -> R.style.Theme_DarkPresenceOfMind
         })
+
+        runCatching {
+            val appUpdateManager = AppUpdateManagerFactory.create(this.baseContext)
+            val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+            appUpdateInfoTask.addOnSuccessListener {
+                when {
+                    !it.isUpdateTypeAllowed(FLEXIBLE) -> return@addOnSuccessListener
+                    it.updateAvailability() != UPDATE_AVAILABLE -> return@addOnSuccessListener
+                    it.availableVersionCode() == presenceRepository.getLatestVersionCode() -> return@addOnSuccessListener
+                }
+                presenceRepository.setLatestVersionCode(it.availableVersionCode())
+                appUpdateManager.startUpdateFlowForResult(it, FLEXIBLE, this, UPDATE_CODE)
+            }
+        }
 
         this.categoryService = CategoryService(
             categoryRepository = SharedPreferencesCategoryRepository(
@@ -77,7 +98,7 @@ class PresenceOfMindActivity : ComponentActivity() {
             }
 
             Router(
-                themeRepository = themeRepository,
+                presenceRepository = presenceRepository,
                 taskService = taskService,
                 restartActivity = {
                     recreate()
@@ -85,6 +106,16 @@ class PresenceOfMindActivity : ComponentActivity() {
                 page = Page.DASHBOARD
             )
         }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == UPDATE_CODE) {
+            if (resultCode != RESULT_OK) {
+                Log.e("MY_APP", "Update flow failed! Result code: $resultCode")
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onStop() {

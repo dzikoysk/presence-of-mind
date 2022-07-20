@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.createDefaultTasks
 import net.dzikoysk.presenceofmind.data.task.MarkedAs
 import net.dzikoysk.presenceofmind.data.task.TaskService
-import net.dzikoysk.presenceofmind.data.theme.InMemoryThemeRepository
-import net.dzikoysk.presenceofmind.data.theme.ThemeRepository
+import net.dzikoysk.presenceofmind.data.presence.InMemoryPresenceRepository
+import net.dzikoysk.presenceofmind.data.presence.PresenceRepository
 import net.dzikoysk.presenceofmind.pages.dashboard.*
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.AnimatedEditorDrawer
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.TaskToEdit
@@ -25,7 +25,7 @@ import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskList
 @Composable
 fun DashboardPreview() {
     Dashboard(
-        themeRepository = InMemoryThemeRepository(),
+        presenceRepository = InMemoryPresenceRepository(),
         taskService = TaskService().also { it.createDefaultTasks() },
         restartActivity = {}
     )
@@ -33,7 +33,7 @@ fun DashboardPreview() {
 
 @Composable
 fun Dashboard(
-    themeRepository: ThemeRepository,
+    presenceRepository: PresenceRepository,
     taskService: TaskService,
     restartActivity: () -> Unit
 ) {
@@ -68,7 +68,7 @@ fun Dashboard(
                             horizontalArrangement = Arrangement.End
                         ) {
                             ChangeThemeButton(
-                                themeRepository = themeRepository,
+                                presenceRepository = presenceRepository,
                                 restartActivity = restartActivity
                             )
                             SwapTasksButton(
@@ -100,7 +100,7 @@ fun Dashboard(
         floatingActionButton = {
             if (openEditorDrawer.value == null) {
                 CreateTaskButton(
-                    themeRepository = themeRepository,
+                    presenceRepository = presenceRepository,
                     openTaskEditor = { openEditorDrawer.value = TaskToEdit(isNew = true) }
                 )
             }

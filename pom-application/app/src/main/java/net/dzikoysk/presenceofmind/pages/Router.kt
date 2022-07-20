@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import net.dzikoysk.presenceofmind.createDefaultTasks
 import net.dzikoysk.presenceofmind.data.task.TaskService
-import net.dzikoysk.presenceofmind.data.theme.InMemoryThemeRepository
-import net.dzikoysk.presenceofmind.data.theme.PresenceOfMindTheme
-import net.dzikoysk.presenceofmind.data.theme.ThemeRepository
+import net.dzikoysk.presenceofmind.data.presence.InMemoryPresenceRepository
+import net.dzikoysk.presenceofmind.data.presence.PresenceOfMindTheme
+import net.dzikoysk.presenceofmind.data.presence.PresenceRepository
 
 /** Redirects to other pages */
 
@@ -18,7 +18,7 @@ enum class Page {
 @Preview(showBackground = true)
 fun RouterPreview() {
     Router(
-        themeRepository = InMemoryThemeRepository(),
+        presenceRepository = InMemoryPresenceRepository(),
         taskService = TaskService().also { it.createDefaultTasks() },
         restartActivity = {},
         page = Page.DASHBOARD
@@ -27,16 +27,16 @@ fun RouterPreview() {
 
 @Composable
 fun Router(
-    themeRepository: ThemeRepository,
+    presenceRepository: PresenceRepository,
     taskService: TaskService,
     restartActivity: () -> Unit,
     page: Page
 ) {
-    PresenceOfMindTheme(lightTheme = themeRepository.isLightMode()) {
+    PresenceOfMindTheme(lightTheme = presenceRepository.isLightMode()) {
         when (page) {
             Page.DASHBOARD ->
                 Dashboard(
-                    themeRepository = themeRepository,
+                    presenceRepository = presenceRepository,
                     taskService = taskService,
                     restartActivity = restartActivity
                 )

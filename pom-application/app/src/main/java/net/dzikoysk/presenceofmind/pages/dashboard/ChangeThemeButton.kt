@@ -10,26 +10,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.data.theme.ThemeRepository
+import net.dzikoysk.presenceofmind.data.presence.PresenceRepository
 
 @Composable
 fun ChangeThemeButton(
-    themeRepository: ThemeRepository,
+    presenceRepository: PresenceRepository,
     restartActivity: () -> Unit
 ) {
     Box(Modifier.padding(horizontal = 16.dp)) {
         Icon(
             contentDescription = "Change color theme",
             painter = painterResource(
-                id = when (themeRepository.isLightMode()) {
+                id = when (presenceRepository.isLightMode()) {
                     true -> R.drawable.ic_baseline_dark_mode_24
                     false -> R.drawable.ic_baseline_light_mode_24
                 }
             ),
             modifier = Modifier
                 .clickable {
-                    themeRepository.setColorMode(
-                        isLightMode = themeRepository
+                    presenceRepository.setColorMode(
+                        isLightMode = presenceRepository
                             .isLightMode()
                             .not()
                     )
