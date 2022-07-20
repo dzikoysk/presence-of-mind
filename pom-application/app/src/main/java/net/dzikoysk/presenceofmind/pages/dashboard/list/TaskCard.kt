@@ -19,10 +19,10 @@ import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.SwipeState
 import net.dzikoysk.presenceofmind.components.SwipeableCard
 import net.dzikoysk.presenceofmind.components.drawTaskColorAccent
-import net.dzikoysk.presenceofmind.data.task.MarkedAs
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.getAccentColor
-import net.dzikoysk.presenceofmind.data.task.isDone
+import net.dzikoysk.presenceofmind.model.task.MarkedAs
+import net.dzikoysk.presenceofmind.model.task.Task
+import net.dzikoysk.presenceofmind.model.task.getAccentColor
+import net.dzikoysk.presenceofmind.model.task.isDone
 import org.burnoutcrew.reorderable.ReorderableLazyListState
 import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState

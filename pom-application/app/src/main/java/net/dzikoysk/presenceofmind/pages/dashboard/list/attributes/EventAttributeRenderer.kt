@@ -10,9 +10,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.components.scaledSp
-import net.dzikoysk.presenceofmind.data.attributes.EventAttribute
-import net.dzikoysk.presenceofmind.data.attributes.EventDateTime
-import net.dzikoysk.presenceofmind.data.attributes.toLocalDateTime
+import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.date.EventDateTime
+import net.dzikoysk.presenceofmind.model.task.attributes.date.toLocalDateTime
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.plural
 import java.time.Duration

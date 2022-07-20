@@ -10,11 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.data.attributes.ChecklistAttribute
-import net.dzikoysk.presenceofmind.data.attributes.ChecklistEntry
-import net.dzikoysk.presenceofmind.data.attributes.withUpdatedEntry
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.UpdateTask
+import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistEntry
+import net.dzikoysk.presenceofmind.model.task.attributes.withUpdatedEntry
+import net.dzikoysk.presenceofmind.model.task.Task
+import net.dzikoysk.presenceofmind.model.task.UpdateTask
 
 @Composable
 fun ChecklistAttributeRenderer(

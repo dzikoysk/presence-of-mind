@@ -1,6 +1,7 @@
-package net.dzikoysk.presenceofmind.data.attributes
+package net.dzikoysk.presenceofmind.model.task.attributes
 
 import androidx.compose.ui.graphics.Color
+import net.dzikoysk.presenceofmind.model.task.Attribute
 import java.time.DayOfWeek
 
 /**

@@ -7,10 +7,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.components.NamedDivider
 import net.dzikoysk.presenceofmind.createDefaultTasks
-import net.dzikoysk.presenceofmind.data.task.MarkedAs
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.TaskService
-import net.dzikoysk.presenceofmind.data.task.isDone
+import net.dzikoysk.presenceofmind.model.task.MarkedAs
+import net.dzikoysk.presenceofmind.model.task.Task
+import net.dzikoysk.presenceofmind.model.task.TaskService
+import net.dzikoysk.presenceofmind.model.task.isDone
 
 @Preview(showBackground = true)
 @Composable

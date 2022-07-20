@@ -1,25 +1,30 @@
-package net.dzikoysk.presenceofmind.data.task
+package net.dzikoysk.presenceofmind.model.task
 
 import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
+import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.date.MarkAsWatcher
 import net.dzikoysk.presenceofmind.shared.TimeProvider
-import net.dzikoysk.presenceofmind.data.attributes.RepetitiveAttribute
 import org.junit.Test
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.ZoneId
 import kotlin.time.Duration.Companion.days
 
-class TaskServiceTest {
+class MarkAsWatcherTest {
 
     private val firstDayOfWeekEver = Instant.ofEpochMilli(0).atZone(ZoneId.systemDefault()).dayOfWeek
     private val weekLater = Instant.ofEpochMilli(7.days.inWholeMilliseconds)
 
     private val taskService = TaskService(
-        timeProvider = object : TimeProvider {
-            override fun now(): Instant = weekLater
-        },
-        taskRepository = InMemoryTaskRepository()
+        taskRepository = InMemoryTaskRepository(),
+        watchers = listOf(
+            MarkAsWatcher(
+                timeProvider = object : TimeProvider {
+                    override fun now(): Instant = weekLater
+                }
+            )
+        )
     )
 
     @Test

@@ -17,9 +17,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.data.task.DeleteTask
-import net.dzikoysk.presenceofmind.data.task.SaveTask
-import net.dzikoysk.presenceofmind.data.task.Task
+import net.dzikoysk.presenceofmind.model.task.DeleteTask
+import net.dzikoysk.presenceofmind.model.task.SaveTask
+import net.dzikoysk.presenceofmind.model.task.Task
 
 data class TaskToEdit(
     val isNew: Boolean,

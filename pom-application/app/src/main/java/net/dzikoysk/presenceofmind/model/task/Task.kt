@@ -1,8 +1,13 @@
-package net.dzikoysk.presenceofmind.data.task
+package net.dzikoysk.presenceofmind.model.task
 
 import androidx.compose.ui.graphics.Color
-import net.dzikoysk.presenceofmind.data.attributes.*
+import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.PomodoroAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.reminder.ReminderAttribute
 import java.io.Serializable
+import java.time.ZonedDateTime
 import java.util.UUID
 
 data class Task(
@@ -17,6 +22,7 @@ data class Task(
     val eventAttribute: EventAttribute? = null,
     val repetitiveAttribute: RepetitiveAttribute? = null,
     val pomodoroAttribute: PomodoroAttribute? = null,
+    val reminderAttribute: ReminderAttribute? = null,
 ) : Serializable
 
 val Task.attributes: Collection<Attribute>
@@ -24,17 +30,20 @@ val Task.attributes: Collection<Attribute>
         checklistAttribute,
         eventAttribute,
         repetitiveAttribute,
-        pomodoroAttribute
+        pomodoroAttribute,
+        reminderAttribute
     )
 
-inline fun <reified A : Attribute> Task.getAttribute(): A? =
-    attributes.find { it is A } as A?
+fun Task.getTriggerDate(): ZonedDateTime? =
+    attributes.asSequence()
+        .sortedBy { it.getPriority() }
+        .firstNotNullOfOrNull { it.getTriggerDate() }
 
 fun Task.getAccentColor(): Color =
-    attributes
+    attributes.asSequence()
         .sortedBy { it.getPriority() }
         .firstNotNullOfOrNull { it.getDefaultAccentColor() }
-        ?: Color(0xFFC3EEFF)
+        ?: DEFAULT_COLOR
 
 fun Task.isConcealable(): Boolean =
     attributes.any { it.isConcealable() }

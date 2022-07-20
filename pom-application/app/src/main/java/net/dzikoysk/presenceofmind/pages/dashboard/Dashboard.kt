@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.createDefaultTasks
-import net.dzikoysk.presenceofmind.data.task.MarkedAs
-import net.dzikoysk.presenceofmind.data.task.TaskService
-import net.dzikoysk.presenceofmind.data.presence.InMemoryPresenceRepository
-import net.dzikoysk.presenceofmind.data.presence.PresenceRepository
+import net.dzikoysk.presenceofmind.model.presence.InMemoryPresenceRepository
+import net.dzikoysk.presenceofmind.model.presence.PresenceRepository
+import net.dzikoysk.presenceofmind.model.task.MarkedAs
+import net.dzikoysk.presenceofmind.model.task.TaskService
 import net.dzikoysk.presenceofmind.pages.dashboard.*
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.AnimatedEditorDrawer
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.TaskToEdit

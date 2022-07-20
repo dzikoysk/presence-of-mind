@@ -1,7 +1,9 @@
-package net.dzikoysk.presenceofmind.data.attributes
+package net.dzikoysk.presenceofmind.model.task.attributes
 
 import androidx.annotation.CheckResult
 import androidx.compose.ui.graphics.Color
+import net.dzikoysk.presenceofmind.model.task.Attribute
+import net.dzikoysk.presenceofmind.model.task.Priority
 import kotlin.time.Duration.Companion.milliseconds
 
 data class PomodoroAttribute(

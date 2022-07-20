@@ -1,6 +1,5 @@
 package net.dzikoysk.presenceofmind
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,14 +10,6 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE
 import com.google.android.play.core.install.model.UpdateAvailability.UPDATE_AVAILABLE
 import kotlinx.coroutines.delay
-import net.dzikoysk.presenceofmind.data.attributes.*
-import net.dzikoysk.presenceofmind.data.category.CategoryService
-import net.dzikoysk.presenceofmind.data.category.SharedPreferencesCategoryRepository
-import net.dzikoysk.presenceofmind.data.presence.PresenceRepository
-import net.dzikoysk.presenceofmind.data.presence.SharedPreferencesPresenceRepository
-import net.dzikoysk.presenceofmind.data.task.SharedPreferencesTaskRepository
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.TaskService
 import net.dzikoysk.presenceofmind.pages.Page
 import net.dzikoysk.presenceofmind.pages.Router
 import kotlin.time.Duration.Companion.minutes
@@ -28,22 +19,11 @@ const val UPDATE_CODE = 0xFADED
 
 class PresenceOfMindActivity : ComponentActivity() {
 
-    private lateinit var presenceRepository: PresenceRepository
-    private lateinit var categoryService: CategoryService
-    private lateinit var taskService: TaskService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val presenceOfMind = PresenceOfMind.getInstance(this)
 
-        this.presenceRepository = SharedPreferencesPresenceRepository(
-            sharedPreferences = getSharedPreferences(
-                "net.dzikoysk.presenceofmind.data.theme-repository",
-                MODE_PRIVATE
-            ),
-            version = DATA_VERSION
-        )
-
-        setTheme(when (presenceRepository.isLightMode()) {
+        setTheme(when (presenceOfMind.presenceRepository.isLightMode()) {
             true -> R.style.Theme_LightPresenceOfMind
             false -> R.style.Theme_DarkPresenceOfMind
         })
@@ -56,50 +36,24 @@ class PresenceOfMindActivity : ComponentActivity() {
                 when {
                     !it.isUpdateTypeAllowed(FLEXIBLE) -> return@addOnSuccessListener
                     it.updateAvailability() != UPDATE_AVAILABLE -> return@addOnSuccessListener
-                    it.availableVersionCode() == presenceRepository.getLatestVersionCode() -> return@addOnSuccessListener
+                    it.availableVersionCode() == presenceOfMind.presenceRepository.getLatestVersionCode() -> return@addOnSuccessListener
                 }
-                presenceRepository.setLatestVersionCode(it.availableVersionCode())
+                presenceOfMind.presenceRepository.setLatestVersionCode(it.availableVersionCode())
                 appUpdateManager.startUpdateFlowForResult(it, FLEXIBLE, this, UPDATE_CODE)
             }
-        }
-
-        this.categoryService = CategoryService(
-            categoryRepository = SharedPreferencesCategoryRepository(
-                sharedPreferences = getSharedPreferences(
-                    "net.dzikoysk.presenceofmind.category-repository",
-                    Context.MODE_PRIVATE
-                ),
-                version = DATA_VERSION
-            )
-        )
-
-        this.taskService = TaskService(
-            taskRepository = SharedPreferencesTaskRepository(
-                sharedPreferences = getSharedPreferences(
-                    "net.dzikoysk.presenceofmind.task-repository",
-                    Context.MODE_PRIVATE
-                ),
-                version = DATA_VERSION
-            )
-        )
-
-        taskService.refreshTasksState()
-
-        if (taskService.findAllTasks().isEmpty()) {
-            taskService.createDefaultTasks()
         }
 
         setContent {
             LaunchedEffect(Unit) {
                 while(true) {
                     delay(1.minutes)
-                    taskService.refreshTasksState()
+                    presenceOfMind.taskService.refreshTasksState()
                 }
             }
 
             Router(
-                presenceRepository = presenceRepository,
-                taskService = taskService,
+                presenceRepository = presenceOfMind.presenceRepository,
+                taskService = presenceOfMind.taskService,
                 restartActivity = {
                     recreate()
                 },
@@ -119,58 +73,8 @@ class PresenceOfMindActivity : ComponentActivity() {
     }
 
     override fun onStop() {
-        taskService.forceTasksSave(sync = true)
+        PresenceOfMind.getInstance(this).taskService.forceTasksSave(sync = true)
         super.onStop()
     }
 
-}
-
-fun TaskService.createDefaultTasks() {
-    saveTask(
-        Task(description = "**Long-term** task")
-    )
-    saveTask(
-        Task(
-            description = "**Event** task",
-            eventAttribute = EventAttribute()
-        )
-    )
-    saveTask(
-        Task(
-            description = "**Habit** task",
-            repetitiveAttribute = RepetitiveAttribute(
-                intervalInDays = 1,
-            )
-        )
-    )
-    saveTask(
-        Task(
-            description = "**Pomodoro** task",
-            pomodoroAttribute = PomodoroAttribute(
-                expectedAttentionInMinutes = 75
-            )
-        )
-    )
-    saveTask(
-        Task(
-            description = "**Checklist** task",
-            checklistAttribute = ChecklistAttribute(
-                list = listOf(ChecklistEntry(description = "Done", done = true))
-            )
-        )
-    )
-    saveTask(
-        Task(
-            description = "**All-in-one** task",
-            eventAttribute = EventAttribute(EventDateTime.now().copy(year = 2023)),
-            repetitiveAttribute = RepetitiveAttribute(intervalInDays = 1),
-            pomodoroAttribute = PomodoroAttribute(90),
-            checklistAttribute = ChecklistAttribute(
-                list = listOf(
-                    ChecklistEntry(description = "https://github.com/dzikoysk/presence-of-mind"),
-                    ChecklistEntry(description = "Done", done = true),
-                )
-            )
-        )
-    )
 }

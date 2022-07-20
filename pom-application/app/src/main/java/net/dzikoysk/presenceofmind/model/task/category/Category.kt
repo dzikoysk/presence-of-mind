@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.data.category
+package net.dzikoysk.presenceofmind.model.task.category
 
 import java.util.UUID
 

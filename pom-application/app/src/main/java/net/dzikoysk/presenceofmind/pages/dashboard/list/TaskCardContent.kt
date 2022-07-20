@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.R
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.isConcealable
-import net.dzikoysk.presenceofmind.data.task.isOpen
+import net.dzikoysk.presenceofmind.model.task.Task
+import net.dzikoysk.presenceofmind.model.task.isConcealable
+import net.dzikoysk.presenceofmind.model.task.isOpen
 import net.dzikoysk.presenceofmind.pages.dashboard.list.attributes.*
 
 @Composable

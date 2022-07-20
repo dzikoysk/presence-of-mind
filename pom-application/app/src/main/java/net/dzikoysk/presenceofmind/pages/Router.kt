@@ -3,10 +3,10 @@ package net.dzikoysk.presenceofmind.pages
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import net.dzikoysk.presenceofmind.createDefaultTasks
-import net.dzikoysk.presenceofmind.data.task.TaskService
-import net.dzikoysk.presenceofmind.data.presence.InMemoryPresenceRepository
-import net.dzikoysk.presenceofmind.data.presence.PresenceOfMindTheme
-import net.dzikoysk.presenceofmind.data.presence.PresenceRepository
+import net.dzikoysk.presenceofmind.model.presence.InMemoryPresenceRepository
+import net.dzikoysk.presenceofmind.model.presence.PresenceOfMindTheme
+import net.dzikoysk.presenceofmind.model.presence.PresenceRepository
+import net.dzikoysk.presenceofmind.model.task.TaskService
 
 /** Redirects to other pages */
 

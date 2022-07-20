@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.data.task
+package net.dzikoysk.presenceofmind.model.task
 
 import android.content.SharedPreferences
 import androidx.core.content.edit

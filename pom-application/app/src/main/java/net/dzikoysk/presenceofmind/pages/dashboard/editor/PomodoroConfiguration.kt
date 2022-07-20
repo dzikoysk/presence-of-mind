@@ -16,9 +16,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.UpdateTask
-import net.dzikoysk.presenceofmind.data.attributes.PomodoroAttribute
+import net.dzikoysk.presenceofmind.model.task.Task
+import net.dzikoysk.presenceofmind.model.task.UpdateTask
+import net.dzikoysk.presenceofmind.model.task.attributes.PomodoroAttribute
 
 @Preview(showBackground = true)
 @Composable

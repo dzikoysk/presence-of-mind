@@ -1,6 +1,8 @@
-package net.dzikoysk.presenceofmind.data.attributes
+package net.dzikoysk.presenceofmind.model.task.attributes.date
 
 import androidx.compose.ui.graphics.Color
+import net.dzikoysk.presenceofmind.model.task.Attribute
+import net.dzikoysk.presenceofmind.model.task.Priority
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId

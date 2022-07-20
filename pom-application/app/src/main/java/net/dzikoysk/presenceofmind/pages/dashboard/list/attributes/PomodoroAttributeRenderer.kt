@@ -16,10 +16,10 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.R
 import net.dzikoysk.presenceofmind.components.scaledSp
-import net.dzikoysk.presenceofmind.data.attributes.*
-import net.dzikoysk.presenceofmind.data.task.MarkedAs
-import net.dzikoysk.presenceofmind.data.task.Task
-import net.dzikoysk.presenceofmind.data.task.UpdateTask
+import net.dzikoysk.presenceofmind.model.task.attributes.*
+import net.dzikoysk.presenceofmind.model.task.MarkedAs
+import net.dzikoysk.presenceofmind.model.task.Task
+import net.dzikoysk.presenceofmind.model.task.UpdateTask
 import net.dzikoysk.presenceofmind.pages.dashboard.list.SubscribeToOnDone
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.timeToHumanReadableFormat

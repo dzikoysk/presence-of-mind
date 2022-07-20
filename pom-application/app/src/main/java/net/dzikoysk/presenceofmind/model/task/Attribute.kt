@@ -1,11 +1,16 @@
-package net.dzikoysk.presenceofmind.data.attributes
+package net.dzikoysk.presenceofmind.model.task
 
 import androidx.compose.ui.graphics.Color
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.time.ZonedDateTime
 
 /** Higher means lower priority */
 typealias Priority = Int
 
+/** Default color of task */
+val DEFAULT_COLOR = Color(0xFFC3EEFF)
+
+/** Represents task extension */
 interface Attribute {
 
     @JsonIgnore
@@ -17,10 +22,15 @@ interface Attribute {
         false
 
     @JsonIgnore
+    fun getTriggerDate(): ZonedDateTime? =
+        null
+
+    @JsonIgnore
     fun getPriority(): Priority
 
     @JsonIgnore
-    fun getDefaultAccentColor(): Color
+    fun getDefaultAccentColor(): Color =
+        DEFAULT_COLOR
 
     @JsonIgnore
     fun getName(): String
