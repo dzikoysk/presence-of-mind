@@ -9,7 +9,9 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.PRIORITY_MAX
 import net.dzikoysk.presenceofmind.PresenceOfMind
 import net.dzikoysk.presenceofmind.PresenceOfMindActivity
 import net.dzikoysk.presenceofmind.R
@@ -23,6 +25,7 @@ import java.util.UUID
 const val CHANNEL_ID = "pom-event-alarm-receiver"
 const val EVENT_TASK_EXTRA_ID = "pom-event-task-id"
 const val EVENT_TASK_REMINDER_TIME = "pom-event-task-reminder-time"
+val DEFAULT_VIBRATE_PATTERN = longArrayOf(0, 250, 250, 250)
 
 class AlarmReceiver(private val timeProvider: TimeProvider = DefaultTimeProvider()) : BroadcastReceiver() {
 
@@ -55,6 +58,10 @@ class AlarmReceiver(private val timeProvider: TimeProvider = DefaultTimeProvider
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(task.description)
             .setContentText("In " + eventAttribute.getHumanReadableInterval())
+            .setVibrate(DEFAULT_VIBRATE_PATTERN)
+            .setColor(Color.RED)
+            .setLights(Color.RED, 1000, 1000)
+            .setPriority(PRIORITY_MAX)
             .setAutoCancel(true)
 
         val presenceOfMindActivity = Intent(context, PresenceOfMindActivity::class.java)

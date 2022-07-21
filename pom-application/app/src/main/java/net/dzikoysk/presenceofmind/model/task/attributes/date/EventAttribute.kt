@@ -66,6 +66,4 @@ fun EventAttribute.hasOutdatedSchedule(now: Instant): Boolean =
     reminder?.hasOutdatedSchedule(now) ?: false
 
 fun EventDateTime.toLocalDateTime(): ZonedDateTime =
-    LocalDateTime.of(year, month, day, hour, minute)
-        .atZone(ZoneOffset.UTC)
-        .withZoneSameInstant(ZoneId.systemDefault())
+    LocalDateTime.of(year, month, day, hour, minute).atZone(ZoneId.systemDefault())
