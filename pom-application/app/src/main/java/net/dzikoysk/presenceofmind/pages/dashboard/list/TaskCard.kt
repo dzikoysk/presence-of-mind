@@ -85,7 +85,6 @@ fun TaskCard(
                             }
 
                             context.updateTask(updatedTask)
-                            println(updatedTask)
                             swipeContext.snapTo(SwipeState.CONTENT)
 
                             SweetSuccess(

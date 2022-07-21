@@ -37,10 +37,6 @@ class MarkAsWatcherTest {
             )
         )
         taskService.saveTask(task)
-        assertTrue(taskService.findTaskById(task.id)!!.isDone())
-
-        // when: task state is refreshed
-        taskService.refreshTasksState()
 
         // then: task should be marked as unfinished
         assertFalse(taskService.findTaskById(task.id)!!.isDone())
@@ -56,10 +52,6 @@ class MarkAsWatcherTest {
             )
         )
         taskService.saveTask(task)
-        assertTrue(taskService.findTaskById(task.id)!!.isDone())
-
-        // when: task state is refreshed
-        taskService.refreshTasksState()
 
         // then: task should be marked as unfinished
         assertFalse(taskService.findTaskById(task.id)!!.isDone())
@@ -74,10 +66,6 @@ class MarkAsWatcherTest {
             )
         )
         taskService.saveTask(task)
-        assertFalse(taskService.findTaskById(task.id)!!.isDone())
-
-        // when: task state is refreshed
-        taskService.refreshTasksState()
 
         // then: task should be marked as finished
         assertTrue(taskService.findTaskById(task.id)!!.isDone())

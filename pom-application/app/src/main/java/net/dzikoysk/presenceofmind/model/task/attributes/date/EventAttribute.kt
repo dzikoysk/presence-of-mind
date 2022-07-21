@@ -36,17 +36,16 @@ data class EventDateTime(
     val minute: Int,
 ) {
 
+    constructor(dateTime: ZonedDateTime) : this(
+        year = dateTime.year,
+        month = dateTime.monthValue,
+        day = dateTime.dayOfMonth,
+        hour = dateTime.hour,
+        minute = dateTime.minute
+    )
+
     companion object {
-        fun now(): EventDateTime =
-            ZonedDateTime.now().run {
-                EventDateTime(
-                    year = year,
-                    month = monthValue,
-                    day = dayOfMonth,
-                    hour = hour,
-                    minute = minute
-                )
-            }
+        fun now(): EventDateTime = EventDateTime(ZonedDateTime.now())
     }
 
 }
@@ -68,4 +67,5 @@ fun EventAttribute.hasOutdatedSchedule(now: Instant): Boolean =
 
 fun EventDateTime.toLocalDateTime(): ZonedDateTime =
     LocalDateTime.of(year, month, day, hour, minute)
-        .atZone(ZoneId.systemDefault())
+        .atZone(ZoneOffset.UTC)
+        .withZoneSameInstant(ZoneId.systemDefault())

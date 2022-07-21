@@ -4,21 +4,22 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Checkbox
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import net.dzikoysk.presenceofmind.components.NumberField
 import net.dzikoysk.presenceofmind.model.task.Task
 import net.dzikoysk.presenceofmind.model.task.UpdateTask
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.toLocalDateTime
+import net.dzikoysk.presenceofmind.model.task.reminder.Reminder
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -91,5 +92,39 @@ fun EventConfiguration(
                 .height(58.dp)
                 .clickable { timePickerDialog.show() }
         )
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = eventAttribute.reminder != null,
+                onCheckedChange = {
+                    updateTask(task.copy(
+                        eventAttribute = eventAttribute.copy(
+                            reminder = when (eventAttribute.reminder) {
+                                null -> Reminder()
+                                else -> null
+                            }
+                        )
+                    ))
+                }
+            )
+            Text(text = "Enable reminder")
+        }
+
+        if (eventAttribute.reminder != null) {
+            val reminder = eventAttribute.reminder
+
+            NumberField(
+                description = "Interval in minutes until the reminder is sent",
+                value = reminder.beforeInMinutes,
+                onValueChange = { updateTask(task.copy(
+                    eventAttribute = eventAttribute.copy(
+                        reminder = reminder.copy(
+                            beforeInMinutes = it,
+                            scheduledAt = null
+                        )
+                    )
+                ))}
+            )
+        }
     }
 }

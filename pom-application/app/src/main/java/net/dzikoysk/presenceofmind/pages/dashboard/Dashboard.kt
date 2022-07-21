@@ -91,7 +91,10 @@ fun Dashboard(
                 AnimatedEditorDrawer(
                     open = openEditorDrawer.value != null,
                     close = { openEditorDrawer.value = null },
-                    saveTask = { taskService.saveTask(it) },
+                    saveTask = {
+                        taskService.saveTask(it)
+                        taskService.refreshTasksState()
+                    },
                     deleteTask = { taskService.deleteTask(it.id) },
                     taskToEdit = openEditorDrawer.value ?: TaskToEdit(isNew = true)
                 )

@@ -18,7 +18,4 @@ class DefaultTimeProvider : TimeProvider {
     override fun now(): Instant =
         Instant.now()
 
-    override fun nowAtDefaultZone(): ZonedDateTime =
-        ZonedDateTime.now()
-
 }

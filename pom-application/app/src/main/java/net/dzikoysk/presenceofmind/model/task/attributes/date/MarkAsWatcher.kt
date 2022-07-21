@@ -14,12 +14,14 @@ import java.time.temporal.ChronoUnit
 class MarkAsWatcher(private val timeProvider: TimeProvider = DefaultTimeProvider()) : Watcher {
 
     override fun onRefresh(taskService: TaskService) {
-        // marks tasks as unfinished
+        // marks repetitive tasks as unfinished
         taskService.findAllTasks().asSequence()
             .filter { it.isDone() }
             .filter { it.repetitiveAttribute != null }
             .filter { checkIfTaskIsDoneByRepetitiveAttribute(it, it.repetitiveAttribute!!) }
-            .forEach { taskService.saveTask(it.copy(doneDate = null)) }
+            .map { it.copy(doneDate = null) }
+            .toList()
+            .let { taskService.saveTasks(it) }
 
         // marks repetitive tasks as finished
         taskService.findAllTasks().asSequence()
@@ -31,13 +33,17 @@ class MarkAsWatcher(private val timeProvider: TimeProvider = DefaultTimeProvider
                     else -> false
                 }
             }
-            .forEach { taskService.saveTask(it.copy(doneDate = timeProvider.now().toEpochMilli())) }
+            .map { it.copy(doneDate = timeProvider.now().toEpochMilli()) }
+            .toList()
+            .let { taskService.saveTasks(it) }
 
         // mark event tasks as finished
         taskService.findAllTasks().asSequence()
             .filterNot { it.isDone() }
             .filter { it.eventAttribute != null && it.eventAttribute.eventDate.toLocalDateTime().isBefore(timeProvider.nowAtDefaultZone()) }
-            .forEach { taskService.saveTask(it.copy(doneDate = timeProvider.now().toEpochMilli())) }
+            .map { it.copy(doneDate = timeProvider.now().toEpochMilli()) }
+            .toList()
+            .let { taskService.saveTasks(it) }
     }
 
     private fun checkIfTaskIsDoneByRepetitiveAttribute(task: Task, repetitiveAttribute: RepetitiveAttribute): Boolean {

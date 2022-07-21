@@ -17,10 +17,12 @@ import net.dzikoysk.presenceofmind.model.task.attributes.date.getHumanReadableIn
 import net.dzikoysk.presenceofmind.model.task.attributes.date.toLocalDateTime
 import net.dzikoysk.presenceofmind.shared.DefaultTimeProvider
 import net.dzikoysk.presenceofmind.shared.TimeProvider
+import java.time.Instant
 import java.util.UUID
 
 const val CHANNEL_ID = "pom-event-alarm-receiver"
 const val EVENT_TASK_EXTRA_ID = "pom-event-task-id"
+const val EVENT_TASK_REMINDER_TIME = "pom-event-task-reminder-time"
 
 class AlarmReceiver(private val timeProvider: TimeProvider = DefaultTimeProvider()) : BroadcastReceiver() {
 
@@ -33,9 +35,18 @@ class AlarmReceiver(private val timeProvider: TimeProvider = DefaultTimeProvider
             ?.takeIf { it.eventAttribute != null }
             ?: return
 
-        if (task.eventAttribute!!.eventDate.toLocalDateTime().isBefore(timeProvider.nowAtDefaultZone())) {
-            return
-        }
+        val eventAttribute = task.eventAttribute
+            ?.takeIf { it.reminder?.scheduledAt == Instant.ofEpochMilli(intent.getLongExtra(EVENT_TASK_REMINDER_TIME, 0)) }
+            ?.takeUnless { it.eventDate.toLocalDateTime().isBefore(timeProvider.nowAtDefaultZone()) }
+            ?: return
+
+        presenceOfMind.taskService.saveTask(task.copy(
+            eventAttribute = eventAttribute.copy(
+                reminder = eventAttribute.reminder!!.copy(
+                    scheduledAt = null
+                )
+            )
+        ))
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = notificationManager.findChannel()
@@ -43,7 +54,7 @@ class AlarmReceiver(private val timeProvider: TimeProvider = DefaultTimeProvider
         val notificationBuilder = NotificationCompat.Builder(context, channel.id)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(task.description)
-            .setContentText("In " + task.eventAttribute.getHumanReadableInterval())
+            .setContentText("In " + eventAttribute.getHumanReadableInterval())
             .setAutoCancel(true)
 
         val presenceOfMindActivity = Intent(context, PresenceOfMindActivity::class.java)

@@ -43,6 +43,8 @@ class PresenceOfMindActivity : ComponentActivity() {
             }
         }
 
+        presenceOfMind.taskService.refreshTasksState()
+
         setContent {
             LaunchedEffect(Unit) {
                 while(true) {
@@ -73,7 +75,7 @@ class PresenceOfMindActivity : ComponentActivity() {
     }
 
     override fun onStop() {
-        PresenceOfMind.getInstance(this).taskService.forceSave(sync = true)
+        PresenceOfMind.getInstance(this).taskService.refreshTasksState()
         super.onStop()
     }
 

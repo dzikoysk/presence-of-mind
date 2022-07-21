@@ -27,6 +27,7 @@ import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.PomodoroAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.date.EventDateTime
 
 @Preview(showBackground = true)
 @Composable
@@ -135,7 +136,13 @@ fun MainMenu(
                 attribute = task.eventAttribute,
                 attributeDefaultInstance = EventAttribute(),
                 attributeName = "event",
-                onEnable = { updateTask(task.copy(eventAttribute = EventAttribute())) },
+                onEnable = {
+                    updateTask(task.copy(
+                        eventAttribute = EventAttribute(
+                            eventDate = EventDateTime.now()
+                        )
+                    ))
+                },
                 onDisable = { updateTask(task.copy(eventAttribute = null)) }
             ) {
                 EventConfiguration(

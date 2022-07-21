@@ -24,51 +24,56 @@ class ReminderWatcher(
         // cleanup old reminders
         taskService.findAllTasks().asSequence()
             .filter { task -> task.eventAttribute?.hasOutdatedSchedule(timeProvider.now()) ?: false }
-            .forEach {
-                taskService.saveTask(it.copy(
+            .map {
+                it.copy(
                     eventAttribute = it.eventAttribute!!.copy(
                         reminder = it.eventAttribute.reminder!!.copy(
                             scheduledAt = null
                         )
                     )
-                ))
+                )
             }
+            .toList()
+            .let { taskService.saveTasks(it) }
 
         // schedule new alarms for event attributes
         taskService.findAllTasks().asSequence()
             .filterNot { it.isDone() }
             .filter { it.eventAttribute?.reminder != null && it.eventAttribute.reminder.scheduledAt == null }
-            .forEach {
+            .map {
                 val eventAttribute = it.eventAttribute!!
                 val reminder = eventAttribute.reminder!!
 
-                val currentDateTime = timeProvider.nowAtDefaultZone()
-                    .toLocalDate()
-                    .atStartOfDay()
-
-                val notificationDateTime = it.eventAttribute.eventDate
+                val notificationDateTime = eventAttribute.eventDate
                     .toLocalDateTime()
-                    .minus(reminder.beforeInMillis, ChronoUnit.MILLIS)
+                    // add extra minute, because we don't have guarantee of execution
+                    // at the exact time in millis we've requested from alarm manager
+                    .minus(reminder.beforeInMinutes + 1L, ChronoUnit.MINUTES)
+                    .takeIf { date -> date.isAfter(timeProvider.nowAtDefaultZone()) }
+                    ?: return@map it
 
                 createNotification(
                     task = it,
                     ring = reminder.ring,
-                    triggerAtMillis = ChronoUnit.MILLIS.between(currentDateTime, notificationDateTime)
+                    triggerAtMillis = notificationDateTime.toInstant().toEpochMilli()
                 )
 
-                taskService.saveTask(it.copy(
+                it.copy(
                     eventAttribute = eventAttribute.copy(
                         reminder = reminder.copy(
                             scheduledAt = notificationDateTime.toInstant()
                         )
                     )
-                ))
+                )
             }
+            .toList()
+            .let { taskService.saveTasks(it) }
     }
 
     private fun createNotification(task: Task, ring: Boolean, triggerAtMillis: Long) {
         val intent = Intent(context, AlarmReceiver::class.java)
         intent.putExtra(EVENT_TASK_EXTRA_ID, task.id.toString())
+        intent.putExtra(EVENT_TASK_REMINDER_TIME, triggerAtMillis)
         val pendingIntent = PendingIntent.getBroadcast(context, task.id.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
         alarmManager?.setExactAndAllowWhileIdle(RTC_WAKEUP, triggerAtMillis, pendingIntent)

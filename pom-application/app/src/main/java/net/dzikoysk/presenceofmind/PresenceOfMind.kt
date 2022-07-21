@@ -69,8 +69,6 @@ private object PresenceOfMindFactory {
             )
         )
 
-        taskService.refreshTasksState()
-
         if (taskService.findAllTasks().isEmpty()) {
             taskService.createDefaultTasks()
         }
