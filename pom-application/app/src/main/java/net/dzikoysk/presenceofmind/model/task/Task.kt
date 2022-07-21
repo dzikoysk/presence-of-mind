@@ -5,9 +5,7 @@ import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.PomodoroAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
-import net.dzikoysk.presenceofmind.model.task.attributes.reminder.ReminderAttribute
 import java.io.Serializable
-import java.time.ZonedDateTime
 import java.util.UUID
 
 data class Task(
@@ -22,7 +20,6 @@ data class Task(
     val eventAttribute: EventAttribute? = null,
     val repetitiveAttribute: RepetitiveAttribute? = null,
     val pomodoroAttribute: PomodoroAttribute? = null,
-    val reminderAttribute: ReminderAttribute? = null,
 ) : Serializable
 
 val Task.attributes: Collection<Attribute>
@@ -30,14 +27,8 @@ val Task.attributes: Collection<Attribute>
         checklistAttribute,
         eventAttribute,
         repetitiveAttribute,
-        pomodoroAttribute,
-        reminderAttribute
+        pomodoroAttribute
     )
-
-fun Task.getTriggerDate(): ZonedDateTime? =
-    attributes.asSequence()
-        .sortedBy { it.getPriority() }
-        .firstNotNullOfOrNull { it.getTriggerDate() }
 
 fun Task.getAccentColor(): Color =
     attributes.asSequence()

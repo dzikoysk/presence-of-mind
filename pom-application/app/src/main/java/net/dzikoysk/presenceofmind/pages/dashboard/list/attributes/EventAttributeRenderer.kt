@@ -3,22 +3,20 @@ package net.dzikoysk.presenceofmind.pages.dashboard.list.attributes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.components.scaledSp
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventDateTime
+import net.dzikoysk.presenceofmind.model.task.attributes.date.getHumanReadableInterval
 import net.dzikoysk.presenceofmind.model.task.attributes.date.toLocalDateTime
-import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
-import net.dzikoysk.presenceofmind.shared.plural
-import java.time.Duration
-import java.time.Instant
+import net.dzikoysk.presenceofmind.shared.OUTDATED
 import java.time.format.DateTimeFormatter
-import kotlin.time.toKotlinDuration
+import kotlin.time.Duration.Companion.seconds
 
 @Preview(showBackground = true)
 @Composable
@@ -41,18 +39,24 @@ fun EventAttributeRenderer(eventAttribute: EventAttribute) {
     val eventDateFormatter = remember { DateTimeFormatter.ofPattern("dd.MM HH:mm") }
     val eventDateTime = eventAttribute.eventDate.toLocalDateTime()
 
-    val interval = Duration.between(Instant.now(), eventDateTime)
-        .toKotlinDuration()
-        .let {
-            when (it.inWholeDays) {
-                0L -> it.incomingDurationToHumanReadableFormat()
-                else -> plural(it.inWholeDays, "day")
-            }
+    var countdownWatcher by remember { mutableStateOf(0) }
+    val interval = countdownWatcher.run {
+        eventAttribute.getHumanReadableInterval()
+            .takeUnless { it == OUTDATED }
+            ?.let { "in $it" }
+            ?: OUTDATED.lowercase()
+    }
+
+    LaunchedEffect(Unit) {
+        while(true) {
+            countdownWatcher++
+            delay(1.seconds)
         }
+    }
 
     Column(Modifier.padding(start = 16.dp)) {
         Text(
-            text = "${eventDateFormatter.format(eventDateTime)}, in $interval",
+            text = "${eventDateFormatter.format(eventDateTime)}, $interval",
             fontSize = 10.scaledSp(),
             color = Color.Gray,
             modifier = Modifier.padding(top = 2.dp)

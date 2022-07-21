@@ -13,7 +13,7 @@ import java.time.temporal.ChronoUnit
 
 class MarkAsWatcher(private val timeProvider: TimeProvider = DefaultTimeProvider()) : Watcher {
 
-    override fun refresh(taskService: TaskService) {
+    override fun onRefresh(taskService: TaskService) {
         // marks tasks as unfinished
         taskService.findAllTasks().asSequence()
             .filter { it.isDone() }
@@ -21,7 +21,7 @@ class MarkAsWatcher(private val timeProvider: TimeProvider = DefaultTimeProvider
             .filter { checkIfTaskIsDoneByRepetitiveAttribute(it, it.repetitiveAttribute!!) }
             .forEach { taskService.saveTask(it.copy(doneDate = null)) }
 
-        // marks tasks as finished
+        // marks repetitive tasks as finished
         taskService.findAllTasks().asSequence()
             .filterNot { it.isDone() }
             .filter { it.repetitiveAttribute != null }
@@ -32,6 +32,12 @@ class MarkAsWatcher(private val timeProvider: TimeProvider = DefaultTimeProvider
                 }
             }
             .forEach { taskService.saveTask(it.copy(doneDate = timeProvider.now().toEpochMilli())) }
+
+        // mark event tasks as finished
+        taskService.findAllTasks().asSequence()
+            .filterNot { it.isDone() }
+            .filter { it.eventAttribute != null && it.eventAttribute.eventDate.toLocalDateTime().isBefore(timeProvider.nowAtDefaultZone()) }
+            .forEach { taskService.saveTask(it.copy(doneDate = timeProvider.now().toEpochMilli())) }
     }
 
     private fun checkIfTaskIsDoneByRepetitiveAttribute(task: Task, repetitiveAttribute: RepetitiveAttribute): Boolean {
@@ -39,12 +45,9 @@ class MarkAsWatcher(private val timeProvider: TimeProvider = DefaultTimeProvider
         val currentDate = timeProvider.now().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay()
 
         return when {
-            repetitiveAttribute.intervalInDays != null ->
-                ChronoUnit.DAYS.between(doneDate, currentDate) >= (repetitiveAttribute.intervalInDays)
-            repetitiveAttribute.daysOfWeek != null ->
-                doneDate != currentDate && repetitiveAttribute.daysOfWeek.contains(currentDate.dayOfWeek)
-            else ->
-                false
+            repetitiveAttribute.intervalInDays != null -> ChronoUnit.DAYS.between(doneDate, currentDate) >= (repetitiveAttribute.intervalInDays)
+            repetitiveAttribute.daysOfWeek != null -> doneDate != currentDate && repetitiveAttribute.daysOfWeek.contains(currentDate.dayOfWeek)
+            else -> false
         }
     }
 

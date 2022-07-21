@@ -35,7 +35,7 @@ fun ReorderableListOfTasks(
             )
         },
         onDragEnd = { _, _ ->
-            taskService.forceTasksSave()
+            taskService.forceSave(sync = false)
         }
     )
 

@@ -11,14 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import net.dzikoysk.presenceofmind.model.task.Task
 import net.dzikoysk.presenceofmind.model.task.UpdateTask
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
-import net.dzikoysk.presenceofmind.model.task.attributes.date.getDateAsString
-import net.dzikoysk.presenceofmind.model.task.attributes.date.getTimeAsString
+import net.dzikoysk.presenceofmind.model.task.attributes.date.toLocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun EventConfiguration(
@@ -26,7 +27,10 @@ fun EventConfiguration(
     eventAttribute: EventAttribute,
     updateTask: UpdateTask
 ) {
+    val dateFormatter = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd")}
+    val timeFormatter = remember { DateTimeFormatter.ofPattern("HH:mm")}
     val currentEventDate = eventAttribute.eventDate
+    val currentEventDateTime = currentEventDate.toLocalDateTime()
 
     val datePickerDialog = DatePickerDialog(
         LocalContext.current,
@@ -35,14 +39,14 @@ fun EventConfiguration(
                 eventAttribute = eventAttribute.copy(
                     eventDate = currentEventDate.copy(
                         year = newYear,
-                        month = newMonth,
+                        month = newMonth + 1,
                         day = newDayOfMonth
                     )
                 )
             ))
         },
         currentEventDate.year,
-        currentEventDate.month,
+        currentEventDate.month - 1,
         currentEventDate.day
     )
 
@@ -67,7 +71,7 @@ fun EventConfiguration(
 
     Column(Modifier.padding(12.dp)) {
         OutlinedTextField(
-            value = currentEventDate.getDateAsString(),
+            value = currentEventDateTime.format(dateFormatter),
             label = { Text(text = "Select the date of the event") },
             onValueChange = {},
             enabled = false,
@@ -77,7 +81,7 @@ fun EventConfiguration(
                 .clickable { datePickerDialog.show() }
         )
         OutlinedTextField(
-            value = currentEventDate.getTimeAsString(),
+            value = currentEventDateTime.format(timeFormatter),
             label = { Text(text = "Select the time of the event") },
             onValueChange = {},
             enabled = false,

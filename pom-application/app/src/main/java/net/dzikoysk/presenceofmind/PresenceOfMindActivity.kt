@@ -73,7 +73,7 @@ class PresenceOfMindActivity : ComponentActivity() {
     }
 
     override fun onStop() {
-        PresenceOfMind.getInstance(this).taskService.forceTasksSave(sync = true)
+        PresenceOfMind.getInstance(this).taskService.forceSave(sync = true)
         super.onStop()
     }
 

@@ -2,7 +2,13 @@ package net.dzikoysk.presenceofmind.shared
 
 import kotlin.time.Duration
 
+const val OUTDATED = "Outdated"
+
 fun Duration.incomingDurationToHumanReadableFormat(): String {
+    if (isNegative()) {
+        return OUTDATED
+    }
+
     val parts = ArrayList<String>()
 
     if (inWholeDays > 0) {
@@ -23,7 +29,7 @@ fun Duration.incomingDurationToHumanReadableFormat(): String {
 
     return parts.joinToString(separator = " ")
         .takeIf { it.trim().isNotEmpty() }
-        ?: "Outdated"
+        ?: OUTDATED
 }
 
 fun Duration.timeToHumanReadableFormat(): String {

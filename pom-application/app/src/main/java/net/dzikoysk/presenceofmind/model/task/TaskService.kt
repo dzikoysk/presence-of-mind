@@ -24,7 +24,7 @@ class TaskService(
 
     fun refreshTasksState() =
         watchers.forEach {
-            it.refresh(this)
+            it.onRefresh(this)
         }
 
     fun saveTask(task: Task) {
@@ -35,23 +35,28 @@ class TaskService(
                 tasks.add(index, task)
             }
         }
-        forceTasksSave()
+        forceSave(sync = true)
     }
 
     fun moveTasks(from: Int, to: Int) {
         tasks.add(to, tasks.removeAt(from))
     }
 
-    fun forceTasksSave(sync: Boolean = false) {
+    fun forceSave(sync: Boolean) {
         when (sync) {
-            true -> taskRepository.saveOrderedTasks(tasks)
-            false -> executor.submit { forceTasksSave(sync = true) }
+            true -> forceSave()
+            false -> executor.submit { forceSave() }
         }
+    }
+
+    private fun forceSave() {
+        taskRepository.saveOrderedTasks(tasks)
+        refreshTasksState()
     }
 
     fun deleteTask(id: UUID) {
         tasks.removeIf { it.id == id }
-        forceTasksSave()
+        forceSave(sync = true)
     }
 
     fun findTaskById(id: UUID): Task? =

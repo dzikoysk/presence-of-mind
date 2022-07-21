@@ -14,9 +14,9 @@ import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventDateTime
 import net.dzikoysk.presenceofmind.model.task.attributes.date.MarkAsWatcher
-import net.dzikoysk.presenceofmind.model.task.attributes.reminder.ReminderWatcher
 import net.dzikoysk.presenceofmind.model.task.category.CategoryService
 import net.dzikoysk.presenceofmind.model.task.category.SharedPreferencesCategoryRepository
+import net.dzikoysk.presenceofmind.model.task.reminder.ReminderWatcher
 
 internal class PresenceOfMind constructor(
     val presenceRepository: PresenceRepository,

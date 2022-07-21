@@ -2,7 +2,6 @@ package net.dzikoysk.presenceofmind.model.task
 
 import androidx.compose.ui.graphics.Color
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.time.ZonedDateTime
 
 /** Higher means lower priority */
 typealias Priority = Int
@@ -20,10 +19,6 @@ interface Attribute {
     @JsonIgnore
     fun isConcealable(): Boolean =
         false
-
-    @JsonIgnore
-    fun getTriggerDate(): ZonedDateTime? =
-        null
 
     @JsonIgnore
     fun getPriority(): Priority

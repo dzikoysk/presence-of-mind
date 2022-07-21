@@ -3,14 +3,18 @@ package net.dzikoysk.presenceofmind.model.task.attributes.date
 import androidx.compose.ui.graphics.Color
 import net.dzikoysk.presenceofmind.model.task.Attribute
 import net.dzikoysk.presenceofmind.model.task.Priority
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import net.dzikoysk.presenceofmind.model.task.reminder.Reminder
+import net.dzikoysk.presenceofmind.model.task.reminder.hasOutdatedSchedule
+import net.dzikoysk.presenceofmind.shared.OUTDATED
+import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
+import net.dzikoysk.presenceofmind.shared.plural
+import java.time.*
+import kotlin.time.toKotlinDuration
 
 /** One-time events */
 data class EventAttribute(
-    val eventDate: EventDateTime = EventDateTime.now()
+    val eventDate: EventDateTime = EventDateTime.now(),
+    val reminder: Reminder? = null,
 ) : Attribute {
 
     override fun getPriority(): Priority =
@@ -34,7 +38,7 @@ data class EventDateTime(
 
     companion object {
         fun now(): EventDateTime =
-            Instant.now().atZone(ZoneId.systemDefault()).run {
+            ZonedDateTime.now().run {
                 EventDateTime(
                     year = year,
                     month = monthValue,
@@ -47,20 +51,20 @@ data class EventDateTime(
 
 }
 
-private fun Int.getPrettyNumber(): String =
-    String.format("%02d", this)
+fun EventAttribute.getHumanReadableInterval(): String =
+    Duration.between(ZonedDateTime.now(), eventDate.toLocalDateTime())
+        .toKotlinDuration()
+        .takeUnless { it.isNegative() }
+        ?.let {
+            when (it.inWholeDays) {
+                0L -> it.incomingDurationToHumanReadableFormat()
+                else -> plural(it.inWholeDays, "day")
+            }
+        }
+        ?: OUTDATED
 
-fun EventDateTime.getDate(): Triple<Int, Int, Int> =
-    Triple(year, month, day)
-
-fun EventDateTime.getDateAsString(): String =
-    "$year-${(month + 1).getPrettyNumber()}-${day.getPrettyNumber()}"
-
-fun EventDateTime.getTime(): Pair<Int, Int> =
-    hour to minute
-
-fun EventDateTime.getTimeAsString(): String =
-    "${hour.getPrettyNumber()}:${minute.getPrettyNumber()}"
+fun EventAttribute.hasOutdatedSchedule(now: Instant): Boolean =
+    reminder?.hasOutdatedSchedule(now) ?: false
 
 fun EventDateTime.toLocalDateTime(): ZonedDateTime =
     LocalDateTime.of(year, month, day, hour, minute)
