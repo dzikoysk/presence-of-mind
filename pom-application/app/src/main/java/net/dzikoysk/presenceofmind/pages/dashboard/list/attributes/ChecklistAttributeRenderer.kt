@@ -10,19 +10,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import net.dzikoysk.presenceofmind.model.task.MarkedAs
+import net.dzikoysk.presenceofmind.model.task.Task
+import net.dzikoysk.presenceofmind.model.task.UpdateTask
 import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistEntry
 import net.dzikoysk.presenceofmind.model.task.attributes.withUpdatedEntry
-import net.dzikoysk.presenceofmind.model.task.Task
-import net.dzikoysk.presenceofmind.model.task.UpdateTask
+import net.dzikoysk.presenceofmind.pages.dashboard.list.SubscribeToOnDone
 
 @Composable
 fun ChecklistAttributeRenderer(
     task: Task,
     checklistAttribute: ChecklistAttribute,
+    subscribeToOnDone: SubscribeToOnDone,
     updateTask: UpdateTask
 ) {
     val fontSize = task.description.scaledFontSize()
+
+    subscribeToOnDone { updatedTask, markedAs ->
+        updatedTask.copy(
+            checklistAttribute = checklistAttribute.copy(
+                list = checklistAttribute.list.map {
+                    it.copy(done = when (markedAs) {
+                        MarkedAs.UNFINISHED -> false
+                        MarkedAs.DONE -> true
+                    })
+                }
+            )
+        )
+    }
 
     Box(modifier = Modifier.padding(start = 3.dp)) {
         checklistAttribute.list

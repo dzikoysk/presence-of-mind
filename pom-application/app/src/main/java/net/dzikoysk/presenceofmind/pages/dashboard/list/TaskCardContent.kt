@@ -74,6 +74,7 @@ fun TaskCardContent(
                     ChecklistAttributeRenderer(
                         task = task,
                         checklistAttribute = checklistAttribute,
+                        subscribeToOnDone = subscribeToOnDone,
                         updateTask = { updateTask(it) }
                     )
                 }
