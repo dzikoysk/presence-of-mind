@@ -2,7 +2,7 @@ package net.dzikoysk.presenceofmind.model.task.attributes.date
 
 import net.dzikoysk.presenceofmind.model.task.Task
 import net.dzikoysk.presenceofmind.model.task.TaskService
-import net.dzikoysk.presenceofmind.model.task.Watcher
+import net.dzikoysk.presenceofmind.model.task.TaskWatcher
 import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.isDone
 import net.dzikoysk.presenceofmind.shared.DefaultTimeProvider
@@ -11,7 +11,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
-class MarkAsWatcher(private val timeProvider: TimeProvider = DefaultTimeProvider()) : Watcher {
+class MarkAsTaskWatcher(private val timeProvider: TimeProvider = DefaultTimeProvider()) : TaskWatcher {
 
     override fun onRefresh(taskService: TaskService) {
         // marks repetitive tasks as unfinished

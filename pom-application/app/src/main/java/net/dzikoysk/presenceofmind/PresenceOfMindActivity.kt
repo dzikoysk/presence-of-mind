@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE
+import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability.UPDATE_AVAILABLE
 import kotlinx.coroutines.delay
 import net.dzikoysk.presenceofmind.pages.Page
@@ -34,15 +34,16 @@ class PresenceOfMindActivity : ComponentActivity() {
 
             appUpdateInfoTask.addOnSuccessListener {
                 when {
-                    !it.isUpdateTypeAllowed(FLEXIBLE) -> return@addOnSuccessListener
+                    !it.isUpdateTypeAllowed(IMMEDIATE) -> return@addOnSuccessListener
                     it.updateAvailability() != UPDATE_AVAILABLE -> return@addOnSuccessListener
                     it.availableVersionCode() == presenceOfMind.presenceRepository.getLatestVersionCode() -> return@addOnSuccessListener
                 }
                 presenceOfMind.presenceRepository.setLatestVersionCode(it.availableVersionCode())
-                appUpdateManager.startUpdateFlowForResult(it, FLEXIBLE, this, UPDATE_CODE)
+                appUpdateManager.startUpdateFlowForResult(it, IMMEDIATE, this, UPDATE_CODE)
             }
         }
 
+        presenceOfMind.taskService.initializeWatchers(intent.extras)
         presenceOfMind.taskService.refreshTasksState()
 
         setContent {

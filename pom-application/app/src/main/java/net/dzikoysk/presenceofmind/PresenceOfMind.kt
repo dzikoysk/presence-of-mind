@@ -13,12 +13,12 @@ import net.dzikoysk.presenceofmind.model.task.attributes.PomodoroAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventDateTime
-import net.dzikoysk.presenceofmind.model.task.attributes.date.MarkAsWatcher
+import net.dzikoysk.presenceofmind.model.task.attributes.date.MarkAsTaskWatcher
 import net.dzikoysk.presenceofmind.model.task.category.CategoryService
 import net.dzikoysk.presenceofmind.model.task.category.SharedPreferencesCategoryRepository
-import net.dzikoysk.presenceofmind.model.task.reminder.ReminderWatcher
+import net.dzikoysk.presenceofmind.model.task.reminder.ReminderTaskWatcher
 
-internal class PresenceOfMind constructor(
+class PresenceOfMind constructor(
     val presenceRepository: PresenceRepository,
     val categoryService: CategoryService,
     val taskService: TaskService,
@@ -63,9 +63,9 @@ private object PresenceOfMindFactory {
                 ),
                 version = DATA_VERSION
             ),
-            watchers = listOf(
-                MarkAsWatcher(),
-                ReminderWatcher(context)
+            taskWatchers = listOf(
+                MarkAsTaskWatcher(),
+                ReminderTaskWatcher(context)
             )
         )
 

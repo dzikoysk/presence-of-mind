@@ -8,8 +8,15 @@ import net.dzikoysk.presenceofmind.model.task.reminder.hasOutdatedSchedule
 import net.dzikoysk.presenceofmind.shared.OUTDATED
 import net.dzikoysk.presenceofmind.shared.incomingDurationToHumanReadableFormat
 import net.dzikoysk.presenceofmind.shared.plural
-import java.time.*
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.time.toKotlinDuration
+
+val EVENT_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM HH:mm")
 
 /** One-time events */
 data class EventAttribute(

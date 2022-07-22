@@ -1,5 +1,6 @@
 package net.dzikoysk.presenceofmind.model.task
 
+import android.os.Bundle
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import java.util.UUID
@@ -11,7 +12,7 @@ typealias DeleteTask = (Task) -> Unit
 
 class TaskService(
     val taskRepository: TaskRepository = InMemoryTaskRepository(),
-    val watchers: Collection<Watcher> = emptyList()
+    val taskWatchers: Collection<TaskWatcher> = emptyList()
 ) {
 
     private val tasks = mutableStateListOf<Task>()
@@ -20,8 +21,11 @@ class TaskService(
         tasks.addAll(taskRepository.loadOrderedTasks())
     }
 
+    fun initializeWatchers(extras: Bundle?) =
+        taskWatchers.forEach { it.initialize(this, extras) }
+
     fun refreshTasksState() =
-        watchers.forEach { it.onRefresh(this) }
+        taskWatchers.forEach { it.onRefresh(this) }
 
     fun saveTask(task: Task) =
         saveTasks(listOf(task))
