@@ -1,5 +1,6 @@
 package net.dzikoysk.presenceofmind.pages.dashboard.editor
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,16 +27,19 @@ fun PomodoroConfiguration(
     pomodoroAttribute: PomodoroAttribute,
     updateTask: UpdateTask
 ) {
-    NumberField(
-        modifier = Modifier.padding(top = 10.dp),
-        description = "Expected attention in minutes",
-        value = pomodoroAttribute.expectedAttentionInMinutes,
-        onValueChange = {
-            updateTask(task.copy(
-                pomodoroAttribute = pomodoroAttribute.copy(
-                    expectedAttentionInMinutes = it
+    Box(Modifier.padding(vertical = 10.dp, horizontal = 8.dp)) {
+        NumberField(
+            description = "Expected attention in minutes",
+            value = pomodoroAttribute.expectedAttentionInMinutes,
+            onValueChange = {
+                updateTask(
+                    task.copy(
+                        pomodoroAttribute = pomodoroAttribute.copy(
+                            expectedAttentionInMinutes = it
+                        )
+                    )
                 )
-            ))
-        }
-    )
+            }
+        )
+    }
 }
