@@ -20,12 +20,12 @@ android {
         }
     }
 
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "net.dzikoysk.presenceofmind"
         minSdk 29
-        targetSdk 32
+        targetSdk 33
         versionCode 10
         versionName "1.0.0-RC.10"
         archivesBaseName = "presence-of-mind-$versionName"
@@ -71,6 +71,7 @@ android {
         includeInApk true
         includeInBundle true
     }
+    namespace 'net.dzikoysk.presenceofmind'
 }
 
 dependencies {
@@ -81,10 +82,10 @@ dependencies {
     implementation("com.github.jeziellago:compose-markdown:0.2.9")
     implementation("com.github.tfaki:ComposableSweetToast:1.0.1")
 
-    def appUpdate = "2.0.0"
+    def appUpdate = "2.0.1"
     implementation("com.google.android.play:app-update-ktx:$appUpdate")
 
-    def jackson = "2.13.3"
+    def jackson = "2.14.0"
     implementation("com.fasterxml.jackson.core:jackson-databind:$jackson")
     implementation("com.fasterxml.jackson.core:jackson-core:$jackson")
     implementation("com.fasterxml.jackson.core:jackson-annotations:$jackson")
@@ -92,12 +93,12 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jackson")
 
-    def room_version = "2.4.2"
+    def room_version = "2.4.3"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
 
-    def compose_libs_version = "1.2.0-rc03"
+    def compose_libs_version = "1.4.0-alpha02"
     implementation "androidx.compose.ui:ui:$compose_libs_version"
     implementation "androidx.compose.ui:ui-util:$compose_libs_version"
     implementation "androidx.compose.material:material:$compose_libs_version"
@@ -105,11 +106,11 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_libs_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_libs_version"
 
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.0'
-    implementation 'androidx.activity:activity-compose:1.5.0'
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation 'androidx.core:core-ktx:1.9.0'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 }
