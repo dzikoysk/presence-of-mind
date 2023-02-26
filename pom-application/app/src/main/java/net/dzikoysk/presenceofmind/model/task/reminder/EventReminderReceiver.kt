@@ -24,6 +24,7 @@ import net.dzikoysk.presenceofmind.shared.DefaultTimeProvider
 import net.dzikoysk.presenceofmind.shared.TimeProvider
 import java.time.Instant
 import java.util.UUID
+import kotlin.time.Duration.Companion.seconds
 
 const val CHANNEL_ID = "pom-event-reminder-channel"
 const val EVENT_TASK_EXTRA_ID = "pom-event-reminder-id"
@@ -41,7 +42,7 @@ class EventReminderReceiver(private val timeProvider: TimeProvider = DefaultTime
             intent.putExtra(EVENT_TASK_REMINDER_TIME, triggerAtMillis)
             val pendingIntent = PendingIntent.getBroadcast(context, task.id.hashCode(), intent, FLAG_CANCEL_CURRENT or FLAG_IMMUTABLE)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
-            alarmManager?.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+            alarmManager?.setWindow(AlarmManager.RTC_WAKEUP, triggerAtMillis, 1.seconds.inWholeMilliseconds, pendingIntent)
         }
 
     }

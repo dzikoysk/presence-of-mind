@@ -11,8 +11,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.skydoves.landscapist.CircularReveal
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.animation.circular.CircularRevealPlugin
+import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.placeholder.placeholder.PlaceholderPlugin
 import net.dzikoysk.presenceofmind.R
 
 @Composable
@@ -25,10 +28,14 @@ fun AvatarImage(
             .height(32.dp)
             .clip(CircleShape)
             .clickable(onClick = { openMenu() }),
-        imageModel = "https://avatars.githubusercontent.com/u/75123628?s=200&v=4",
-        contentScale = ContentScale.Crop,
-        circularReveal = CircularReveal(duration = 0),
-        placeHolder = ImageVector.vectorResource(R.drawable.ic_baseline_check_circle_24),
-        error = ImageVector.vectorResource(id = R.drawable.ic_baseline_account_circle_24)
+        imageModel = { "https://avatars.githubusercontent.com/u/75123628?s=200&v=4" },
+        imageOptions = ImageOptions(
+            contentScale = ContentScale.Crop
+        ),
+        component = rememberImageComponent {
+            +CircularRevealPlugin(duration = 0)
+            +PlaceholderPlugin.Loading(ImageVector.vectorResource(R.drawable.ic_baseline_check_circle_24))
+            +PlaceholderPlugin.Failure(ImageVector.vectorResource(id = R.drawable.ic_baseline_account_circle_24))
+        }
     )
 }
