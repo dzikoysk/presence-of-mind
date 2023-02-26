@@ -6,7 +6,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -34,6 +42,7 @@ import net.dzikoysk.presenceofmind.components.scaledSp
 @Composable
 fun MenuDrawerPreview() {
     MenuDrawer(
+        openSettings = {},
         closeMenu = {}
     )
 }
@@ -41,6 +50,7 @@ fun MenuDrawerPreview() {
 @Composable
 fun AnimatedMenuDrawer(
     open: Boolean,
+    openSettings: () -> Unit,
     close: () -> Unit
 ) {
     val density = LocalDensity.current
@@ -52,13 +62,15 @@ fun AnimatedMenuDrawer(
         }
     ) {
         MenuDrawer(
-            closeMenu = { close() }
+            openSettings = openSettings,
+            closeMenu = close
         )
     }
 }
 
 @Composable
 fun MenuDrawer(
+    openSettings: () -> Unit,
     closeMenu: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -91,6 +103,14 @@ fun MenuDrawer(
                )
            }
            Column(Modifier.padding(vertical = 16.dp)) {
+               Text(
+                   text = "Settings",
+                   fontWeight = FontWeight.SemiBold,
+                   fontSize = 15.scaledSp(),
+                   modifier = Modifier
+                       .clickable { openSettings() }
+                       .padding(vertical = 8.dp)
+               )
                Text(
                    text = "Sources",
                    fontWeight = FontWeight.SemiBold,

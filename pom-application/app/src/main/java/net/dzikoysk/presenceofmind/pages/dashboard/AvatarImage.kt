@@ -20,6 +20,7 @@ import net.dzikoysk.presenceofmind.R
 
 @Composable
 fun AvatarImage(
+    avatarUrl: String,
     openMenu: () -> Unit = {}
 ) {
     GlideImage(
@@ -28,7 +29,7 @@ fun AvatarImage(
             .height(32.dp)
             .clip(CircleShape)
             .clickable(onClick = { openMenu() }),
-        imageModel = { "https://avatars.githubusercontent.com/u/75123628?s=200&v=4" },
+        imageModel = { avatarUrl },
         imageOptions = ImageOptions(
             contentScale = ContentScale.Crop
         ),

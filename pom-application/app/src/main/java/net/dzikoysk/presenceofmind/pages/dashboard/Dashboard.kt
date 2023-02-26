@@ -1,6 +1,12 @@
 package net.dzikoysk.presenceofmind.pages
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -14,7 +20,12 @@ import net.dzikoysk.presenceofmind.model.presence.InMemoryPresenceRepository
 import net.dzikoysk.presenceofmind.model.presence.PresenceRepository
 import net.dzikoysk.presenceofmind.model.task.MarkedAs
 import net.dzikoysk.presenceofmind.model.task.TaskService
-import net.dzikoysk.presenceofmind.pages.dashboard.*
+import net.dzikoysk.presenceofmind.pages.dashboard.AnimatedMenuDrawer
+import net.dzikoysk.presenceofmind.pages.dashboard.AvatarImage
+import net.dzikoysk.presenceofmind.pages.dashboard.ChangeThemeButton
+import net.dzikoysk.presenceofmind.pages.dashboard.CreateTaskButton
+import net.dzikoysk.presenceofmind.pages.dashboard.SwapTasksButton
+import net.dzikoysk.presenceofmind.pages.dashboard.TodayLabel
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.AnimatedEditorDrawer
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.TaskToEdit
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskList
@@ -27,7 +38,6 @@ fun DashboardPreview() {
     Dashboard(
         presenceRepository = InMemoryPresenceRepository(),
         taskService = TaskService().also { it.createDefaultTasks() },
-        restartActivity = {}
     )
 }
 
@@ -35,7 +45,8 @@ fun DashboardPreview() {
 fun Dashboard(
     presenceRepository: PresenceRepository,
     taskService: TaskService,
-    restartActivity: () -> Unit
+    restartActivity: () -> Unit = {},
+    changePage: (Page) -> Unit = {}
 ) {
     val selectedTasks = remember { mutableStateOf(MarkedAs.UNFINISHED) }
     val openMenu = remember { mutableStateOf(false)  }
@@ -58,6 +69,7 @@ fun Dashboard(
                             .fillMaxWidth()
                     ) {
                         AvatarImage(
+                            avatarUrl = presenceRepository.getAvatarUrl(),
                             openMenu = {  openMenu.value = true  }
                         )
                         TodayLabel(
@@ -85,6 +97,7 @@ fun Dashboard(
                 }
                 AnimatedMenuDrawer(
                     open = openMenu.value,
+                    openSettings = { changePage(Page.SETTINGS) },
                     close = { openMenu.value = false }
                 )
 
