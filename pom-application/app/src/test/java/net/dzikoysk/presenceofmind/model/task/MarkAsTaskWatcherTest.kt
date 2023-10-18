@@ -2,7 +2,7 @@ package net.dzikoysk.presenceofmind.model.task
 
 import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
-import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.date.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.MarkAsTaskWatcher
 import net.dzikoysk.presenceofmind.shared.TimeProvider
 import org.junit.Test

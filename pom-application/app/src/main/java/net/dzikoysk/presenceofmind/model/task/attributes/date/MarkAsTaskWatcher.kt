@@ -3,7 +3,6 @@ package net.dzikoysk.presenceofmind.model.task.attributes.date
 import net.dzikoysk.presenceofmind.model.task.Task
 import net.dzikoysk.presenceofmind.model.task.TaskService
 import net.dzikoysk.presenceofmind.model.task.TaskWatcher
-import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.isDone
 import net.dzikoysk.presenceofmind.shared.DefaultTimeProvider
 import net.dzikoysk.presenceofmind.shared.TimeProvider

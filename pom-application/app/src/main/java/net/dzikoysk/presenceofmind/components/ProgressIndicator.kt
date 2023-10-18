@@ -18,6 +18,7 @@
 
 package net.dzikoysk.presenceofmind.components
 
+import androidx.annotation.FloatRange
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
@@ -62,7 +63,7 @@ import kotlin.math.max
  */
 @Composable
 fun LinearProgressIndicator(
-    /*@FloatRange(from = 0.0, to = 1.0)*/
+    @FloatRange(from = 0.0, to = 1.0)
     progress: Float,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colors.primary,

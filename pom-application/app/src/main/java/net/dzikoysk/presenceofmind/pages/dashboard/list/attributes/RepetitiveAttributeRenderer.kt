@@ -14,8 +14,8 @@ import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskCard
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskCardContext
 import net.dzikoysk.presenceofmind.shared.plural
 import net.dzikoysk.presenceofmind.model.task.Task
-import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
-import net.dzikoysk.presenceofmind.model.task.attributes.getShortAbbreviation
+import net.dzikoysk.presenceofmind.model.task.attributes.date.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.date.getShortAbbreviation
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import java.util.UUID
 

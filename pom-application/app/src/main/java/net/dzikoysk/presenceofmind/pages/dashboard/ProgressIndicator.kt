@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.pages.dashboard.list
+package net.dzikoysk.presenceofmind.pages.dashboard
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +15,7 @@ fun ProgressIndicator(
     doneTasks: Int,
     allTasks: Int
 ) {
-    val percent = runCatching { doneTasks / allTasks.toFloat() }
-        .getOrDefault(1f)
+    val percent = if (allTasks == 0) 0f else (doneTasks / allTasks.toFloat())
 
     Row(
         modifier = Modifier
