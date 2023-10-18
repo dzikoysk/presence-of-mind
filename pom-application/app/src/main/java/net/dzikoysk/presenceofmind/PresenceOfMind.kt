@@ -10,7 +10,7 @@ import net.dzikoysk.presenceofmind.model.task.TaskService
 import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistEntry
 import net.dzikoysk.presenceofmind.model.task.attributes.PomodoroAttribute
-import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.date.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventDateTime
 import net.dzikoysk.presenceofmind.model.task.attributes.date.MarkAsTaskWatcher

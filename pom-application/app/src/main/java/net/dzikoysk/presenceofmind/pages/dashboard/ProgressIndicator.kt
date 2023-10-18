@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.pages.dashboard.list
+package net.dzikoysk.presenceofmind.pages.dashboard
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

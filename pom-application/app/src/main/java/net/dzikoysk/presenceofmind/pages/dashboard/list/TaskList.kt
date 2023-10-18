@@ -11,6 +11,7 @@ import net.dzikoysk.presenceofmind.model.task.MarkedAs
 import net.dzikoysk.presenceofmind.model.task.Task
 import net.dzikoysk.presenceofmind.model.task.TaskService
 import net.dzikoysk.presenceofmind.model.task.isDone
+import net.dzikoysk.presenceofmind.pages.dashboard.ProgressIndicator
 
 @Preview(showBackground = true)
 @Composable

@@ -1,4 +1,4 @@
-package net.dzikoysk.presenceofmind.pages
+package net.dzikoysk.presenceofmind.pages.dashboard
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,12 +20,7 @@ import net.dzikoysk.presenceofmind.model.presence.InMemoryPresenceRepository
 import net.dzikoysk.presenceofmind.model.presence.PresenceRepository
 import net.dzikoysk.presenceofmind.model.task.MarkedAs
 import net.dzikoysk.presenceofmind.model.task.TaskService
-import net.dzikoysk.presenceofmind.pages.dashboard.AnimatedMenuDrawer
-import net.dzikoysk.presenceofmind.pages.dashboard.AvatarImage
-import net.dzikoysk.presenceofmind.pages.dashboard.ChangeThemeButton
-import net.dzikoysk.presenceofmind.pages.dashboard.CreateTaskButton
-import net.dzikoysk.presenceofmind.pages.dashboard.SwapTasksButton
-import net.dzikoysk.presenceofmind.pages.dashboard.TodayLabel
+import net.dzikoysk.presenceofmind.pages.Page
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.AnimatedEditorDrawer
 import net.dzikoysk.presenceofmind.pages.dashboard.editor.TaskToEdit
 import net.dzikoysk.presenceofmind.pages.dashboard.list.TaskList

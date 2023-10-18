@@ -9,6 +9,7 @@ import net.dzikoysk.presenceofmind.model.presence.InMemoryPresenceRepository
 import net.dzikoysk.presenceofmind.model.presence.PresenceOfMindTheme
 import net.dzikoysk.presenceofmind.model.presence.PresenceRepository
 import net.dzikoysk.presenceofmind.model.task.TaskService
+import net.dzikoysk.presenceofmind.pages.dashboard.Dashboard
 import net.dzikoysk.presenceofmind.pages.settings.Settings
 
 /** Redirects to other pages */

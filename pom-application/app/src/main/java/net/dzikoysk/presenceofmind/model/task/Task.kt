@@ -3,7 +3,7 @@ package net.dzikoysk.presenceofmind.model.task
 import androidx.compose.ui.graphics.Color
 import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.PomodoroAttribute
-import net.dzikoysk.presenceofmind.model.task.attributes.RepetitiveAttribute
+import net.dzikoysk.presenceofmind.model.task.attributes.date.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
 import java.io.Serializable
 import java.util.UUID
