@@ -50,6 +50,7 @@ fun Router(
             Page.SETTINGS ->
                 Settings(
                     presenceRepository = presenceRepository,
+                    restartActivity = restartActivity,
                     changePage = { currentPage.value = it }
                 )
         }

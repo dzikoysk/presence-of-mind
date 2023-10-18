@@ -1,13 +1,16 @@
 package net.dzikoysk.presenceofmind.pages.settings
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Slider
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,7 +26,7 @@ import net.dzikoysk.presenceofmind.model.presence.InMemoryPresenceRepository
 import net.dzikoysk.presenceofmind.model.presence.PresenceRepository
 import net.dzikoysk.presenceofmind.pages.Page
 
-@Preview(showBackground = false)
+@Preview(showBackground = true)
 @Composable
 fun SettingsPreview() {
     Settings()
@@ -32,9 +35,11 @@ fun SettingsPreview() {
 @Composable
 fun Settings(
     presenceRepository: PresenceRepository = InMemoryPresenceRepository(),
-    changePage: (Page) -> Unit = {}
+    changePage: (Page) -> Unit = {},
+    restartActivity: () -> Unit = {}
 ) {
     val avatarUrl = remember { mutableStateOf(presenceRepository.getAvatarUrl()) }
+    val fontSize = remember { mutableStateOf(presenceRepository.getFontScale()) }
 
     Column(
         modifier = Modifier
@@ -46,6 +51,7 @@ fun Settings(
             modifier = Modifier
                 .padding(vertical = 24.dp)
                 .clickable {
+                    presenceRepository.setFontScale(fontSize.value)
                     presenceRepository.setAvatarUrl(avatarUrl.value)
                     changePage(Page.DASHBOARD)
                 }
@@ -61,7 +67,28 @@ fun Settings(
                 fontWeight = FontWeight.Bold
             )
         }
-
+        Row {
+            Column {
+                Text(
+                    fontSize = 15.scaledSp(),
+                    text = "Scale font size"
+                )
+                Slider(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = fontSize.value,
+                    onValueChange = { fontSize.value = it },
+                    onValueChangeFinished = { },
+                    valueRange = 0.7f..1.5f,
+                    steps = 6
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "x ${fontSize.value}")
+                }
+            }
+        }
         Row {
             Column {
                 Text(
@@ -69,8 +96,8 @@ fun Settings(
                     text = "Avatar URL",
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
-
-                TextField(
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     value = avatarUrl.value,
                     onValueChange = { avatarUrl.value = it  }
                 )
