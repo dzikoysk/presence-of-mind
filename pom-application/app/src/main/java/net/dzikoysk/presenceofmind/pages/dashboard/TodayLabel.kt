@@ -7,8 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import net.dzikoysk.presenceofmind.components.scaledSp
 import java.time.Instant
 import java.time.ZoneId
@@ -16,6 +21,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
+@Preview(showBackground = true)
 fun TodayLabel(modifier: Modifier = Modifier) {
     val todayFormatter = remember {
         DateTimeFormatter.ofPattern("E dd.MM")
@@ -23,29 +29,28 @@ fun TodayLabel(modifier: Modifier = Modifier) {
             .withZone(ZoneId.systemDefault())
     }
 
-    val fontSize = 13.scaledSp()
+    val style = SpanStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 13.scaledSp()
+    )
 
     Column(modifier) {
+        Text(
+            buildAnnotatedString {
+                withStyle(style.copy(color = Color(0xFF777777))) {
+                    append("Today is ")
+                }
+                withStyle(style.copy(textDecoration = TextDecoration.Underline)) {
+                    append(todayFormatter.format(Instant.now()))
+                }
+            }
+        )
         Row {
             Text(
-                text = "Today is ",
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF777777),
-                fontSize = fontSize
-            )
-            Text(
-                text = todayFormatter.format(Instant.now()),
-                fontWeight = FontWeight.Bold,
-                textDecoration = TextDecoration.Underline,
-                fontSize = fontSize
-            )
-        }
-        Row {
-            Text(
-                text = "Suggested activities for you:",
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF777777),
-                fontSize = fontSize
+                AnnotatedString(
+                    "Suggested activities for you:",
+                    style.copy(color = Color(0xFF777777))
+                )
             )
         }
     }
