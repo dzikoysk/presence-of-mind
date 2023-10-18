@@ -44,6 +44,7 @@ fun SettingsPreview() {
 @Composable
 fun Settings(
     presenceRepository: PresenceRepository = InMemoryPresenceRepository(),
+    restartActivity: () -> Unit = {},
     changePage: (Page) -> Unit = {}
 ) {
     val avatarUrl = remember { mutableStateOf(presenceRepository.getAvatarUrl()) }
@@ -63,6 +64,7 @@ fun Settings(
                     presenceRepository.setAvatarUrl(avatarUrl.value)
                     presenceRepository.setFontScale(fontSize.value)
                     changePage(Page.DASHBOARD)
+                    restartActivity()
                 }
         ) {
             Icon(
@@ -103,8 +105,8 @@ fun Settings(
                 Slider(
                     value = fontSize.value,
                     onValueChange = { fontSize.value = it.roundFontSize() },
-                    valueRange = 1f..3f,
-                    steps = 9
+                    valueRange = 1f..2f,
+                    steps = 10
                 )
 
                 Text(

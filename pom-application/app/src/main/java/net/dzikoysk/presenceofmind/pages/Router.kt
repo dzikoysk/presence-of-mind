@@ -1,9 +1,11 @@
 package net.dzikoysk.presenceofmind.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
+import net.dzikoysk.presenceofmind.components.LocalFontScale
 import net.dzikoysk.presenceofmind.createDefaultTasks
 import net.dzikoysk.presenceofmind.model.presence.InMemoryPresenceRepository
 import net.dzikoysk.presenceofmind.model.presence.PresenceOfMindTheme
@@ -38,21 +40,25 @@ fun Router(
     page: Page
 ) {
     PresenceOfMindTheme(lightTheme = presenceRepository.isLightMode()) {
-        val currentPage = remember { mutableStateOf(page) }
+        CompositionLocalProvider(LocalFontScale provides presenceRepository.getFontScale()) {
+            val currentPage = remember { mutableStateOf(page) }
 
-        when (currentPage.value) {
-            Page.DASHBOARD ->
-                Dashboard(
-                    presenceRepository = presenceRepository,
-                    taskService = taskService,
-                    restartActivity = restartActivity,
-                    changePage = { currentPage.value = it }
-                )
-            Page.SETTINGS ->
-                Settings(
-                    presenceRepository = presenceRepository,
-                    changePage = { currentPage.value = it }
-                )
+            when (currentPage.value) {
+                Page.DASHBOARD ->
+                    Dashboard(
+                        presenceRepository = presenceRepository,
+                        taskService = taskService,
+                        restartActivity = restartActivity,
+                        changePage = { currentPage.value = it }
+                    )
+
+                Page.SETTINGS ->
+                    Settings(
+                        presenceRepository = presenceRepository,
+                        restartActivity = restartActivity,
+                        changePage = { currentPage.value = it },
+                    )
+            }
         }
     }
 }
