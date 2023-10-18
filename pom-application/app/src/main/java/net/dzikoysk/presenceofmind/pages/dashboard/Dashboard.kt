@@ -68,10 +68,11 @@ fun Dashboard(
                             openMenu = {  openMenu.value = true  }
                         )
                         TodayLabel(
-                            modifier = Modifier.padding(start = 16.dp)
+                            modifier = Modifier
+                                .padding(start = 16.dp)
+                                .weight(1f, fill = false)
                         )
                         Row(
-                            modifier = Modifier.weight(2f),
                             horizontalArrangement = Arrangement.End
                         ) {
                             ChangeThemeButton(

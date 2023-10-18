@@ -1,11 +1,11 @@
 package net.dzikoysk.presenceofmind.pages.dashboard.list.attributes
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.TextUnit
@@ -40,22 +40,17 @@ fun ChecklistAttributeRenderer(
         )
     }
 
-    Box(modifier = Modifier.padding(start = 3.dp)) {
+    Column(modifier = Modifier.padding(start = 3.dp)) {
         checklistAttribute.list
             .sortedBy { it.done }
-            .forEachIndexed { idx, subtask ->
-                Row(
-                    modifier = Modifier.padding(top = (30 * idx).dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    ChecklistEntryRenderer(
-                        task = task,
-                        checklistAttribute = checklistAttribute,
-                        entry = subtask,
-                        fontSize = fontSize,
-                        updateTask = updateTask
-                    )
-                }
+            .forEach { subtask ->
+                ChecklistEntryRenderer(
+                    task = task,
+                    checklistAttribute = checklistAttribute,
+                    entry = subtask,
+                    fontSize = fontSize,
+                    updateTask = updateTask
+                )
             }
     }
 }
@@ -68,7 +63,7 @@ fun ChecklistEntryRenderer(
     fontSize: TextUnit,
     updateTask: UpdateTask
 ) {
-    Row {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Checkbox(
             checked = entry.done,
             onCheckedChange = {
@@ -84,8 +79,7 @@ fun ChecklistEntryRenderer(
         )
         DescriptionMarkdown(
             description = entry.description,
-            fontSize = fontSize,
-            modifier = Modifier.padding(top = 15.dp)
+            fontSize = fontSize
         )
     }
 }
