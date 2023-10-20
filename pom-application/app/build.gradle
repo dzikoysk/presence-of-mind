@@ -1,6 +1,6 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
 }
 
 android {
@@ -12,20 +12,20 @@ android {
 
         signingConfigs {
             release {
-                keyAlias keystoreProperties['keyAlias']
-                keyPassword keystoreProperties['keyPassword']
-                storeFile file(keystoreProperties['storeFile'])
-                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties["keyAlias"]
+                keyPassword keystoreProperties["keyPassword"]
+                storeFile file(keystoreProperties["storeFile"])
+                storePassword keystoreProperties["storePassword"]
             }
         }
     }
 
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "net.dzikoysk.presenceofmind"
         minSdk 29
-        targetSdk 33
+        targetSdk 34
         versionCode 12
         versionName "1.0.0-RC.12"
         archivesBaseName = "presence-of-mind-$versionName"
@@ -43,7 +43,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
@@ -51,9 +51,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
         freeCompilerArgs += [
-                '-opt-in=kotlin.RequiresOptIn',
+                "-opt-in=kotlin.RequiresOptIn",
         ]
     }
     buildFeatures {
@@ -64,32 +64,32 @@ android {
     }
     packagingOptions {
         resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
     dependenciesInfo {
         includeInApk true
         includeInBundle true
     }
-    namespace 'net.dzikoysk.presenceofmind'
+    namespace "net.dzikoysk.presenceofmind"
 }
 
 dependencies {
-    implementation('org.burnoutcrew.composereorderable:reorderable:0.9.6')
+    implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
     implementation("io.github.androidpoet:dropdown:1.0.1")
-    implementation('io.github.vanpra.compose-material-dialogs:core:0.9.0')
+    implementation("io.github.vanpra.compose-material-dialogs:core:0.9.0")
     implementation("com.github.jeziellago:compose-markdown:0.2.9")
     implementation("com.github.tfaki:ComposableSweetToast:1.0.1")
 
-    def landscapist_version = '2.1.12'
+    def landscapist_version = "2.1.12"
     implementation("com.github.skydoves:landscapist-glide:$landscapist_version")
     implementation("com.github.skydoves:landscapist-placeholder:$landscapist_version")
     implementation("com.github.skydoves:landscapist-animation:$landscapist_version")
 
-    def appUpdate = "2.0.1"
+    def appUpdate = "2.1.0"
     implementation("com.google.android.play:app-update-ktx:$appUpdate")
 
-    def jackson = '2.14.2'
+    def jackson = "2.14.2"
     implementation("com.fasterxml.jackson.core:jackson-databind:$jackson")
     implementation("com.fasterxml.jackson.core:jackson-core:$jackson")
     implementation("com.fasterxml.jackson.core:jackson-annotations:$jackson")
@@ -97,24 +97,24 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jackson")
 
-    def room_version = '2.5.1'
+    def room_version = "2.5.2"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
 
-    def compose_libs_version = '1.5.0-alpha03'
-    implementation "androidx.compose.ui:ui:$compose_libs_version"
-    implementation "androidx.compose.ui:ui-util:$compose_libs_version"
-    implementation "androidx.compose.material:material:$compose_libs_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_libs_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_libs_version"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_libs_version"
+    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.ui:ui-util"
+    implementation "androidx.compose.material:material"
+    implementation "androidx.compose.ui:ui-tooling-preview"
+    debugImplementation "androidx.compose.ui:ui-tooling"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.5.4"
 
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    implementation 'androidx.activity:activity-compose:1.7.1'
-    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
+    implementation "androidx.activity:activity-compose:1.8.0"
+    implementation "androidx.core:core-ktx:1.12.0"
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
 }
