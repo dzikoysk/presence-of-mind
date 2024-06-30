@@ -1,7 +1,6 @@
 package net.dzikoysk.presenceofmind
 
 import android.content.Context
-import androidx.activity.ComponentActivity
 import net.dzikoysk.presenceofmind.model.presence.PresenceRepository
 import net.dzikoysk.presenceofmind.model.presence.SharedPreferencesPresenceRepository
 import net.dzikoysk.presenceofmind.model.task.SharedPreferencesTaskRepository
@@ -10,10 +9,10 @@ import net.dzikoysk.presenceofmind.model.task.TaskService
 import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.ChecklistEntry
 import net.dzikoysk.presenceofmind.model.task.attributes.PomodoroAttribute
-import net.dzikoysk.presenceofmind.model.task.attributes.date.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventAttribute
 import net.dzikoysk.presenceofmind.model.task.attributes.date.EventDateTime
 import net.dzikoysk.presenceofmind.model.task.attributes.date.MarkAsTaskWatcher
+import net.dzikoysk.presenceofmind.model.task.attributes.date.RepetitiveAttribute
 import net.dzikoysk.presenceofmind.model.task.category.CategoryService
 import net.dzikoysk.presenceofmind.model.task.category.SharedPreferencesCategoryRepository
 import net.dzikoysk.presenceofmind.model.task.reminder.ReminderTaskWatcher
@@ -40,7 +39,7 @@ private object PresenceOfMindFactory {
         val presenceRepository = SharedPreferencesPresenceRepository(
             sharedPreferences = context.getSharedPreferences(
                 "net.dzikoysk.presenceofmind.data.theme-repository",
-                ComponentActivity.MODE_PRIVATE
+                Context.MODE_PRIVATE
             ),
             version = DATA_VERSION
         )
